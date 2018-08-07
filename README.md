@@ -25,3 +25,9 @@ The issues at this GitHub repository will be redundant with emails on the BIDS m
 This repository is managed by Kirstie Whitaker [@KirstieJane](https://github.com/KirstieJane), but this BIDS extension is lead by Gilles de Hollander. It is a very collaborative project and everyone who takes part will be acknowledged.
 
 We don't have a process for that just yet, if you have any ideas or want to help to record key contributors please add your thoughts to issue [#1](https://github.com/INCF/BEP001/issues/1) :sparkles::space_invader::cake:
+
+## Licence
+
+The work contained in this repository is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](/LICENCE).
+
+Please acknowledge the **BIDS Extension Proposal 001 community** when reusing content.
