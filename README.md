@@ -28,6 +28,6 @@ We don't have a process for that just yet, if you have any ideas or want to help
 
 ## Licence
 
-The work contained in this repository is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](/LICENCE).
+The work contained in this repository is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](LICENSE).
 
 Please acknowledge the **BIDS Extension Proposal 001 community** when reusing content.
