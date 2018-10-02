@@ -1,7 +1,9 @@
 {
-	"Name": "BEP001 example dataset 02 (MP2RAGE)",
-	"BIDSVersion": "1.0.10",
-	"Authors": ["Kirstie Whitaker", "Gilles de Hollander"],
-	"Description": "This virtual dataset is a standard MP2RAGE dataset, which includes two GRE images acquired after a single inversion pulse. They have been used to create a T1-map, as well as a T1-weighted image, corrected for B0 and B1-inhomogeneities."
-
+    "Name": "BEP001 example dataset 02 (MP2RAGE)",
+    "BIDSVersion": "1.0.10",
+    "Authors": [
+        "Kirstie Whitaker",
+        "Gilles de Hollander"
+    ],
+    "Description": "This virtual dataset is a standard MP2RAGE dataset, which includes two GRE images acquired after a single inversion pulse. They have been used to create a T1-map, as well as a T1-weighted image, corrected for B0 and B1-inhomogeneities."
 }

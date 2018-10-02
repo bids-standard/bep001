@@ -1,11 +1,14 @@
-{"IntendedFor": ["anat/sub-01_inv-1_part-mag_MPRAGE.nii.gz",
-                 "anat/sub-01_inv-1_part-phase_MPRAGE.nii.gz",
-	         "anat/sub-01_inv-2_echo-1_part-mag_MPRAGE.nii.gz",
- 	         "anat/sub-01_inv-2_echo-1_part-phase_MPRAGE.nii.gz",
-	         "anat/sub-01_inv-2_echo-2_part-mag_MPRAGE.nii.gz",
-                 "anat/sub-01_inv-2_echo-2_part-phase_MPRAGE.nii.gz",
-                 "anat/sub-01_inv-2_echo-3_part-mag_MPRAGE.nii.gz",
-                 "anat/sub-01_inv-2_echo-3_part-phase_MPRAGE.nii.gz",
-                 "anat/sub-01_inv-2_echo-4_part-mag_MPRAGE.nii.gz",
-                 "anat/sub-01_inv-2_echo-4_part-phase_MPRAGE.nii.gz"]
+{
+    "IntendedFor": [
+        "anat/sub-01_inv-1_part-mag_MPRAGE.nii.gz",
+        "anat/sub-01_inv-1_part-phase_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-1_part-mag_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-1_part-phase_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-2_part-mag_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-2_part-phase_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-3_part-mag_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-3_part-phase_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-4_part-mag_MPRAGE.nii.gz",
+        "anat/sub-01_inv-2_echo-4_part-phase_MPRAGE.nii.gz"
+    ]
 }
