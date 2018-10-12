@@ -1,5 +1,5 @@
 {
     "MagneticFieldStrength": 7,
-    "RepetitionTimeExcitationExcitationRepetitionTime": 0.04,
+    "RepetitionTimeExcitation": 0.04,
     "FlipAngle": 14
 }

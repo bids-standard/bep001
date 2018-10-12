@@ -1,6 +1,6 @@
 {
     "MagneticFieldStrength": 7,
-    "RepetitionTimeExcitationExcitationRepetitionTime": 0.0062,
-    "RepetitionTimeInversionInversionRepetitionTime": 5.5,
+    "RepetitionTimeExcitation": 0.0062,
+    "RepetitionTimeInversion": 5.5,
     "NumberShots": 159
 }
