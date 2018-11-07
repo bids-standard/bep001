@@ -164,7 +164,7 @@ Especially for quantitative structural MRI, the exact scanning parameters of the
 
 * `PulseSequenceType`: A general description of the pulse sequence used for the scan (i.e., MPRAGE, Gradient Echo EPI, Spin Echo EPI, Multiband gradient echo EPI).
 
-* `PulseSequenceDetails`: Information beyond pulse sequence type that identifies the specific pulse sequence used (i.e., "Standard Siemens Sequence distributed with the VB17 software," "Siemens WIP ### version #.##,” or “Sequence written by X using a version compiled on YYYY/MM/DD MM/DD/YYYY”).
+* `PulseSequenceDetails`: Information beyond pulse sequence type that identifies the specific pulse sequence used (i.e., "Standard Siemens Sequence distributed with the VB17 software," "Siemens WIP ### version #.##,” or “Sequence written by X using a version compiled on YYYY/MM/DD ”).
 
 **Additional meta-information fields**
 
