@@ -37,17 +37,30 @@ Note that although this would typically be called `RepetitionTime` please use `R
 + acquire a single volume in section 8.3.3 and to distinguish it from 
 + `RepetitionTimeInversion`.
 +
-+ * `RepetitionTimeInversion`: The time in seconds between successive inversion 
-+ pulses in an inversion recovery (IR) sequence, such as MP(2)RAGE.
-+ As with `RepetitionTimeExcitation` this corresponds to 
-+ [DICOM Tag 0018, 0080](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)):
-+ "the period of time … between the beginning of a pulse sequence and the 
-+ beginning of the succeeding (essentially identical) pulse sequence".
-+ Note that although this would typically be called `RepetitionTime` please use 
-+ `RepetitionTimeInversion` for structural scans with successive inversion pulses
-+ as `RepetitionTime` is already defined as the amount of time that it takes to
-+ acquire a single volume in section 8.3.3 and to distinguish it from 
-+ `RepetitionTimeExcitation`.
+- * `RepetitionTimeInversion`: The time in seconds between successive inversion 
+- pulses in an inversion recovery (IR) sequence, such as MP(2)RAGE.
+- As with `RepetitionTimeExcitation` this corresponds to 
+- [DICOM Tag 0018, 0080](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)):
+- "the period of time … between the beginning of a pulse sequence and the 
+- beginning of the succeeding (essentially identical) pulse sequence".
+- Note that although this would typically be called `RepetitionTime` please use 
+- `RepetitionTimeInversion` for structural scans with successive inversion pulses
+- as `RepetitionTime` is already defined as the amount of time that it takes to
+- acquire a single volume in section 8.3.3 and to distinguish it from 
+- `RepetitionTimeExcitation`.
++ *`RepetitionTimePreparation`: The period of time in seconds that it takes a 
++ preparation pulse block (prepulse) to re-appear at the beginning of the succeeding  
++ (essentially identical) pulse sequence. A prepulse can refer one of the following:
++   `Inversion prepulse`: An (spatially selective or non-selective) inversion RF pulse 
++   applied prior to the excitation pulse to prepare a desired tissue contrast. Typically
++   to create higher levels of T1 weighting. 
++   `Magnetization transfer prepulse`: Spectrally selective (off-resonant) RF pulse(s) 
++   that is/are applied prior to the excitation pulse to saturate protons associated with 
++   macromolecules. 
++ Please use RepetitionTimePrepation to define the segment (overall or outer) repetition time (TR),
++ if you need to reserve `RepetitionTimeExcitation` field for the readout (echo-train or inner)
++ TR. For example, in the MP2RAGE sequence RepetitionTimePreperation corresponds to 
++ the MP2RAGE_TR, whereas RepetitionTimeExcitation stands for the TR within individual readout blocks. 
 ```
 
 ### 8.3.3 Task (including resting state) imaging data
