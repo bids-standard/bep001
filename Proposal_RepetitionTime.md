@@ -22,7 +22,7 @@ As with `RepetitionTimePreparation` this corresponds to
 "the period of time … between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence".
 Note that although this would typically be called `RepetitionTime` please use `RepetitionTimeExcitation` for structural scans with multiple excitations as `RepetitionTime` is already defined as the amount of time that it takes to acquire a single volume in section 8.3.3 and to distinguish it from `RepetitionTimePreparation`.
 
-* `RepetitionTimePreparation`: The period of time in seconds that it takes a preparation pulse block (prepulse) to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. Common examples of preparation blocks are:<br /><br />
+* `RepetitionTimePreparation`: The period of time in seconds that it takes a preparation pulse block (prepulse) to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. Common examples of preparation blocks are:<br />
    &nbsp; `Inversion prepulse`: An (spatially selective or non-selective) inversion RF pulse 
    applied prior to the excitation pulse to prepare a desired tissue contrast. Typically
    to create higher levels of T1 weighting.<br /> 
