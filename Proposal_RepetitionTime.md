@@ -17,16 +17,16 @@ See Common MR metadata fields for a list of terms and their definitions.
 There are also some OPTIONAL JSON fields specific to anatomical scans:
 
 * `RepetitionTimeExcitation`: The time in seconds between successive excitation pulses that excite the same tissue. The DICOM tag best refers to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)): "the period of time … between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence". This may be superseded by `RepetitionTimePreparation` for certain use cases, such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf). Please see the description of `RepetitionTimePreparation` parameter for further information.<br /><br />
-Finally, please note that `RepetitionTimeExcitation` (0018,0080) would originally be called `RepetitionTime`. However, `RepetitionTime` is already defined as the amount of time that it takes to acquire a single volume in section 8.3.3. Therefore, please use `RepetitionTimeExcitation` (along with `RepetitionTimePreparation`, if needed) for anatomy imaging data. 
+Finally, please note that RepetitionTimeExcitation (0018,0080) is also widely refered to as `RepetitionTime` in MRI physics litterature. However, `RepetitionTime` is already defined as the amount of time that it takes to acquire a single volume in section 8.3.3. Therefore, please use `RepetitionTimeExcitation` (along with `RepetitionTimePreparation`, if needed) for anatomy imaging data. 
 
 * `RepetitionTimePreparation`: The period of time in seconds that it takes a preparation pulse block (prepulse or a train of prepulses) to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. Common examples of prepulses are:<br />
-   &nbsp; `Inversion prepulse`: An (spatially selective or non-selective) inversion RF pulse 
+   &nbsp; `Inversion prepulse`: An inversion RF pulse 
    applied prior to the excitation pulse to prepare a desired tissue contrast. Typically
    to create higher levels of T1 weighting.<br /> 
-   &nbsp;`Magnetization transfer prepulse`: Spectrally selective (off-resonant) RF pulse(s) 
+   &nbsp;`Magnetization transfer prepulse`: Off-resonant RF pulse(s) 
    that is/are applied prior to the excitation pulse to saturate protons associated with 
    macromolecules.<br /><br />
-Please use RepetitionTimePrepation to define the segment (overall or outer) repetition time (TR), if you need to reserve `RepetitionTimeExcitation` field for the readout (echo-train or inner) TR. For example, in the MP2RAGE sequence, RepetitionTimePreperation corresponds to the MP2RAGE_TR, whereas RepetitionTimeExcitation stands for the TR within individual readout blocks. 
+Please use RepetitionTimePrepation to define the segment (overall or outer) repetition time (TR), if you need to reserve `RepetitionTimeExcitation` field for the readout (echo-train or inner) TR. For example, in the MP2RAGE pulse sequence diagram of the original publication (Marques et al. 2010), `RepetitionTimePreperation` corresponds to the MP2RAGE_TR, whereas `RepetitionTimeExcitation` stands for the TR within individual readout blocks. 
 
 ```diff
 + * `RepetitionTimeExcitation`: The time in seconds between successive 
@@ -42,13 +42,11 @@ Please use RepetitionTimePrepation to define the segment (overall or outer) repe
 - `RepetitionTimeExcitation` for structural scans with multiple excitations as 
 - `RepetitionTime` is already defined as the amount of time that it takes to 
 - acquire a single volume in section 8.3.3 and to distinguish it from `RepetitionTimeInversion`.
-+  Finally, please note that `RepetitionTimeExcitation` (0018,0080) would originally be called
-+  `RepetitionTime`. However, `RepetitionTime` is already defined as the amount of time that
++ Finally, please note that `RepetitionTimeExcitation` (0018,0080) is also widely refered to as  
++ `RepetitionTime` in MRI physics litterature. However, `RepetitionTime` is already defined as the amount of time that
 + it takes to acquire a single volume in section 8.3.3. Therefore, please use `RepetitionTimeExcitation`
 + (along with `RepetitionTimePreparation, if needed) for anatomy imaging data. 
 
-
-+
 - * `RepetitionTimeInversion`: The time in seconds between successive inversion 
 - pulses in an inversion recovery (IR) sequence, such as MP(2)RAGE.
 - As with `RepetitionTimeExcitation` this corresponds to 
@@ -63,16 +61,17 @@ Please use RepetitionTimePrepation to define the segment (overall or outer) repe
 + *`RepetitionTimePreparation`: The period of time in seconds that it takes a 
 + preparation pulse block (prepulse or train of prepulses) to re-appear at the beginning of the succeeding  
 + (essentially identical) pulse sequence. Common examples of prepulses are:
-+   `Inversion prepulse`: An (spatially selective or non-selective) inversion RF pulse 
++   `Inversion prepulse`: An inversion RF pulse 
 +   applied prior to the excitation pulse to prepare a desired tissue contrast. Typically
 +   to create higher levels of T1 weighting. 
-+   `Magnetization transfer prepulse`: Spectrally selective (off-resonant) RF pulse(s) 
++   `Magnetization transfer prepulse`: Off-resonant RF pulse(s) 
 +   that is/are applied prior to the excitation pulse to saturate protons associated with 
 +   macromolecules. 
 + Please use RepetitionTimePrepation to define the segment (overall or outer) repetition time (TR),
 + if you need to reserve `RepetitionTimeExcitation` field for the readout (echo-train or inner)
-+ TR. For example, in the MP2RAGE sequence RepetitionTimePreperation corresponds to 
-+ the MP2RAGE_TR, whereas RepetitionTimeExcitation stands for the TR within individual readout blocks. 
++ TR. For example, in the MP2RAGE pulse sequence diagram of the original publication (Marques et al. 2010), 
++`RepetitionTimePreperation` corresponds to the MP2RAGE_TR, whereas `RepetitionTimeExcitation` stands for the 
++ TR within individual readout blocks. 
 ```
 
 ### 8.3.3 Task (including resting state) imaging data
