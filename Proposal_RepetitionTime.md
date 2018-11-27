@@ -39,14 +39,14 @@ Please use RepetitionTimePrepation to define the segment (overall or outer) repe
 + `RepetitionTimePreparation` for certain sequences such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf)<br />.
 +  Please see the description of `RepetitionTimePreparation` parameter for further information. <br /><br />
 -  Note that although this would typically be called `RepetitionTime` please use
+- `RepetitionTimeExcitation` for structural scans with multiple excitations as 
+- `RepetitionTime` is already defined as the amount of time that it takes to 
+- acquire a single volume in section 8.3.3 and to distinguish it from `RepetitionTimeInversion`.
 +  Finally, please note that `RepetitionTimeExcitation` (0018,0080) would originally be called
 +  `RepetitionTime`. However, `RepetitionTime` is already defined as the amount of time that
 + it takes to acquire a single volume in section 8.3.3. Therefore, please use `RepetitionTimeExcitation`
 + (along with `RepetitionTimePreparation, if needed) for anatomy imaging data. 
-- `RepetitionTimeExcitation` for structural scans with multiple excitations as 
-- `RepetitionTime` is already defined as the amount of time that it takes to 
-- acquire a single volume in section 8.3.3 and to distinguish it from 
-- `RepetitionTimeInversion`.
+
 
 +
 - * `RepetitionTimeInversion`: The time in seconds between successive inversion 
