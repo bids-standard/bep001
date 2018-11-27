@@ -16,7 +16,7 @@ See Common MR metadata fields for a list of terms and their definitions.
 
 There are also some OPTIONAL JSON fields specific to anatomical scans:
 
-* `RepetitionTimeExcitation`: The time in seconds between successive excitation pulses that excite the same tissue. The DICOM tag best refers to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)): "the period of time … between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence". This may be superseded by `RepetitionTimePreparation` for certain use cases, such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf). Please see the description of `RepetitionTimePreparation` parameter for further information.Finally, please note that `RepetitionTimeExcitation` (0018,0080) is also widely refered to as `RepetitionTime` in MRI physics litterature. However, `RepetitionTime` is already defined as the amount of time that it takes to acquire a single volume in section 8.3.3. Therefore, please use `RepetitionTimeExcitation` (along with `RepetitionTimePreparation`, if needed) for anatomy imaging data.
+* `RepetitionTimeExcitation`: The time in seconds between successive excitation pulses that excite the same tissue. The DICOM tag best refers to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)): "the period of time … between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence". This may be superseded by `RepetitionTimePreparation` for certain use cases, such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf). Please see the description of `RepetitionTimePreparation` parameter for further information. Finally, please note that `RepetitionTimeExcitation` (0018,0080) is also widely refered to as `RepetitionTime` in MRI physics literature. However, `RepetitionTime` is already defined as the amount of time that it takes to acquire a single volume in section 8.3.3. Therefore, please use `RepetitionTimeExcitation` (along with `RepetitionTimePreparation`, if needed) for anatomy imaging data.
 
 * `RepetitionTimePreparation`: The period of time in seconds that it takes a preparation pulse block (prepulse or a train of prepulses) to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. Common examples of prepulses are:
    `Inversion prepulse`: An inversion RF pulse
@@ -30,7 +30,7 @@ Please use `RepetitionTimePreparation` to define the segment (overall or outer) 
 ```diff
 + * `RepetitionTimeExcitation`: The time in seconds between successive
 + excitation pulses that excite the same tissue. The DICOM tag best refers
-+ to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)): 
++ to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)):
 + "the period of time … between the beginning of a pulse sequence and the
 + beginning of the succeeding (essentially identical) pulse sequence".
 + This may be superseded by `RepetitionTimePreparation` for certain use cases,
