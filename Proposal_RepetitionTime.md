@@ -26,7 +26,7 @@ Finally, please note that RepetitionTimeExcitation (0018,0080) is also widely re
    &nbsp;`Magnetization transfer prepulse`: Off-resonant RF pulse(s) 
    that is/are applied prior to the excitation pulse to saturate protons associated with 
    macromolecules.<br /><br />
-Please use `RepetitionTimePrepation` to define the segment (overall or outer) repetition time (TR), if you need to reserve `RepetitionTimeExcitation` field for the readout (echo-train or inner) TR. For example, in the MP2RAGE pulse sequence diagram of the original publication (Marques et al. 2010), `RepetitionTimePreperation` corresponds to the MP2RAGE_TR, whereas `RepetitionTimeExcitation` stands for the TR within individual readout blocks. 
+Please use `RepetitionTimePreparation` to define the segment (overall or outer) repetition time (TR), if you need to reserve `RepetitionTimeExcitation` field for the readout (echo-train or inner) TR. For example, in the MP2RAGE pulse sequence diagram of the original publication (Marques et al. 2010), `RepetitionTimePreparation` corresponds to the MP2RAGE_TR, whereas `RepetitionTimeExcitation` stands for the TR within individual readout blocks. 
 
 ```diff
 + * `RepetitionTimeExcitation`: The time in seconds between successive 
@@ -67,10 +67,10 @@ Please use `RepetitionTimePrepation` to define the segment (overall or outer) re
 +   `Magnetization transfer prepulse`: Off-resonant RF pulse(s) 
 +   that is/are applied prior to the excitation pulse to saturate protons associated with 
 +   macromolecules. 
-+ Please use RepetitionTimePrepation to define the segment (overall or outer) repetition time (TR),
++ Please use RepetitionTimePreparation to define the segment (overall or outer) repetition time (TR),
 + if you need to reserve `RepetitionTimeExcitation` field for the readout (echo-train or inner)
 + TR. For example, in the MP2RAGE pulse sequence diagram of the original publication (Marques et al. 2010), 
-+`RepetitionTimePreperation` corresponds to the MP2RAGE_TR, whereas `RepetitionTimeExcitation` stands for the 
++`RepetitionTimePreparation` corresponds to the MP2RAGE_TR, whereas `RepetitionTimeExcitation` stands for the 
 + TR within individual readout blocks. 
 ```
 
