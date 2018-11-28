@@ -13,7 +13,7 @@ Structural MR data can be acquired with different parameter values, such as Echo
 
 1. The   `[_fa-<index>][_inv-<index>][_echo-<index>]` key/value pairs correspond to a numerical index label user may use to distinguish different set of multispectral imaging data. `fa` for variation in flip angle, `echo` for multi echo data and `inv` inversion time. Please note that the index label is just an identifier and is not intended to be a source of scanning parameters which should be stored in sidecar JSON files.
 
-2. The optional key `[_part-<phase|mag>]` allows for storing phase and magnitude images. In its absence the image is assumed to be magnitude.
+2. The optional key `[_part-<phase|mag>]` allows for storing phase and magnitude images. In its absence the image is assumed to be magnitude. Phase images should be in radians and have a range of (0, 2 pi] (including 0, excluding 2 pi).
 
 3. Possible sequences label describing sequences used in imaging  include, but are not limited to:
 
