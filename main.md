@@ -145,6 +145,7 @@ Note that if the sequence that is being used is identical to a simpler sequence,
   </tr>
 </table>
 
+Derived (q)MR images/maps should be stored in the `derivatives`-folder, but can be symlinked to the corresponding `sourcedata`-directory, to facilitate the easy use of these images as input to processing workflows implemented as BIDS-apps.
 
 ## 8.10.2 Metadata in sidecar-JSON
 
