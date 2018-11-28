@@ -7,7 +7,7 @@ Template:
 ~~~~
 sub-<participant_label>/[ses-<session_label>/]
 	anat/
-		sub-<participant_label>[_ses-<session_label>][_acq-<label>][_rec-<label>][_fa-<index>][_inv-<index>][_echo-<index>][_part-<phase|mag>][_run-<index>]_<sequence_label>.nii[.gz]
+		sub-<participant_label>[_ses-<session_label>][_acq-<label>][_rec-<label>][_fa-<index>][_inv-<index>][_echo-<index>][_part-<phase|mag>][_run-<index>]_<suffix>.nii[.gz]
 ~~~~
 Structural MR data can be acquired with different parameter values, such as Echo Time(TE), flip angle, inversion time *during the same scan*.  An example of this is the MP2RAGE-sequence, where there are two GRE readout blocks at different "inversion times", after the same inversion pulse. Another example is a multi-echo FLASH sequence, where multiple echoes are acquired after the same excitation pulse. In order to represent such imaging data in the BIDS standard, the following syntax and keywords can be used.  
 
@@ -15,12 +15,12 @@ Structural MR data can be acquired with different parameter values, such as Echo
 
 2. The optional key `[_part-<phase|mag>]` allows for storing phase and magnitude images. In its absence the image is assumed to be magnitude.
 
-3. Possible sequences label describing sequences used in imaging  include, but are not limited to:
+3. Suffixes are used to identify what type of sequence ("sequence label") was used for an anatomical image. Possible suffixes include, but are not limited to:
 
 <table>
   <tr>
     <td>Name</td>
-    <td>sequence_label</td>
+    <td>suffix</td>
     <td>Description</td>
   </tr>
   <tr>
@@ -83,14 +83,16 @@ Structural MR data can be acquired with different parameter values, such as Echo
 </tr>
 </table>
 
-Note that if the sequence that is being used is identical to a simpler sequence, yet with multiple readout blocks that correspond to different acquisition parameters, one should use the simpler sequence label and identify the data corresponding to different readout blocks using numerical indices. Three prominent examples are multi-echo FLASH sequences (`sub-01_echo-1_FLASH.nii.gz and sub-01_echo-2_FLASH.nii.gz`), MP2RAGE sequences (`sub-01_inv-1_MPRAGE.nii.gz and sub-01_inv-2_MPRAGE.nii.gz`) and multi-echo MP2RAGE sequences (`sub-01_inv-1_MPRAGE.nii.gz and sub-01_inv-2_echo-1_MPRAGE.nii.gz`, `sub-01_inv-2_echo-2_MPRAGE.nii.gz` and `sub-01_inv-2_echo-3_MPRAGE.nii.gz`).
+Note that if the sequence that is being used is identical to a simpler sequence, yet with multiple readout blocks that correspond to different acquisition parameters, one should use the simpler suffix and identify the data corresponding to different readout blocks using numerical indices. Three prominent examples are multi-echo FLASH sequences (`sub-01_echo-1_FLASH.nii.gz and sub-01_echo-2_FLASH.nii.gz`), MP2RAGE sequences (`sub-01_inv-1_MPRAGE.nii.gz and sub-01_inv-2_MPRAGE.nii.gz`) and multi-echo MP2RAGE sequences (`sub-01_inv-1_MPRAGE.nii.gz and sub-01_inv-2_echo-1_MPRAGE.nii.gz`, `sub-01_inv-2_echo-2_MPRAGE.nii.gz` and `sub-01_inv-2_echo-3_MPRAGE.nii.gz`).
+
+There is some arbitrariness to which suffix to use for weighted images, since anatomical sequences are never "purely' T1/T2/PD-weighted. It is therefore up to the maintainer of a dataset to use suffixes that he/she thinks are most informative to potential users of the data set.
 
 4. Furthermore, (quantitative) image-derived contrasts can be labeled as follows:
 
 <table>
   <tr>
     <td>Name</td>
-    <td>contrast_label</td>
+    <td>suffix</td>
     <td>Description</td>
   </tr>
   <tr>
