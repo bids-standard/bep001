@@ -4,8 +4,8 @@ Template:
 sub-<participant_label>/[ses-<session_label>/]
     anat/
         sub-<participant_label>_<modality_label>.json
-        sub-<participant_label>[_ses-<session_label>][_indexable_label-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.nii[.gz]
-        sub-<participant_label>[_ses-<session_label>][_indexable_label-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.json
+        sub-<participant_label>[_ses-<session_label>][_indexable_metadata-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.nii[.gz]
+        sub-<participant_label>[_ses-<session_label>][_indexable_metadata-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.json
 ```
 
 A naming convention that can logically group parametrically linked anatomy imaging datasets can be achieved by combining following key/value pairs:
