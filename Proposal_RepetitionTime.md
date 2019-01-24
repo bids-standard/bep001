@@ -9,7 +9,7 @@ Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `Repe
 
 ---
 
-***Section starts at line 107 in [src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md](https://github.com/bids-standard/bids-specification/blob/v.1.1.2/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data)***
+***Section starts at line 107 in [src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md](https://github.com/bids-standard/bids-specification/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data)***
 
 ### Anatomy imaging data
 
@@ -84,36 +84,27 @@ scans:
 ```
 ---
 
+***Section starts at line 181 in [src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md](https://github.com/bids-standard/bids-specification/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data#task-including-resting-state-imaging-data)***
 
-### 8.3.3 Task (including resting state) imaging data
+### Task (including resting state) imaging data
 
-Some meta information about the acquisition MUST be provided in an additional JSON file.
+***(Lines 182 - 241 not rendered)***
 
-Required fields:
+#### Required fields
 
-* `RepetitionTime`: The time in seconds between the beginning of an acquisition of one volume and the beginning of acquisition of the volume following it (TR).
-When used in the context of functional acquisitions this parameter best corresponds to [DICOM Tag 0020,0110](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0020,0110)): the "time delta between images in a dynamic of functional set of images" but may be found in [DICOM Tag 0018, 0080](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)): "the period of time in msec between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence".
-(Remember that DICOM measures must be converted from milliseconds to seconds to fit the BIDS specification.)
-Please note that this definition includes time between scans (when no data has been acquired) in case of sparse acquisition schemes.
-This value needs to be consistent with the '`pixdim[4]`' field (after accounting for units stored in '`xyzt_units`' field) in the NIfTI header.
-This field is mutually exclusive with `VolumeTiming`.
+| Field name     | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| RepetitionTime | REQUIRED. The time in seconds between the beginning of an acquisition of one volume and the beginning of acquisition of the volume following it (TR). When used in the context of functional acquisitions this parameter best corresponds to [DICOM Tag 0020,0110](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0020,0110)): the "time delta between images in a dynamic of functional set of images" but may be found in [DICOM Tag 0018, 0080](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)): "the period of time in msec between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence". This definition includes time between scans (when no data has been acquired) in case of sparse acquisition schemes. This value MUST be consistent with the '`pixdim[4]`' field (after accounting for units stored in '`xyzt_units`' field) in the NIfTI header. This field is mutually exclusive with `VolumeTiming`. |
+| VolumeTiming   | REQUIRED. The time at which each volume was acquired during the acquisition. It is described using a list of times (in JSON format) referring to the onset of each volume in the BOLD series. The list must have the same length as the BOLD series, and the values must be non-negative and monotonically increasing. This field is mutually exclusive with RepetitionTime and `DelayTime`. If defined, this requires acquisition time (TA) be defined via either SliceTiming or AcquisitionDuration be defined.                                              |
+| TaskName       | REQUIRED. Name of the task. No two tasks should have the same name. Task label (`task-`) included in the file name is derived from this field by removing all non alphanumeric (`[a-zA-Z0-9]`) characters. For example task name `faces n-back` will corresponds to task label `facesnback`. An optional but RECOMMENDED convention is to name resting state task using labels beginning with `rest`.  
 
 ```diff
-* `RepetitionTime`: The time in seconds between the beginning of an acquisition
-of one volume and the beginning of acquisition of the volume following it (TR).
-+ When used in the context of functional acquisitions this parameter best
-+ corresponds to [DICOM Tag 0020,0110](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0020,0110)):
-+ the "time delta between images in a dynamic of functional set of images" but
-+ may be found in [DICOM Tag 0018, 0080](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)):
-+ "the period of time in msec between the beginning of a pulse sequence and the
-+ beginning of the succeeding (essentially identical) pulse sequence".
-+ (Remember that DICOM measures must be converted from milliseconds to seconds
-+ to fit the BIDS specification.)
-Please note that this definition includes time between scans (when no data has
- been acquired) in case of sparse acquisition schemes.
-This value needs to be consistent with the '`pixdim[4]`' field (after accounting
- for units stored in '`xyzt_units`' field) in the NIfTI header.
-- This field is mutually exclusive with `VolumeTiming` and is derived from
-- DICOM Tag 0018, 0080 and converted to seconds.
-+ This field is mutually exclusive with `VolumeTiming`.
+#### Required fields
+
+| Field name     | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+-| RepetitionTime | REQUIRED. The time in seconds between the beginning of an acquisition of one volume and the beginning of acquisition of the volume following it (TR). Please note that this definition includes time between scans (when no data has been acquired) in case of sparse acquisition schemes. This value needs to be consistent with the `pixdim[4]` field (after accounting for units stored in `xyzt_units` field) in the NIfTI header. This field is mutually exclusive with `VolumeTiming` and is derived from DICOM Tag 0018, 0080 and converted to seconds. |
++| RepetitionTime | REQUIRED. The time in seconds between the beginning of an acquisition of one volume and the beginning of acquisition of the volume following it (TR). When used in the context of functional acquisitions this parameter best corresponds to [DICOM Tag 0020,0110](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0020,0110)): the "time delta between images in a dynamic of functional set of images" but may be found in [DICOM Tag 0018, 0080](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)): "the period of time in msec between the beginning of a pulse sequence and the beginning of the succeeding (essentially identical) pulse sequence". This definition includes time between scans (when no data has been acquired) in case of sparse acquisition schemes. This value MUST be consistent with the '`pixdim[4]`' field (after accounting for units stored in '`xyzt_units`' field) in the NIfTI header. This field is mutually exclusive with `VolumeTiming`. |
+| VolumeTiming   | REQUIRED. The time at which each volume was acquired during the acquisition. It is described using a list of times (in JSON format) referring to the onset of each volume in the BOLD series. The list must have the same length as the BOLD series, and the values must be non-negative and monotonically increasing. This field is mutually exclusive with RepetitionTime and `DelayTime`. If defined, this requires acquisition time (TA) be defined via either SliceTiming or AcquisitionDuration be defined.                                              |
+| TaskName       | REQUIRED. Name of the task. No two tasks should have the same name. Task label (`task-`) included in the file name is derived from this field by removing all non alphanumeric (`[a-zA-Z0-9]`) characters. For example task name `faces n-back` will corresponds to task label `facesnback`. An optional but RECOMMENDED convention is to name resting state task using labels beginning with `rest`.              
 ```
