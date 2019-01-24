@@ -4,7 +4,7 @@
 However there are structural scans that collect multiple volumes during an acquisition.
 Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `RepetitionTimeExcitation` and `RepetitionTimePreparation` as two additional terms for structural acquisitions that include multiple contrasts in 4.1.y.
 
-*What follows is the text from the current BIDS specification with the suggested additions inclued.*
+*What follows is the text from the current BIDS specification with the suggested additions included.*
 *The text is also shown in "code diff" format to make it easy to see the proposed changes.*
 
 ---
@@ -32,14 +32,14 @@ scans:
 While this is a common definition of `RepetitionTime` in the functional MRI analysis community, it is not the common definition in the MR Physics community.
 Redefining a metadata term would invalidate BIDS formatted datasets so the terms `RepetitionTimeExcitation` and `RepetitionTimePreparation` were introduced by BEP001 in version 1.x.x to disambiguate the different uses of these terms for quanitatiative anatomical neuroimaging.
 
-An example of an anatomical acquisition sequence that would require the `RepetitionTimeExcitation` metadata field is .......
+An example of an anatomical acquisition sequence that would require the `RepetitionTimeExcitation` metadata field is ....... [NEED HELP!]
 
-Some anatomical acquisitions need to record two measurements of time.
+Some anatomical acquisitions need to record two measurements that are referred to in different contexts as TR (repetition time).
 `RepetitionTimePreparation` can be used to describe the time it takes for a preparation pulse block to re-appear at the beginning of the succeeding pulse sequence.
 The pulse block may contain one prepulse or a train of prepulses.
 Common examples of prepulses are an inversion prepulse and a magnetization transfer prepulse.
 An inversion RF pulse applied prior to the excitation pulse may be used to prepare a desired tissue contrast, typically to create higher levels of T1 weighting.
-A magnetization transfer prepulse is an off-resonant RF pulse that is applied prior to the excitation pulse to saturate protons associated with macromolecules.
+A magnetization transfer prepulse is an off-resonance RF pulse that is applied prior to the excitation pulse to saturate protons associated with macromolecules.
 (Note that there can be multiple off-resonanct RF pulses.)
 
 An example of an anatomical acquisition sequence that would require the `RepetitionTimeExcitation` and `RepetitionTimePreparation` files is the MP2RAGE sequence (Marques et al. 2010).
