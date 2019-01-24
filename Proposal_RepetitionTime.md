@@ -42,7 +42,6 @@ An inversion RF pulse applied prior to the excitation pulse may be used to prepa
 A magnetization transfer prepulse is an off-resonant RF pulse that is applied prior to the excitation pulse to saturate protons associated with macromolecules.
 (Note that there can be multiple off-resonanct RF pulses.)
 
-
 An example of an anatomical acquisition sequence that would require the `RepetitionTimeExcitation` and `RepetitionTimePreparation` files is the MP2RAGE sequence (Marques et al. 2010).
 For this sequence `RepetitionTimePreparation` corresponds to the `MP2RAGE_TR`, whereas `RepetitionTimeExcitation` stands for the TR within individual readout blocks.
 
