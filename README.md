@@ -19,7 +19,7 @@ You can contact them by tagging them in an issue on GitHub or by sending them an
 They don't work alone, we have a fantastic community who contribute to this project.
 THANK YOU to everyone who has helped shape BEP001.
 
-We don't have a process for acknowledging our community, if you have any ideas or **want to help to record key contributors** please add your thoughts to issue [#1](https://github.com/INCF/BEP001/issues/1) :sparkles::space_invader::cake:
+We don't have a process for acknowledging our community, if you have any ideas or **want to help to record key contributors** please add your thoughts to issue [#1](https://github.com/bids-standard/bep001/issues/1) :sparkles::space_invader::cake:
 
 ## How to help
 
@@ -44,7 +44,7 @@ However, there are quite a few changes to make, and quite a lot of conversation 
 Each conceptual update to the specification should have a "proposal file".
 This file should explain what change it is proposing and provide a justification for the change.
 
-The file should contain the rendered text that is easy to read along with a "diff formatted" section that explicitly makes clear what is added and what has changed.
+The developer should also change the file in the BIDS specification (saved in `src` in the master branch of the BEP001 repository) to refect the proposed changes.
 
 Once the proposal is ready, the developer should **open a pull request** to the master branch of the BEP001 repository (this one).
 If everyone agrees on the proposal, the file will be merged to master.
@@ -132,7 +132,7 @@ When you have a point that you'd like to discuss related to BEP001 please try to
 ### Monthly meetings
 
 We try to have zoom meetings once per month.
-Keep an eye on the mailing list or this repository's issue tracker for announcments :smiley_cat:
+Keep an eye on the mailing list or this repository's issue tracker for announcements :smiley_cat:
 
 ## Licence
 
