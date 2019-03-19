@@ -111,8 +111,9 @@ Template:
 ```Text
 sub-<participant_label>/[ses-<session_label>/]
     anat/
-        sub-<participant_label>[_ses-<session_label>][_acq-<label>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.nii[.gz]
-        sub-<participant_label>[_ses-<session_label>][_acq-<label>][_ce-<label>][_rec-<label>][_run-<index>][_mod-<label>]_defacemask.nii[.gz]
+        sub-<participant_label>_<modality_label>.json
+        sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.nii[.gz]
+        sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.json
 ```
 
 Anatomical (structural) data acquired for that participant. Currently supported
