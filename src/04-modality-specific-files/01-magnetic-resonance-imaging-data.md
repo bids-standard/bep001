@@ -254,7 +254,7 @@ naming convention while combining several scans of the same modality intended to
 create quantitative maps, following labels SHOULD be included in the filename 
 where applicable:
 
-| Method Name | Labels           | Respective metadata fields   |
+| Respective suffix | Labels           | Respective metadata fields   |
 |-------------|------------------|------------------------------|
 | MTR         | MTon, MToff      | MTC (Sequence variant attr.) |
 | MTS         | MTon, MToff, T1w | MTC (Sequence variant attr.) |
