@@ -148,6 +148,16 @@ sub-01_mod-T1w_defacemask.nii.gz
 sub-01_mod-T1w_defacemask.json 
 ```
 
+Some meta information about the acquisition MAY be provided in an additional
+JSON file. See Common MR metadata fields for a list of terms and their
+definitions. There are also some OPTIONAL JSON fields specific to anatomical
+scans:
+
+| Field name              | Definition                                                                                                                                         |
+| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ContrastBolusIngredient | OPTIONAL. Active ingredient of agent. Values MUST be one of: IODINE, GADOLINIUM, CARBON DIOXIDE, BARIUM, XENON Corresponds to DICOM Tag 0018,1048. |
+
+
 #### Suffix
 
 If a structural data is not intended for creating a quantitative map, the use of
@@ -202,19 +212,53 @@ list of available suffixes.
 | True transverse relaxation rate map                    | R2map     | In seconds<sup>-1</sup> (1/s). R2 maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Observed transverse relaxation rate map                | R2starmap | In seconds<sup>-1</sup> (1/s). R2* maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | Proton density map                                     | PDmap     | In arbitrary units (a.u.). PD maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Magnetization transfer ratio map                       | MTRmap    | In percentages (%). MTR maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Magnetization transfer ratio map                       | MTRmap    | In percentage (%). MTR maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Magnetization transfer saturation index map            | MTsat     | In arbitrary units (a.u.). MTsat maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | Homogeneous (flat) T1 image by MP2RAGE                 | UNIT1     | In arbitrary units (a.u.). UNIT1 maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | Longutidunal relaxation in rotating frame (T1 rho) map | T1Rmap    | In seconds (s). T1-rho maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| Combined PD/T2 map                                     | PDT2map   | In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                     |
-Some meta information about the acquisition MAY be provided in an additional
-JSON file. See Common MR metadata fields for a list of terms and their
-definitions. There are also some OPTIONAL JSON fields specific to anatomical
-scans:
+| Myelin water fraction map                              | MWFmap    | In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Combined PD/T2 map                                     | PDT2map   | In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                                                                                                               |
 
-| Field name              | Definition                                                                                                                                         |
-| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ContrastBolusIngredient | OPTIONAL. Active ingredient of agent. Values MUST be one of: IODINE, GADOLINIUM, CARBON DIOXIDE, BARIUM, XENON Corresponds to DICOM Tag 0018,1048. |
+#### `<indexable_metadata>-<index>` key-value pair
+
+If the grouping logic of a set of parametrically linked anatomical images is 
+(entirely or partially) bound up with a metadata field that varies from image to
+image, `<indexable_metadata>-<index>` SHOULD be included in the file name. This
+is applicable if the varying entries of the same metadata field are enumerable.
+
+Unlike other key/value pairs, key tag of the `<indexable_metadata>-<index>` is 
+mutable depending on the metadata field that varies between several scans of the
+same modality and can appear more than once in the filename with different keys.
+
+Please note that the order of the `index` and the value of the associated 
+metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
+correspond to the `FlipAngle` of `35`, `10` and `25` degrees).
+
+
+| Allowed key tags | Value list | Associated metadata field |
+|---------|------------|---------------------|
+| fa      | 1,2,... N  | FlipAngle           |
+| inv     | 1,2,... N  | InversionTime       |
+| echo    | 1,2,... N  | EchoTime            |
+| tsl     | 1,2,... N  | SpinLockTime        |
+
+#### `acq-<label>` key-value pair
+
+If the grouping logic of a set of parametrically linked anatomical images is
+(entirely or partially) bound up with a metadata field that varies from image to
+image, `acq-<label>` SHOULD be included in the file name. This is applicable if
+the varying entries of the metadata field are categorical. 
+
+Note that value of the `acq-<label>` is free form. However, to enable a unified
+naming convention while combining several scans of the same modality intended to
+create quantitative maps, following labels SHOULD be included in the filename 
+where applicable:
+
+| Method Name | Labels           | Respective metadata fields   |
+|-------------|------------------|------------------------------|
+| MTR         | MTon, MToff      | MTC (Sequence variant attr.) |
+| MTS         | MTon, MToff, T1w | MTC (Sequence variant attr.) |
+| MPM         | MTon, MToff, T1w | MTC (Sequence variant attr.) |
 
 ### Tasindexable_metadata 
 
