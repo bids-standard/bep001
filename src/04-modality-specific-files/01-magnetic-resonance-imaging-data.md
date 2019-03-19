@@ -254,11 +254,19 @@ naming convention while combining several scans of the same modality intended to
 create quantitative maps, following labels SHOULD be included in the filename 
 where applicable:
 
-| Respective suffix | Labels           | Respective metadata fields   |
+| Respective suffix | Labels           | Related metadata fields   |
 |-------------|------------------|------------------------------|
-| MTR         | MTon, MToff      | MTC (Sequence variant attr.) |
-| MTS         | MTon, MToff, T1w | MTC (Sequence variant attr.) |
-| MPM         | MTon, MToff, T1w | MTC (Sequence variant attr.) |
+| MTR         | `MTon`, `MToff`      | MagnetizationTransfer |
+| MTS         | `MTon`, `MToff`, `T1w` | MagnetizationTransfer, FlipAngle |
+| MPM         | `MTon`, `MToff`, `T1w`| MagnetizationTransfer, FlipAngle |
+
+### `part-<label>` key/value pair
+
+Some parametrically linked anatomical images involve both magnitude and phase  
+reconstructed images in the calculation of a parameter map. In that case, the 
+filename MUST make use of this key/value pair to distinguish between them. 
+The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
+`Image Type`. For example, see `MP2RAGE` suffix. 
 
 ### Tasindexable_metadata 
 
