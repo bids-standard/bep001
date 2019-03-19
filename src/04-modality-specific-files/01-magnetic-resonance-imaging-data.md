@@ -111,10 +111,61 @@ Template:
 ```Text
 sub-<participant_label>/[ses-<session_label>/]
     anat/
-        sub-<participant_label>_<modality_label>.json
-        sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.nii[.gz]
-        sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<modality_label>.json
+        sub-<participant_label>_<suffix>.json
+        sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<suffix>.nii[.gz]
+        sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<suffix>.json
 ```
+Anatomical (structural) data for a participant may refer to a simple standalone
+data (e.g. a 3D high resolution T1 weighted image), or a group of parametrically 
+linked images acquired on the purpose of calculating quantitative maps
+(e.g. three 3D volumes provided as an input to the multiparametric mapping 
+protocol) and/or the quantitative maps themselves (e.g. T1map, T2map etc.). 
+
+All anatomy imaging data filenames can include the key/value pairs of
+`run-<index>`, `ce-<label>` or `rec-<label>`. 
+
+If the same acquisition for a given `_suffix` is repeated without any parameter 
+changes, they must be indexed with the key/value pair of `run-<index>`:
+`_run-1`, `_run-2`, `_run-3` etc. (only integers are allowed as run numbers).
+When there is only one scan of a given type, the run key MAY be omitted.
+
+The OPTIONAL `ce-<label>` key/value can be used to distinguish
+sequences using different contrast enhanced images. The label is the name of the
+contrast agent. The key `ContrastBolusIngredient` MAY be also be added in the
+JSON file, with the same label.
+
+The OPTIONAL `rec-<label>` key/value can be used to distinguish
+different reconstruction algorithms (for example ones using motion correction).
+
+#### Suffix
+
+If a structural data is not intended for creating a quantitative map, the use of
+`_suffix` along with the common key/value pairs is REQUIRED to provide a
+self explanatory filename. For example: 
+
+```Text
+sub-01_run-1_T1w.nii.gz
+sub-01_run-1_T1w.json
+sub-01_run-2_T1w.nii.gz
+sub-01_run-2_T1w.json
+```
+
+Please note that the `run-<index>` denotes the index of the acquisition repeated
+with the identical parameters (e.g. to achieve a higher SNR). 
+
+However, if a structural data belongs to a list of parametrically linked scans,
+the use of `_suffix` alone cannot distinguish them from each other, failing to 
+identify their roles as inputs to the calculation of quantitative maps. 
+Therefore, such images are RECOMMENDED to include `acq-<label>`, `part-<label>`
+and `<indexable_metadata>-<index>` key/value pairs. Please visit corresponding
+sections for further explanation. 
+
+
+ 
+
+
+
+
 
 Anatomical (structural) data acquired for that participant. Currently supported
 modalities include:
@@ -179,11 +230,11 @@ scans:
 | :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ContrastBolusIngredient | OPTIONAL. Active ingredient of agent. Values MUST be one of: IODINE, GADOLINIUM, CARBON DIOXIDE, BARIUM, XENON Corresponds to DICOM Tag 0018,1048. |
 
-### Task (including resting state) imaging data
+### Tasindexable_metadata 
 
-Template:
+Templatindexable_metadata 
 
-```Text
+```Textindexable_metadata 
 sub-<participant_label>/[ses-<session_label>/]
     func/
         sub-<participant_label>[_ses-<session_label>]_task-<task_label>[_acq-<label>][_rec-<label>][_run-<index>][_echo-<index>]_bold.nii[.gz]
