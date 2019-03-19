@@ -260,7 +260,7 @@ where applicable:
 | MTS         | `MTon`, `MToff`, `T1w` | MagnetizationTransfer, FlipAngle |
 | MPM         | `MTon`, `MToff`, `T1w`| MagnetizationTransfer, FlipAngle |
 
-### `part-<label>` key/value pair
+#### `part-<label>` key/value pair
 
 Some parametrically linked anatomical images involve both magnitude and phase  
 reconstructed images in the calculation of a parameter map. In that case, the 
@@ -268,11 +268,9 @@ filename MUST make use of this key/value pair to distinguish between them.
 The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
 `Image Type`. For example, see `MP2RAGE` suffix. 
 
-### Tasindexable_metadata 
+### Task (including resting state) imaging data
 
-Templatindexable_metadata 
-
-```Textindexable_metadata 
+```Text
 sub-<participant_label>/[ses-<session_label>/]
     func/
         sub-<participant_label>[_ses-<session_label>]_task-<task_label>[_acq-<label>][_rec-<label>][_run-<index>][_echo-<index>]_bold.nii[.gz]
