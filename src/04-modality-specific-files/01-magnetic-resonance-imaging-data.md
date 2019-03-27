@@ -245,7 +245,9 @@ same modality and can appear more than once in the filename with different keys.
 
 Please note that the order of the `index` and the value of the associated 
 metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
-correspond to the `FlipAngle` of `35`, `10` and `25` degrees).
+correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
+values need to be stored in the corresponding metadata field of the separate 
+JSON files.
 
 
 | Allowed key tags | Value list | Associated metadata field |
@@ -254,6 +256,17 @@ correspond to the `FlipAngle` of `35`, `10` and `25` degrees).
 | inv     | 1,2,... N  | InversionTime       |
 | echo    | 1,2,... N  | EchoTime            |
 | tsl     | 1,2,... N  | SpinLockTime        |
+
+For example (for a multi-echo FLASH dataset):
+
+```Text
+sub-01_echo-1_T1w.nii.gz
+sub-01_echo-1_T1w.json
+sub-01_echo-2_T1w.nii.gz
+sub-01_echo-2_T1w.json
+sub-01_echo-3_T1w.nii.gz
+sub-01_echo-3_T1w.json
+```
 
 #### `acq-<label>` key-value pair
 
@@ -273,13 +286,35 @@ where applicable:
 | MTS         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
 | MPM         | `MTon`, `MToff`, `T1w`| MTstate, FlipAngle |
 
+For example (for an `MPM` dataset):
+
+```Text
+sub-01_echo-1_acq-MTon_MPM.nii.gz
+sub-01_echo-1_acq-MTon_MPM.json
+sub-01_echo-1_acq-MToff_MPM.nii.gz
+sub-01_echo-1_acq-MToff_MPM.json
+sub-01_echo-1_acq-T1w_MPM.nii.gz
+sub-01_echo-1_acq-T1w_MPM.json
+```
+
 #### `part-<label>` key/value pair
 
 Some parametrically linked anatomical images involve both magnitude and phase  
 reconstructed images in the calculation of a parameter map. In that case, the 
 filename MUST make use of this key/value pair to distinguish between them. 
 The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
-`Image Type`. For example, see `MP2RAGE` suffix. 
+`Image Type`.
+
+For example (for an `MP2RAGE` dataset):
+
+```Text
+sub-01_inv-1_part-mag_MP2RAGE.nii.gz
+sub-01_inv-1_part-phase_MP2RAGE.nii.gz
+sub-01_inv-1_MP2RAGE.json
+sub-01_inv-2_part-mag_MP2RAGE.nii.gz
+sub-01_inv-2_part-phase_MP2RAGE.nii.gz
+sub-01_inv-2_MP2RAGE.json
+```
 
 ### Task (including resting state) imaging data
 
@@ -335,7 +370,7 @@ sub-01/
 
 Please note that the `<index>` denotes the number/index (in a form of an
 integer) of the echo not the echo time value which needs to be stored in the
-field EchoTime of the separate JSON file.
+field EchoTime of the separate JSON file (see [here](https://github.com/tiborauer/bep001/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair)). 
 
 Some meta information about the acquisition MUST be provided in an additional
 JSON file.
