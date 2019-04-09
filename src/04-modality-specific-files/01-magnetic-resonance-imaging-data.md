@@ -247,13 +247,13 @@ Please note that the order of the `index` and the value of the associated
 metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
 correspond to the `FlipAngle` of `35`, `10` and `25` degrees).
 
-If a filename contains more than one indexable metadata, respective key tags MUST 
+If a filename contains more than one indexable metadata, included key tags MUST 
 appear in alphabetical order. For example: 
 
 
 ```
-sub-01_echo-1_inv1_MP2RAGE.nii.gz
-sub-01_echo-1_inv1_MP2RAGE.json
+sub-01_echo-1_inv-1_MP2RAGE.nii.gz
+sub-01_echo-1_inv-1_MP2RAGE.json
 ```
 
 | Allowed key tags | Value list | Associated metadata field |
