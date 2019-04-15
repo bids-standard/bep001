@@ -4,7 +4,23 @@ This document captures all of the changes that the BEP001 team are proposing to 
 
 Table of contents:
 
+* [Indexable metadata](#indexable-metadata)
 * [Repetition Time](#repetition-time)
+* [Suffix](#suffix)
+
+## Indexable metadata
+
+`src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md`
+
+"Sequence specifics" updated to include metadata for MT sequences and to include metadata for any sequence with spoiling gradients.
+
+In "Anatomy imaging data" added indexable-metadata
+
+`<indexable_metadata>-<index>` key-value pair
+
+`acq-<label>` key-value pair
+
+`part-<label>` key/value pair
 
 ## Repetition Time
 
@@ -17,4 +33,8 @@ Adjust the definition of `RepetitionTime` in section [4.1.x Task (including rest
 `RepetitionTime` is currently defined very specifically as relating to functional imaging data.
 However there are structural scans that collect multiple volumes during an acquisition.
 Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `RepetitionTimeExcitation` and `RepetitionTimePreparation` as two additional terms for structural acquisitions that include multiple contrasts in 4.1.y.
+
+## Suffix
+
+Updated "modality label" to "suffix".
 
