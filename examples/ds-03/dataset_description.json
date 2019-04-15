@@ -1,0 +1,9 @@
+{
+    "Name": "BEP001 example dataset 03 (multi-echo MP2RAGE)",
+    "BIDSVersion": "1.0.10",
+    "Authors": [
+        "Kirstie Whitaker",
+        "Gilles de Hollander"
+    ],
+    "Description": "This virtual dataset is a multi-echo MP2RAGE dataset, which  was acquired with two inversion times, and, for the second inversion time, 4 different echoes."
+}

@@ -59,6 +59,42 @@ We'll cross that bridge when we come to it! :sparkles:)
 For example: Kirstie is currently working on a proposal to *"Adjust the definition of RepetitionTime in section 4.1.x Task (including resting state) imaging data and add two new fields to section 4.1.y Anatomy imaging data."*.
 You can see her suggestion at: https://github.com/KirstieJane/bep001/blob/repetitiontime/Proposal_RepetitionTime.md
 
+#### Proposal top line (title) and introduction
+
+Start with a one sentence explanation of what you're proposing and a justification for why it needs to change.
+
+![](images/proposal_example_1.png)
+
+#### Add the proposed text
+
+Start by linking to the section of the file you want to change, and the current line number of that section
+
+![](images/proposal_example_2.png)
+
+#### Repeat the text but in "diff" format
+
+This is to make it very explicit what has change and what has not.
+
+This is a bit of a pain to do, but will make reviews by the community *much* easier in the long run.
+
+![](images/proposal_example_3.png)
+
+The following screenshot shows what you can see when you're editing the markdown file.
+
+![](images/proposal_example_6.png)
+
+
+#### If there's a different section that needs to change, repeat the previous two steps
+
+Link to the section of the file you want to change.
+Add the proposed text.
+Repeat the text making clear what has changed using the "diff" formatting.
+
+![](images/proposal_example_4.png)
+
+![](images/proposal_example_5.png)
+
+
 ### Current proposals under development
 
 :construction: **THIS SECTION IS NOT UP TO DATE! HELP! :construction:

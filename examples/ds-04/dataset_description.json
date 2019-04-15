@@ -1,0 +1,10 @@
+{
+	"Name": "BEP001 example dataset 04 (MultiParameter Mapping)",
+    "BIDSVersion": "1.0.10",
+    "Authors": [
+        "Kirstie Whitaker",
+        "Gilles de Hollander"
+	"Alberto Lazari"
+    ],
+    "Description": "This is a sample dataset from a MultiParameter Mapping (MPM) sequence (as per Weiskopf et al., 2013), which yields multi-echo FLASH scans that are predominantly T1-, PD-, or MT-weighted by changing repetition time and flip angle."
+}
