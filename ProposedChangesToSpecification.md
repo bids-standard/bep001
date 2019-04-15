@@ -5,7 +5,8 @@ This document captures all of the changes that the BEP001 team are proposing to 
 Table of contents:
 
 * [Indexable metadata](#indexable-metadata)
-* [Repetition Time](#repetition-time)
+* [Repetition time](#repetition-time)
+* [Symbolic links](#symbolic-links)
 * [Suffix](#suffix)
 
 ## Indexable metadata
@@ -33,6 +34,21 @@ Adjust the definition of `RepetitionTime` in section [4.1.x Task (including rest
 `RepetitionTime` is currently defined very specifically as relating to functional imaging data.
 However there are structural scans that collect multiple volumes during an acquisition.
 Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `RepetitionTimeExcitation` and `RepetitionTimePreparation` as two additional terms for structural acquisitions that include multiple contrasts in 4.1.y.
+
+## Symbolic links
+
+### Proposed change
+
+Files in the derived folder can be symbolically linked to the main BIDS folder.
+For example, a derived quantitative map `derivatives/sub-01/anat/sub-01_R1.nii.gz` may be linked as `sub-01/anat/sub-01_T1w.nii.gz` to be used as a standard structural image for functional MRI processing pipelines.
+
+### Justification
+
+Whether a file is "derived" or "raw" depends on where you're starting from.
+To give a specific example, some researchers will be working on _creating_ quantitative maps, while others will want to _use_ the map as an input file to a structural processing pipeline.
+There is a possible natural cut off by saying that files in the BIDS specification are "raw" as they come off the scanner, and "derived" if offline processing has happened.
+Unfortunately, it is not possible to harmonize datasets across different scanners when following this rule.
+For example MP2RAGE images are sometimes used to construct `_T1uni`-images and `_T1map`s on the scanner system, but on some systems, this only happens post-hoc/"offline".
 
 ## Suffix
 
