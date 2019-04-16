@@ -295,7 +295,7 @@ where applicable:
 |-------------|------------------|------------------------------|
 | MTR         | `MTon`, `MToff`      | MTState |
 | MTS         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
-| MPM         | `MTon`, `MToff`, `T1w`| MTstate, FlipAngle |
+| MPM         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
 
 For example (for an `MPM` dataset):
 
