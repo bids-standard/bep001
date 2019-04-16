@@ -250,12 +250,19 @@ correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
 values need to be stored in the corresponding metadata field of the separate 
 JSON files.
 
+If a filename contains more than one indexable metadata, included key tags MUST 
+appear in alphabetical order. For example: 
+
+```
+sub-01_echo-1_inv-1_MP2RAGE.nii.gz
+sub-01_echo-1_inv-1_MP2RAGE.json
+```
 
 | Allowed key tags | Value list | Associated metadata field |
 |---------|------------|---------------------|
+| echo    | 1,2,... N  | EchoTime            |
 | fa      | 1,2,... N  | FlipAngle           |
 | inv     | 1,2,... N  | InversionTime       |
-| echo    | 1,2,... N  | EchoTime            |
 | tsl     | 1,2,... N  | SpinLockTime        |
 
 For example (for a multi-echo gradient echo dataset):
@@ -268,6 +275,9 @@ sub-01_echo-2_MEGRE.json
 sub-01_echo-3_MEGRE.nii.gz
 sub-01_echo-3_MEGRE.json
 ```
+
+Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
+specification is REQUIRED to extend the list above. 
 
 #### `acq-<label>` key-value pair
 
