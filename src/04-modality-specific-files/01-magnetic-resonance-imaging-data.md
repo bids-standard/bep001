@@ -504,7 +504,7 @@ B0 maps are primarily used to correct for spatial distortions in functional
 data acquired with EPI sequences.
 
 B1+ and B1- maps are mostly used in anatomical imaging, especially when applying
-quantitative MRI (qMRI or hMRI) techniques.
+quantitative MRI (qMRI) techniques.
 
 #### B0 fieldmaps
 
