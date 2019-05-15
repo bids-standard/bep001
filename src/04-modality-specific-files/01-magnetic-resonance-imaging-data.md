@@ -496,9 +496,9 @@ JSON example:
 
 ### Fieldmap data
 
-Both B0 (static magnetic field strength pattern), B1+ (transmit field pattern), and B1
-(receive field pattern) maps can be useful in post-processing raw functional and
-anatomical data.
+Both B0 (static magnetic field strength pattern), B1+ (transmit field pattern), and 
+B1- (receive field pattern; not yet supported) maps can be useful in post-processing
+both raw functional and anatomical data.
 
 B0 maps are primarily used to correct for spatial distortions in functional
 data acquired with EPI sequences.
@@ -539,7 +539,7 @@ Multiple fieldmaps can be stored. In such case the `_run-1`, `_run-2` should be
 used. The optional `acq-<label>` key/value pair corresponds to a custom label
 the user may use to distinguish different set of parameters.
 
-##### Phase difference image and at least one magnitude image
+##### Case 1: Phase difference image and at least one magnitude image
 
 Template:
 
@@ -574,7 +574,7 @@ the shorter echo time and `EchoTime2` to the longer echo time. Similarly
 }
 ```
 
-##### Two phase images and two magnitude images
+##### Case 2: Two phase images and two magnitude images
 
 Template:
 
@@ -600,7 +600,7 @@ corresponding `EchoTime` values. For example:
 }
 ```
 
-##### A real fieldmap image
+##### Case 3: A real fieldmap image
 
 Template:
 
@@ -624,7 +624,7 @@ the fieldmap. The possible options are: `Hz`, `rad/s`, or `Tesla`. For example:
 }
 ```
 
-##### Multiple phase encoded directions ("pepolar")
+##### Case 4: Multiple phase encoded directions ("pepolar")
 
 Template:
 
@@ -663,3 +663,32 @@ file to obtain scanning parameters. \_epi files can be a 3D or 4D - in the
 latter case all timepoints share the same scanning parameters. To indicate which
 run is intended to be used with which functional or diffusion scan the
 IntendedFor field in the JSON file should be used.
+
+#### B1+ fieldmaps 
+
+B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_ 
+flip angle that is transmited across the different locations in the image.
+The image is thus 3D and its values should mostly be close to 1.  B1+ 
+fieldmaps are stored in the `fmap`-folder and use the suffix `_B1plusmap`.
+The `IntendedFor`-field in the JSON file can be used to indicate which
+images it is intended to be be used with.
+
+
+Template:
+
+```Text
+sub-<participant_label>/[ses-<session_label>/]
+    fmap/
+        sub-<participant-label>[_ses-<session_label>][_acq-<acq-label>][_run-<run_index>]_B1plusmap.nii[.gz]
+        sub-<participant-label>[_ses-<session_label>][_acq-<acq-label>][_run-<run_index>]_B1plusmap.json
+```
+
+```JSON
+{
+   "PulseSequenceType":"DREAM",
+   "IntendedFor": ["anat/sub-01_inv-1_part-mag_MP2RAGE.nii.gz",
+                   "anat/sub-01_inv-1_part-phase_MP2RAGE.nii.gz",
+                   "anat/sub-01_inv-2_part-mag_MP2RAGE.nii.gz",
+                   "anat/sub-01_inv-2_part-phase_MP2RAGE.nii.gz"]
+}
+```
