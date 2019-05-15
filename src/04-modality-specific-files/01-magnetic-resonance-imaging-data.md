@@ -215,6 +215,7 @@ list of available suffixes.
 | Inversion recovery (for T1 mapping)                    | IRT1      | Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `<indexable_metadata>-<index>` of `inv-<index>` is REQUIRED for the images grouped by this suffix. Associated output suffixes: T1map                                                                                                                                                                                                                      |
 | Magnetization prepared two gradient echoes             | MP2RAGE   | Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `<indexable_metadata>-<index>` key/value pairs of `inv-<index>` and `fa-<index>`, and `part-<label>` key/value pair are REQUIRED for the images grouped by this suffix. Associated output suffixes: T1map, UNIT1                                              |
 | Multi-echo spin echo                                   | MESET2    | Groups together parametrically linked anatomical images for T2 mapping.The MESET2 method involves multiple spin echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. Associated output suffixes: T2map                                                                                                                                                                                                                             |
+| Multi-echo gradient echo                               | MEGRE     | Groups together parametrically linked multiple anatomical gradient echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. Associated output suffixes can be: T2starmap, R2starmap, when used for T2* mapping.                                                                                                                                                                                                                            |
 | Magnetization transfer ratio                           | MTR       | Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-<label>` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. Associated output suffixes: MTRmap                                                                                             |
 | Magnetization transfer saturation                      | MTS       | Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. Associated output suffixes: T1map, MTsat  |
 | Multi-parametric mapping                               | MPM       | Groups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. Associated output suffixes: R1map, R2starmap, MTsat, PDmap                  |
@@ -245,11 +246,12 @@ same modality and can appear more than once in the filename with different keys.
 
 Please note that the order of the `index` and the value of the associated 
 metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
-correspond to the `FlipAngle` of `35`, `10` and `25` degrees).
+correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
+values need to be stored in the corresponding metadata field of the separate 
+JSON files.
 
 If a filename contains more than one indexable metadata, included key tags MUST 
 appear in alphabetical order. For example: 
-
 
 ```
 sub-01_echo-1_inv-1_MP2RAGE.nii.gz
@@ -262,6 +264,17 @@ sub-01_echo-1_inv-1_MP2RAGE.json
 | fa      | 1,2,... N  | FlipAngle           |
 | inv     | 1,2,... N  | InversionTime       |
 | tsl     | 1,2,... N  | SpinLockTime        |
+
+For example (for a multi-echo gradient echo dataset):
+
+```Text
+sub-01_echo-1_MEGRE.nii.gz
+sub-01_echo-1_MEGRE.json
+sub-01_echo-2_MEGRE.nii.gz
+sub-01_echo-2_MEGRE.json
+sub-01_echo-3_MEGRE.nii.gz
+sub-01_echo-3_MEGRE.json
+```
 
 Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
 specification is REQUIRED to extend the list above. 
@@ -282,7 +295,18 @@ where applicable:
 |-------------|------------------|------------------------------|
 | MTR         | `MTon`, `MToff`      | MTState |
 | MTS         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
-| MPM         | `MTon`, `MToff`, `T1w`| MTstate, FlipAngle |
+| MPM         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
+
+For example (for an `MPM` dataset):
+
+```Text
+sub-01_echo-1_acq-MTon_MPM.nii.gz
+sub-01_echo-1_acq-MTon_MPM.json
+sub-01_echo-1_acq-MToff_MPM.nii.gz
+sub-01_echo-1_acq-MToff_MPM.json
+sub-01_echo-1_acq-T1w_MPM.nii.gz
+sub-01_echo-1_acq-T1w_MPM.json
+```
 
 #### `part-<label>` key/value pair
 
@@ -290,7 +314,18 @@ Some parametrically linked anatomical images involve both magnitude and phase
 reconstructed images in the calculation of a parameter map. In that case, the 
 filename MUST make use of this key/value pair to distinguish between them. 
 The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
-`Image Type`. For example, see `MP2RAGE` suffix. 
+`Image Type`.
+
+For example (for an `MP2RAGE` dataset):
+
+```Text
+sub-01_inv-1_part-mag_MP2RAGE.nii.gz
+sub-01_inv-1_part-phase_MP2RAGE.nii.gz
+sub-01_inv-1_MP2RAGE.json
+sub-01_inv-2_part-mag_MP2RAGE.nii.gz
+sub-01_inv-2_part-phase_MP2RAGE.nii.gz
+sub-01_inv-2_MP2RAGE.json
+```
 
 ### Task (including resting state) imaging data
 
@@ -346,7 +381,7 @@ sub-01/
 
 Please note that the `<index>` denotes the number/index (in a form of an
 integer) of the echo not the echo time value which needs to be stored in the
-field EchoTime of the separate JSON file.
+field EchoTime of the separate JSON file (see [here](src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair)). 
 
 Some meta information about the acquisition MUST be provided in an additional
 JSON file.
