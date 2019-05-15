@@ -666,14 +666,6 @@ IntendedFor field in the JSON file should be used.
 
 #### B1+ fieldmaps 
 
-B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_ 
-flip angle that is transmited across the different locations in the image.
-The image is thus 3D and its values should mostly be close to 1.  B1+ 
-fieldmaps are stored in the `fmap`-folder and use the suffix `_B1plusmap`.
-The `IntendedFor`-field in the JSON file can be used to indicate which
-images it is intended to be be used with.
-
-
 Template:
 
 ```Text
@@ -692,3 +684,11 @@ sub-<participant_label>/[ses-<session_label>/]
                    "anat/sub-01_inv-2_part-phase_MP2RAGE.nii.gz"]
 }
 ```
+
+B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_ 
+flip angle that is transmited across the different locations in the image.
+The image is thus 3D and its values should mostly be close to 1.  B1+ 
+fieldmaps are stored in the `fmap`-folder and use the suffix `_B1plusmap`.
+The `IntendedFor`-field in the JSON file can be used to indicate which
+images it is intended to be be used with.
+
