@@ -252,8 +252,8 @@ appear in alphabetical order. For example:
 
 
 ```
-sub-01_echo-1_inv-1_MP2RAGE.nii.gz
-sub-01_echo-1_inv-1_MP2RAGE.json
+sub-01_echo-1_inv-1_part-mag_MP2RAGE.nii.gz
+sub-01_echo-1_inv-1_part-mag_MP2RAGE.json
 ```
 
 | Allowed key tags | Value list | Associated metadata field |
