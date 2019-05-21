@@ -48,13 +48,13 @@ As a result, semantic relevance of any specific key label can get easily overloa
 
 Based on the reasons given above, to maintain a viable and well-balanced list of suffixes, BEP001 classify suffixes in three categories:
 
-1. `Agglomerating suffixes` 
+1. `Agglomerating suffixes` (`A`)
      * **Role:** Groups together files that belong to parametrically linked multiple scans intended for a well-defined qMRI application (e.g. `MPM`, `VFA`).
 
-2. `Designation suffixes for qMRI maps` 
+2. `Designation suffixes for qMRI maps` (`M`) 
      * **Role:** Denotes the parameter contained within a single file of a quantitative map (e.g. `T1map`,`MTsat`).  
 
-3. `Suffixes for conventional MRI contrasts`
+3. `Suffixes for conventional MRI contrasts` (`W`)
      * **Role:** Denotes the type of the predominant contrast conveyed by a single file of a conventional anatomical image (e.g. `T1w`, `T2w`, `PDw`, `T2starw`). 
 
 #### An important note on minimizing the use of weight tags for grouping qMRI inputs
@@ -84,19 +84,41 @@ sub-01_acq-T1w_MTS.json [**]
 
 In conclusion, weight tags denote the type of predominant contrast conveyed by a single file of a conventional anatomical image ONLY when used as a suffix. In all other cases,  the `acq-<label>` key-value pair can be still used to accodomate legacy naming conventions for the sake of accustomed familiarity, yet without interfering with the interchangeability principle. Nevertheless, minimizing the use of weight tags is highly encouraged to avoid confusion.  
 
-For the `MTS` example given above, one would question why two `<indexable_metadata>-<index>` key-value pairs of `fa` and (a new key tag of) `mt` are not used to distinguish `MTS` images from each other? Answers to this question are:
-1. `<indexable_metadata>-<index>` is applicable when the variable entries are _enumerable_. Whereas `mt` would attain  _categorical_ entries. Therefore, `mt` cannot be defined as a new key tag in the list of allowed key tags.
-2. The list of `acq-<label>` key-value pairs would only define `MTon` and `MToff` for the `MTS` and could be used in junction with the `<indexable_metadata>-<index>` key-value pair of `fa`. Although this is a legitimate solution, it was _not preferred_ to keep convention somewhat closer to the accustomed format of `MTw`-`PDw`-`T1w` and to collapse two varying parameters (flip angle and MT) into one variable, so that the file list becomes easier to read for the multi-echo derivatives of the `MTS` method (e.g. `MPM`).              
+>  Answers to the plausible questions:
 
-#### BEP001 adopts following principles when a new `_suffix` entry is to be listed:
+Q1 - For the `MTS` example given above, why two `<indexable_metadata>-<index>` key-value pairs of `fa` and (a new key tag of) `mt` are not used to distinguish `MTS` images from each other? 
+* A-1. `<indexable_metadata>-<index>` is applicable when the variable entries are _enumerable_. Whereas `mt` would attain  _categorical_ entries. Therefore, `mt` cannot be defined as a new key tag in the list of allowed key tags.
+
+Q2 - For the `MTS` example given above, the list of `acq-<label>` key-value pairs would only define `MTon` and `MToff` instead of including `T1w`, which then could be used in conjunction with the `<indexable_metadata>-<index>` key-value pair of `fa`. Why deviate from a more weight tag agnostic convention?
+
+* A-2. Although this is a legitimate solution, it was _not preferred_ to keep convention somewhat closer to the accustomed format of `MTw`-`PDw`-`T1w` and to collapse two varying parameters (flip angle and MT) into one variable, so that the file list becomes easier to read for the multi-echo derivatives of the `MTS` method (e.g. `MPM`).              
+
+#### Principles for adding a new `_suffix` entry
+
+Updates to the specification is REQUIRED to extend the list of available suffixes. A new entry request or any suggestion to modify existing entries can be made by opening a GitHub issue on [BEP001 repository](https://github.com/bids-standard/bep001). Following principles MUST be respected:  
 
 * List of available suffixes is a list of unique entries. Thus, more than one description for a single `_suffix` is not allowed. 
-* Every suffix MUST belong to one and only one of the three suffix classes given above. 
+* Every suffix MUST belong to one and only one of the three suffix classes of **i)** `agglomerating suffixes (A)`, **ii)** `designation suffixes for qMRI maps (M)` and **iii)** `suffixes for conventional MRI contrasts (W)`.
+* Corresponding suffix class (`A`, `M` or `W`) must be denoted for every entry of the list of available suffixes. 
+
+*** 
+
 * `Agglomerating suffixes` MUST attain a clear description of the qMRI application that they relate to. If available, hyperlinks to example applications and/or more detailed descriptions are encouraged.
-* If there exist an `agglomerating suffix` which relates to one or many `designation suffix for qMRI map`, all the relevances MUST be indicated in the description of the `agglomerating suffix` by the "Associated output suffixes" expression.
-* Unless the pulse sequence name is directly linked to a qMRI application (e.g. `MP2RAGE`),          
+* If there exist an `agglomerating suffix` which relates to one or many `designation suffix for qMRI map`, all the relevances MUST be indicated in the description of the `agglomerating suffix` by the _"Associated output suffixes: "_ expression.
+* Unless the pulse sequence is exclusively associated with a specific qMRI application (e.g. `MP2RAGE`), sequence names are NOT used as `agglomerative suffixes`.
+* `Agglomerating suffixes` MUST be used in conjuction with at least one of the `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs. If existing `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs are not enough to describe a new qMRI method, additional request is needed to extend those lists.     
 
+*** 
 
+* `Designation suffixes for qMRI maps` MUST attain a clear description of the parameter that they contain, **including the units**. If available, hyperlinks to example applications and/or more detailed descriptions are highly encouraged.
+
+* If there exist a `designation suffix for qMRI maps` that relates to one or many `agglomerative suffix`, all the relevances MUST be indicated in the description of the `designation suffix for qMRI map` by the _"Can be generated by: "_ expression.
+
+*** 
+
+* The list of available `suffixes for conventional MRI contrasts` is immutable: `T1w`,`T2w`,`PDw`,`T2starw`. 
+
+***
 
 
 ## Indexable Metadata 
@@ -104,4 +126,29 @@ For the `MTS` example given above, one would question why two `<indexable_metada
 ### Proposed Change 
 
 ### Justification 
+
+## Sidecar JSON files of qMRI maps
+
+Which metadata fields must be included. Some of these fields are to be inherited by the input files and some of them are to be populated by the estimation software. Right now: 
+
+* BasedOn --> List of files gruoped by an agglomerative suffix + (optional) field maps. 
+* MagneticFieldStrength
+* Manufacturer
+* ManufacturerModelName
+* InstitutionName 
+* PulseSequenceType
+* PulseSequenceDetails
+* EstimationPaper
+* EstimationAlgorithm
+* EstimationSoftwareName
+* EstimationSoftwareVersion 
+* EstimationSoftwareLanguage
+* EstimationSoftwareEnv 
+
+## Sidecar JSON files of agglomerative suffixes 
+
+Mention about root JSON + repeating JSON file convention.
+Which root JSON metadata fields are optional/required. 
+
+
 
