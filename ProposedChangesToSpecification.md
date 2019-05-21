@@ -18,10 +18,7 @@ Adjust the definition of `RepetitionTime` in section [4.1.x Task (including rest
 However there are structural scans that collect multiple volumes during an acquisition.
 Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `RepetitionTimeExcitation` and `RepetitionTimePreparation` as two additional terms for structural acquisitions that include multiple contrasts in 4.1.y.
 
-* [B1plus fieldmaps](#b1plus-fieldmaps)
-## Suffix 
-
-## Repetition Time
+## [B1plus fieldmaps](#b1plus-fieldmaps)
 
 ### Proposed Change
 
@@ -31,6 +28,10 @@ for storing B1+ fielmaps.
 ### Justification
 
 For some anatomical MRI acquisitions, especially when doing quantiative MRI (qMRI), B1+ fieldmaps can be useful to get better estimates of the underlying physical parameters (e.g., T1 in T1 maps obtained with MP2RAGE-sequence, see Marques et al., 2013).
+
+## Suffix 
+
+### Proposed Change
 
 
 ### Justification 
@@ -65,4 +66,8 @@ BEP001 adopts following principles when a new `_suffix` entry is to be listed:
 
 
 ## Indexable Metadata 
+
+### Proposed Change 
+
+### Justification 
 
