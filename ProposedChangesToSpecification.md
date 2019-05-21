@@ -5,6 +5,9 @@ This document captures all of the changes that the BEP001 team are proposing to 
 Table of contents:
 
 * [Repetition Time](#repetition-time)
+* [B1plus fieldmaps](#b1plus-fieldmaps)
+* [Suffix](#suffix)
+* [Indexable metadata](#indexable-metadata)
 
 ## Repetition Time
 
@@ -18,7 +21,7 @@ Adjust the definition of `RepetitionTime` in section [4.1.x Task (including rest
 However there are structural scans that collect multiple volumes during an acquisition.
 Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `RepetitionTimeExcitation` and `RepetitionTimePreparation` as two additional terms for structural acquisitions that include multiple contrasts in 4.1.y.
 
-## [B1plus fieldmaps](#b1plus-fieldmaps)
+## B1plus fieldmaps
 
 ### Proposed Change
 
