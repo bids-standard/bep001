@@ -48,7 +48,7 @@ As a result, semantic relevance of any specific key label can get easily overloa
 
 Based on the reasons given above, to maintain a viable and well-balanced list of suffixes, BEP001 classify suffixes in three categories:
 
-1. `Agglomerating suffixes` (`A`)
+1. `Grouping suffixes` (`G`)
      * **Role:** Groups together files that belong to parametrically linked multiple scans intended for a well-defined qMRI application (e.g. `MPM`, `VFA`).
 
 2. `Designation suffixes for qMRI maps` (`M`) 
@@ -65,7 +65,7 @@ Assume that `PDw` and `T1w` labels were assigned to the volumes acquired with a 
 
 Similarly, the description of the magnetization transfer saturation index map (`MTsat`) inputs as grouped by the `MTS` suffix constitutes a good real-world example from the curent proposal (please see the list of available suffixes). The method involves acquisition of three volumes, where files are named by `MTw`, `PDw` and `T1w` tags _by tradition_. The `MTw` refers to the volume acquired by playing magnetization transfer pulse as a preperation step, all the remaining parameters of `MTw` ideally match that of `PDw`. When compared side by side, the contrast distinction implied by the `PDw` and `T1w` labels is apprehensible. Given that these two volumes are acquired using a GRE sequence and with the same TR, the one with the higher flip angle is expected to attain a higher T1 contribution. However, outside the scope of the `MTsat` protocol, demarcation of `PDw` vs `T1w` for the identical set of sequence and parameters can easily become a subjective matter. Therefore, to avoid potentially unrepresentative use of the weight tag of `PDw`, following solution is provided: 
 
-* Group input files needed to compute an `MTsat` map by the `MTS` agglomerating suffix.
+* Group input files needed to compute an `MTsat` map by the `MTS` grouping suffix.
 * Change `MTw` tag to `MTon` and `PDw` tag to `MToff` to better denotate the relationship between these images.  
 * Use `MTon`, `MToff` and `T1w` tags as values in the `acq-<label>` key-value pair to distinguish `MTS` files from each other.
 
@@ -98,21 +98,21 @@ Q2 - For the `MTS` example given above, the list of `acq-<label>` key-value pair
 Updates to the specification is REQUIRED to extend the list of available suffixes. A new entry request or any suggestion to modify existing entries can be made by opening a GitHub issue on [BEP001 repository](https://github.com/bids-standard/bep001). Following principles MUST be respected:  
 
 * List of available suffixes is a list of unique entries. Thus, more than one description for a single `_suffix` is not allowed. 
-* Every suffix MUST belong to one and only one of the three suffix classes of **i)** `agglomerating suffixes (A)`, **ii)** `designation suffixes for qMRI maps (M)` and **iii)** `suffixes for conventional MRI contrasts (W)`.
+* Every suffix MUST belong to one and only one of the three suffix classes of **i)** `grouping suffixes (A)`, **ii)** `designation suffixes for qMRI maps (M)` and **iii)** `suffixes for conventional MRI contrasts (W)`.
 * Corresponding suffix class (`A`, `M` or `W`) must be denoted for every entry of the list of available suffixes. 
 
 *** 
 
-* `Agglomerating suffixes` MUST attain a clear description of the qMRI application that they relate to. If available, hyperlinks to example applications and/or more detailed descriptions are encouraged.
-* If there exist an `agglomerating suffix` which relates to one or many `designation suffix for qMRI map`, all the relevances MUST be indicated in the description of the `agglomerating suffix` by the _"Associated output suffixes: "_ expression.
-* Unless the pulse sequence is exclusively associated with a specific qMRI application (e.g. `MP2RAGE`), sequence names are NOT used as `agglomerative suffixes`.
-* `Agglomerating suffixes` MUST be used in conjuction with at least one of the `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs. If existing `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs are not enough to describe a new qMRI method, additional request is needed to extend those lists.     
+* `Grouping suffixes` MUST attain a clear description of the qMRI application that they relate to. If available, hyperlinks to example applications and/or more detailed descriptions are encouraged.
+* If there exist an `grouping suffix` which relates to one or many `designation suffix for qMRI map`, all the relevances MUST be indicated in the description of the `grouping suffix` by the _"Associated output suffixes: "_ expression.
+* Unless the pulse sequence is exclusively associated with a specific qMRI application (e.g. `MP2RAGE`), sequence names are NOT used as `grouping suffixes`.
+* `Grouping suffixes` MUST be used in conjuction with at least one of the `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs. If existing `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs are not enough to describe a new qMRI method, additional request is needed to extend those lists.     
 
 *** 
 
 * `Designation suffixes for qMRI maps` MUST attain a clear description of the parameter that they contain, **including the units**. If available, hyperlinks to example applications and/or more detailed descriptions are highly encouraged.
 
-* If there exist a `designation suffix for qMRI maps` that relates to one or many `agglomerative suffix`, all the relevances MUST be indicated in the description of the `designation suffix for qMRI map` by the _"Can be generated by: "_ expression.
+* If there exist a `designation suffix for qMRI maps` that relates to one or many `grouping suffix`, all the relevances MUST be indicated in the description of the `designation suffix for qMRI map` by the _"Can be generated by: "_ expression.
 
 *** 
 
@@ -131,7 +131,7 @@ Updates to the specification is REQUIRED to extend the list of available suffixe
 
 Which metadata fields must be included. Some of these fields are to be inherited by the input files and some of them are to be populated by the estimation software. Right now: 
 
-* BasedOn --> List of files gruoped by an agglomerative suffix + (optional) field maps. 
+* BasedOn --> List of files gruoped by an grouping suffix + (optional) field maps. 
 * MagneticFieldStrength
 * Manufacturer
 * ManufacturerModelName
@@ -145,7 +145,7 @@ Which metadata fields must be included. Some of these fields are to be inherited
 * EstimationSoftwareLanguage
 * EstimationSoftwareEnv 
 
-## Sidecar JSON files of agglomerative suffixes 
+## Sidecar JSON files of grouping suffixes 
 
 Mention about root JSON + repeating JSON file convention.
 Which root JSON metadata fields are optional/required. 
