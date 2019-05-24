@@ -226,13 +226,108 @@ images, the use of `_suffix` alone cannot distinguish individual files from each
 other, failing to identify their roles as inputs to the calculation of 
 quantitative maps. Although such images are REQUIRED to be grouped by a proper
 `grouping suffix`, they are also RECOMMENDED to include at least one of the `acq-<label>`, 
-`part-<label>` and `<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
+`part-<label>` and `<indexable_metadata>-<index>` key-value pairs (please visit corresponding 
 sections for details).
 
 Please see the available `grouping suffixes` in the list of available suffixes. Descriptions
 of this type of suffixes are preceded by the `(G) -->` notation (`G` stands for grouping). 
 
-###### Content and hierarchy of the JSON files accompanying anatomical images with a grouping suffix
+_Content and hierarchy of the JSON files accompanying anatomical images with a grouping suffix_
+***
+In conformity with the main BIDS specification, key-value pairs involved in the naming of an
+anatomy imaging data can NOT explicitly relay information regarding the sequence parameters. Instead, 
+the key-value pairs are used only for categorization, whereas the respective sequence parameters
+are contained in the sidecar JSON files. 
+
+* _Hierarchy_ 
+
+In case of the `parametrically linked anatomical scans`, majority of the acquisition parameters remain 
+constant across multiple runs of the same sequence. However, some of the parameters are intentionally
+modified to collect a dataset suitable for quantitative parameter mapping. To avoid redundancy of the 
+constant parameters and to ease the readibility of those varying from scan to scan, a parent-child 
+hierarchy is defined between the JSON files containing a grouping suffix.       
+
+i) The constant parameters are stored in a `parent` JSON file that is named only by a `sub-<index>` 
+key-value pair and a `grouping suffix`. For example: 
+
+```Text
+sub-01_VFA.json 
+```
+
+ii) All the metadata entries that are subjected to at least one change between the different runs of 
+the same sequence are stored in `child` JSON files. For example: 
+
+```Text
+sub-01_VFA.json (Parent)
+sub-01_fa-1_VFA.nii.gz 
+sub-01_fa-1_VFA.json (Child-1)
+sub-01_fa-2_VFA.nii.gz 
+sub-01_fa-2_VFA.json (Child-2)
+```
+
+* _Content_ 
+  
+i) There is not a specific restriction to the amount of metadata contained by a `parent` JSON file. 
+However, the following metadata is highly RECOMMENDED to be included for the provenance recording of the
+fitting process:
+
+* All the sccanner hardware parameters primarily including:  
+    * Manufacturer                  
+    * ManufacturersModelName        
+    * DeviceSerialNumber            
+    * StationName                   
+    * SoftwareVersions              
+    * MagneticFieldStrength                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    * ReceiveCoilName               
+    * ReceiveCoilActiveElements     
+    * GradientSetType               
+    * MRTransmitCoilSequence                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+    * MatrixCoilMode                
+    * CoilCombinationMethod
+* Sequence specific parameters primarily including:   
+    * PulseSequenceType
+    * ScanningSequence
+    * SequenceVariant
+    * ScanOptions
+    * SequenceName
+    * PulseSequenceDetails
+    * NonlinearGradientCorrection
+* Other timing, RF, contrast, spatial encoding and acceleration related parameters.
+
+**Important:** Depending** on the qMRI application, some of the constant metadata entries may be REQUIRED
+for the intended parameter estimation. Please see the REQUIRED `parent` fields column in 
+the list of method-specific priority levels for qMRI metadata below. 
+
+ii) The `child` JSON files MUST contain all the metadata entries that are subjected to at least
+one change between different runs of the same sequence. The metadata fields to be included
+in the `child` JSON files depend on the type qMRI application. 
+
+The following table identifies method-specific priority levels for qMRI metadata: 
+
+| Grouping suffix             | REQUIRED `child` fields   | OPTIONAL `child` fields | REQUIRED `parent` fields | OPTIONAL `parent` fields |
+| :-------------------------- | :---------------- | :--------------| :--------------| :--------------|
+| VFA                         | FlipAngle         |     N/A | SequenceType, RepetitionTimeExcitation | PhaseIncrement|
+| IRT1                        | InversionTime     |     N/A | N/A| N/A|
+| MP2RAGE                     | FlipAngle, InversionTime |  EchoTime | RepetitionTimeExcitation, RepetitionTimePreperation | |
+| MESE                        | EchoTime         |   N/A | N/A | N/A|
+| MEGRE                       | EchoTime         |   N/A | N/A | N/A|
+| MTR                         | MTState         |     N/A | N/A| N/A|
+| MTS                         | FlipAngle, MTState  |  N/A | RepetitionTimeExcitation| N/A|
+| MPM                         | FlipAngle, MTState, EchoTime, RepetitionTimeExcitation |  N/A | N/A| N/A|
+
+**Important:**  Please note that OPTIONAL columns in the table above contain list of parameters that may be
+used to derive qMRI applications from an existing `grouping suffix`.  Different use cases can be easily 
+inferred based on the availability of the OPTIONAL `parent` and `child` parameters. This approach i) prevents the 
+list of available suffixes from over-proliferation, ii) provides qMRI-focused BIDS applications with the set of rules 
+to create meta-data driven parameter fitting routines and iii) keep an inheritance track for the qMRI methods 
+described within the specification.
+
+| Grouping suffix             | REQUIRED `parent`:Value | OPTIONAL `child` | OPTIONAL `parent` | Derived qMRI application|
+| :-------------------------- | :---------------- | :--------------|:--------------| :--------------| 
+| VFA | SequenceType:SPGR | - | -| `DESPOT1`|
+| VFA | SequenceType:SSFP | - | PhaseIncrement| `DESPOT2`|
+| VFA | SequenceType:SSFP | PhaseIncrement | -| `DESPOT2FM`|
+
 
 
 ##### Designation suffixes for qMRI maps
@@ -255,8 +350,56 @@ Please see the available `designation suffixes for qMRI maps` in the list of
 available suffixes. Descriptions of this type of suffixes are preceded by the 
 `(M) -->` notation (`M` stands for maps). 
 
-###### Content of the JSON files accompanying qMRI maps 
+_Content of the JSON files accompanying qMRI maps_ 
+***
 
+Metadata fields listed in the sidecar JSON of the quantitative maps depend on the
+way they are generated:
+* If a quantitative map is generated at the scanner site through non-transparent vendor 
+implementations, the content is confined to the available metadata. 
+* If a quantitative map is generated using an open-source software, the sidecar JSON file
+MUST inherit all the fields from the `parent` JSON file of the input data (grouped by a
+`grouping suffix`) and MUST include the following metadata fields: 
+
+| Field name                  | Definition                                                     |
+| :-------------------------- | :------------------------------------------------------------- |
+| BasedOn | List of files gruoped by an `grouping suffix` to generate the map. The fieldmaps are also listed if involved in the processing.|
+| EstimationReference | Reference to the study/studies on which the implementation is based.|
+| EstimationAlgorithm | Type of algoritm used to perform fitting (e.g. linear, non-linear, LM etc.)|
+| EstimationSoftwareName | The name of the open-source tool used for fitting (e.g. qMRLab, QUIT, hMRI-Toolbox etc.)|
+| EstimationSoftwareVer | Version of the open-source tool used for fitting (e.g. v2.3.0 etc.)|
+| EstimationSoftwareLang | Language in which the software is natively developed (e.g. MATLAB, CPP, Python etc.)|
+| EstimationSoftwareEnv | Operation system on which the application was run (e.g. OSX Mojave, Ubuntu 18.04, Win10 etc.)|
+
+Example: 
+
+```Text
+sub-01_T1map.nii.gz
+sub-01_T1map.json 
+```
+
+```Text
+sub-01_T1map.json
+{
+"BasedOn":["anat/sub-01_fa-1_VFA.nii.gz",
+           "anat/sub-01_fa-2_VFA.nii.gz",
+           "fmap/sub-01_B1plusmap.nii.gz"],
+“MagneticFieldStrength”: “3”, 
+“Manufacturer”: “Siemens”, 
+“ManufacturerModelName”: “TrioTim”, 
+“InstitutionName”: “xxx”,    
+“PulseSequenceType”: “SPGR”, (TODO: FIX)
+“PulseSequenceDetails”: “Information beyond the sequence type that identifies the specific pulse sequence used (VB version, if not standard, Siemens WIP XXX version ### sequence written by xx using a version compiled on mm/dd/yyyy/)”, 
+"EstimationPaper":"John Doe et. al.",
+"EstimationAlgorithm":"Linear",
+“EstimationSoftwareName”: “qMRLab”,
+“EstimationSoftwareLanguage”: “Octave”,
+“EstimationSoftwareVersion”: “2.3.0”,
+“EstimationSoftwareEnv”: “Ubuntu 16.04” 
+}
+
+
+```
 
 ##### List of available suffixes for anatomy imaging data
 
@@ -269,14 +412,14 @@ For the sake of clarity, suffix descriptions are preceded by a single letter
 | T2 weighted images                                     | T2w       | (W) --> Denotes images with predominant T2 contribution.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | Proton density weighted images                         | PDw       | (W) --> Denotes images with predominant proton density (PD) contribution.                            |
 | T2 star weighted images                                | T2starw   | (W) --> Denotes images with predominant T2<sup>*</sup> contribution, typically images acquired using a GRE sequence with low flip angle, long echo time and long repetition time. Please note that this suffix is not a surrogate for `T2starmap`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Variable flip angle                                    | VFA       | (G) --> Groups together parametrically linked anatomical images for T1 mapping. The VFA method involves at least two spoiled gradient echo images with different flip angles. The `<indexable_metadata>-<index>` of `fa-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map                                                                                                                                                                                                                                      |
-| Inversion recovery (for T1 mapping)                    | IRT1      | (G) --> Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `<indexable_metadata>-<index>` of `inv-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map                                                                                                                                                                                                                      |
+| Variable flip angle                                    | VFA       | (G) --> Groups together parametrically linked anatomical images (primarily) for relaxometry mapping. The VFA method involves at least two spoiled gradient echo (SPGR) of steady-state free precession (SSFP) images acquired at different flip angles. Therefore, `<indexable_metadata>-<index>` of `fa-<index>` is REQUIRED for the images grouped by this suffix. Depending on the provided metadata fields and the sequence type, data may be eligible for `DESPOT1`, `DESPOT2` and their variants. Please visit the method-specific list of priority levels for qMRI metadata for details. _Associated output suffixes:_ T1map, T2map, R1map, R2map          |
+| Inversion recovery (for T1 mapping)                    | IRT1      | (G) --> Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `<indexable_metadata>-<index>` of `inv-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, R1map                                                                                                                                                                                                                      |
 | Magnetization prepared two gradient echoes             | MP2RAGE   | (G) --> Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `<indexable_metadata>-<index>` key/value pairs of `inv-<index>` and `fa-<index>`, and `part-<label>` key/value pair are REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, UNIT1                                              |
-| Multi-echo spin echo                                   | MESE      | (G) --> Groups together parametrically linked anatomical images (commonlly) for T2 mapping.The MESE method involves multiple spin echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2map                                                                                                                                                                                                                             |
+| Multi-echo spin echo                                   | MESE      | (G) --> Groups together parametrically linked anatomical images (commonlly) for T2 mapping.The MESE method involves multiple spin echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2map, R2map                                                                                                                                                                                                                             |
 | Multi-echo gradient echo                               | MEGRE     | (G) --> Groups together parametrically linked multiple anatomical gradient echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2starmap, R2starmap, when used for T2* mapping.                                                                                                                                                                                                                            |
 | Magnetization transfer ratio                           | MTR       | (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-<label>` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. _Associated output suffixes:_ MTRmap                                                                                             |
 | Magnetization transfer saturation                      | MTS       | (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ T1map, MTsat  |
-| Multi-parametric mapping                               | MPM       | (G) --> Groups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap                  |
+| Multi-parametric mapping                               | MPM       | (G) --> Groups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                  |
 | Longitudinal relaxation time map                       | T1map     | (M) --> In seconds (s). T1 maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | True transverse relaxation time map                    | T2map     | (M) --> In seconds (s). T2 maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | Observed transverse relaxation time map                | T2starmap | (M) --> In seconds (s). T2* maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                           |
