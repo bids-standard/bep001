@@ -173,6 +173,21 @@ scans:
 
 #### Suffix
 
+Based on their function, suffixes are divided into three classes:
+
+1. `Suffixes for conventional MRI contrasts`
+
+2. `Grouping suffixes`
+
+3. `Designation suffixes for qMRI maps`
+
+The following three subsections expand on each of these `_suffix` classes.
+
+##### Sufixes for conventional MRI contrasts
+
+**Function:** Denotes the type of the predominant contrast conveyed by a
+single file of a conventional anatomical image.
+
 If a structural data is not intended for creating a quantitative map, the use of
 `_suffix` is REQUIRED (along with the common key/value pairs if applicable) to 
 provide a self explanatory filename. For example: 
@@ -187,27 +202,66 @@ sub-01_run-2_T1w.json
 The `run-<index>` in the example above denotes the index of the acquisition 
 repeated with the identical parameters (e.g. to achieve a higher SNR). Please 
 note that changing parameters between multiple acquisitions of the same sequence
-creates a different use case: parametrically linked anatomical images.
+creates a different use case: `parametrically linked anatomical images`.
 
-If a structural data is a member of parametrically linked anatomical images,
-the use of `_suffix` alone cannot distinguish individual acquisitions from each 
+The entries listed for `suffixes for conventional MRI contrasts` in the list of 
+available suffixes are immutable. Descriptions of this type of suffixes are preceded 
+by the `(W) -->` notation (`W` stands for grouping).
+
+##### Grouping suffixes
+
+**Function:** Groups together files that belong to parametrically linked multiple 
+scans, which are intended for a well-defined qMRI application. For example:
+
+```Text
+sub-01_VFA.json 
+sub-01_fa-1_VFA.nii.gz
+sub-01_fa-1_VFA.json
+sub-01_fa-2_VFA.nii.gz
+sub-01_fa-2_VFA.json
+```
+
+Please note that if a structural data is a member of parametrically linked anatomical 
+images, the use of `_suffix` alone cannot distinguish individual files from each 
 other, failing to identify their roles as inputs to the calculation of 
-quantitative maps. Although, such images are REQUIRED to be grouped by a proper
-`_suffix` (please see the list of available suffixes), they are also RECOMMENDED
-to include at least one of the `acq-<label>`, `part-<label>` and 
-`<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
-sections for details).  
+quantitative maps. Although such images are REQUIRED to be grouped by a proper
+`grouping suffix`, they are also RECOMMENDED to include at least one of the `acq-<label>`, 
+`part-<label>` and `<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
+sections for details).
 
-Please note that not only parametrically linked anatomical images, but also 
+Please see the available `grouping suffixes` in the list of available suffixes. Descriptions
+of this type of suffixes are preceded by the `(G) -->` notation (`G` stands for grouping). 
+
+###### Content and hierarchy of the JSON files accompanying anatomical images with a grouping suffix
+
+
+##### Designation suffixes for qMRI maps
+
+**Function:** Denotes the parameter contained within a single file of a quantitative map.  
+
+Not only parametrically linked anatomical images, but also 
 outputs (quantitative maps) created by processing these files fall into the 
 category of anatomy imaging data. In addition, in some cases, quantitative maps 
 can be obtained right off the scanner without the need of storing any 
 parametrically linked anatomical images and further processing. For both cases,
-a proper `_suffix` is REQUIRED for describing quantitative maps.
+a proper `_suffix` is REQUIRED for describing quantitative maps. For example:
+
+```Text
+sub-01_T1map.nii.gz
+sub-01_T1map.json 
+```
+
+Please see the available `designation suffixes for qMRI maps` in the list of 
+available suffixes. Descriptions of this type of suffixes are preceded by the 
+`(M) -->` notation (`M` stands for maps). 
+
+###### Content of the JSON files accompanying qMRI maps 
 
 
+##### List of available suffixes for anatomy imaging data
 
-Please see the list of available suffixes below.   
+For the sake of clarity, suffix descriptions are preceded by a single letter 
+(`G`,`M`,`W`), indicating the class that they belong to.    
 
 | Name                                                   | _suffix   | (Class) --> Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 |--------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -236,6 +290,7 @@ Please see the list of available suffixes below.
 | Longutidunal relaxation in rotating frame (T1 rho) map | T1Rmap    | (M) --> In seconds (s). T1-rho maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Myelin water fraction map                              | MWFmap    | (M) --> In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Combined PD/T2 map                                     | PDT2map   | (M) --> In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to.                                                                                                                                                                                                                                                                                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                                                                                                               |
+| B1<sup>+</sup> map                                     | PDT2map   | (M) --> In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.                                                                                                                                                                                                                                                                                                                                                                                                                      |                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 #### `<indexable_metadata>-<index>` key-value pair
 

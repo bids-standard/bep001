@@ -48,14 +48,17 @@ As a result, semantic relevance of any specific key label can get easily overloa
 
 Based on the reasons given above, to maintain a viable and well-balanced list of suffixes, BEP001 classify suffixes in three categories:
 
-1. `Grouping suffixes` (`G`)
-     * **Role:** Groups together files that belong to parametrically linked multiple scans intended for a well-defined qMRI application (e.g. `MPM`, `VFA`).
+1. `Suffixes for conventional MRI contrasts` (`W`)
+     * **Function:** Denotes the type of the predominant contrast conveyed by a
+      single file of a conventional anatomical image.
 
-2. `Designation suffixes for qMRI maps` (`M`) 
-     * **Role:** Denotes the parameter contained within a single file of a quantitative map (e.g. `T1map`,`MTsat`).  
+2. `Grouping suffixes` (`G`)
+     * **Function:** Groups together files that belong to parametrically linked 
+     multiple scans, which are intended for a well-defined qMRI application.
 
-3. `Suffixes for conventional MRI contrasts` (`W`)
-     * **Role:** Denotes the type of the predominant contrast conveyed by a single file of a conventional anatomical image (e.g. `T1w`, `T2w`, `PDw`, `T2starw`). 
+3. `Designation suffixes for qMRI maps` (`M`) 
+     * **Function:** Denotes the parameter contained within a single file of a 
+     quantitative map.  
 
 #### An important note on minimizing the use of weight tags for grouping qMRI inputs
 
