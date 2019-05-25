@@ -134,7 +134,7 @@ Updates to the specification is REQUIRED to extend the list of available suffixe
 
 Which metadata fields must be included. Some of these fields are to be inherited by the input files and some of them are to be populated by the estimation software. Right now: 
 
-* BasedOn --> List of files gruoped by an grouping suffix + (optional) field maps. 
+* BasedOn
 * MagneticFieldStrength
 * Manufacturer
 * ManufacturerModelName

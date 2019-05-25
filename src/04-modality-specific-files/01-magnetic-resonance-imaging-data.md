@@ -183,7 +183,8 @@ Based on their function, suffixes are divided into three classes:
 
 The following three subsections expand on each of these `_suffix` classes.
 
-##### Sufixes for conventional MRI contrasts
+* **Suffix Class-1: Sufixes for conventional MRI contrasts**
+***
 
 **Function:** Denotes the type of the predominant contrast conveyed by a
 single file of a conventional anatomical image.
@@ -200,7 +201,7 @@ sub-01_run-2_T1w.json
 ```
 
 The `run-<index>` in the example above denotes the index of the acquisition 
-repeated with the identical parameters (e.g. to achieve a higher SNR). Please 
+repeated with the **identical parameters **(e.g. to achieve a higher SNR). Please 
 note that changing parameters between multiple acquisitions of the same sequence
 creates a different use case: `parametrically linked anatomical images`.
 
@@ -208,7 +209,8 @@ The entries listed for `suffixes for conventional MRI contrasts` in the list of
 available suffixes are immutable. Descriptions of this type of suffixes are preceded 
 by the `(W) -->` notation (`W` stands for grouping).
 
-##### Grouping suffixes
+* **Suffix Class-2: Grouping suffixes**
+***
 
 **Function:** Groups together files that belong to parametrically linked multiple 
 scans, which are intended for a well-defined qMRI application. For example:
@@ -232,14 +234,16 @@ sections for details).
 Please see the available `grouping suffixes` in the list of available suffixes. Descriptions
 of this type of suffixes are preceded by the `(G) -->` notation (`G` stands for grouping). 
 
-_Content and hierarchy of the JSON files accompanying anatomical images with a grouping suffix_
+_JSON files accompanying anatomical images with `grouping suffix`_
 ***
+
 In conformity with the main BIDS specification, key-value pairs involved in the naming of an
 anatomy imaging data can NOT explicitly relay information regarding the sequence parameters. Instead, 
 the key-value pairs are used only for categorization, whereas the respective sequence parameters
-are contained in the sidecar JSON files. 
+are contained in the sidecar JSON files.
 
-* _Hierarchy_ 
+
+* _JSON Hierarchy for `grouping suffixes`_ 
 
 In case of the `parametrically linked anatomical scans`, majority of the acquisition parameters remain 
 constant across multiple runs of the same sequence. However, some of the parameters are intentionally
@@ -247,14 +251,14 @@ modified to collect a dataset suitable for quantitative parameter mapping. To av
 constant parameters and to ease the readibility of those varying from scan to scan, a parent-child 
 hierarchy is defined between the JSON files containing a grouping suffix.       
 
-i) The constant parameters are stored in a `parent` JSON file that is named only by a `sub-<index>` 
+**Parent JSON:** The constant parameters are stored in a `parent` JSON file that is named only by a `sub-<index>` 
 key-value pair and a `grouping suffix`. For example: 
 
 ```Text
 sub-01_VFA.json 
 ```
 
-ii) All the metadata entries that are subjected to at least one change between the different runs of 
+**Child JSON:** All the metadata entries that are subjected to at least one change between the different runs of 
 the same sequence are stored in `child` JSON files. For example: 
 
 ```Text
@@ -265,9 +269,9 @@ sub-01_fa-2_VFA.nii.gz
 sub-01_fa-2_VFA.json (Child-2)
 ```
 
-* _Content_ 
+* _JSON Content for `grouping suffixes`_ 
   
-i) There is not a specific restriction to the amount of metadata contained by a `parent` JSON file. 
+**Parent:** There is not a specific restriction to the amount of metadata contained by a `parent` JSON file. 
 However, the following metadata is highly RECOMMENDED to be included for the provenance recording of the
 fitting process:
 
@@ -294,15 +298,15 @@ fitting process:
     * NonlinearGradientCorrection
 * Other timing, RF, contrast, spatial encoding and acceleration related parameters.
 
-**Important:** Depending** on the qMRI application, some of the constant metadata entries may be REQUIRED
+> **IMPORTANT** Depending on the qMRI application, some of the constant metadata entries may be REQUIRED
 for the intended parameter estimation. Please see the REQUIRED `parent` fields column in 
 the list of method-specific priority levels for qMRI metadata below. 
 
-ii) The `child` JSON files MUST contain all the metadata entries that are subjected to at least
-one change between different runs of the same sequence. The metadata fields to be included
+**Child:** The `child` JSON files MUST contain _all the metadata entries that are subjected to at least
+one change between different runs of the same sequence_. The metadata fields to be included
 in the `child` JSON files depend on the type qMRI application. 
 
-The following table identifies method-specific priority levels for qMRI metadata: 
+The following table identifies _method-specific priority levels for qMRI metadata_: 
 
 | Grouping suffix             | REQUIRED `child` fields   | OPTIONAL `child` fields | REQUIRED `parent` fields | OPTIONAL `parent` fields |
 | :-------------------------- | :---------------- | :--------------| :--------------| :--------------|
@@ -315,12 +319,14 @@ The following table identifies method-specific priority levels for qMRI metadata
 | MTS                         | FlipAngle, MTState  |  N/A | RepetitionTimeExcitation| N/A|
 | MPM                         | FlipAngle, MTState, EchoTime, RepetitionTimeExcitation |  N/A | N/A| N/A|
 
-**Important:**  Please note that OPTIONAL columns in the table above contain list of parameters that may be
-used to derive qMRI applications from an existing `grouping suffix`.  Different use cases can be easily 
-inferred based on the availability of the OPTIONAL `parent` and `child` parameters. This approach i) prevents the 
-list of available suffixes from over-proliferation, ii) provides qMRI-focused BIDS applications with the set of rules 
-to create meta-data driven parameter fitting routines and iii) keep an inheritance track for the qMRI methods 
-described within the specification.
+**IMPORTANT:** Some qMRI (sub-) methods can be derived from an existing `grouping suffix` only by 
+populating the OPTIONAL columns in the table above (e.g. `VFA`). If such inheritance relationship 
+is possible, the inheritor qMRI method is listed in the table below instead of being assigned with
+a new `grouping suffix`. This approach:    
+
+* prevents the list of available suffixes from over-proliferation 
+* provides qMRI-focused BIDS applications with a set of meta-data driven rules to infer possible fitting options
+* keep an inheritance track of the qMRI methods described within the specification.
 
 | Grouping suffix             | REQUIRED `parent`:Value | OPTIONAL `child` | OPTIONAL `parent` | Derived qMRI application|
 | :-------------------------- | :---------------- | :--------------|:--------------| :--------------| 
@@ -328,9 +334,8 @@ described within the specification.
 | VFA | SequenceType:SSFP | - | PhaseIncrement| `DESPOT2`|
 | VFA | SequenceType:SSFP | PhaseIncrement | -| `DESPOT2FM`|
 
-
-
-##### Designation suffixes for qMRI maps
+* **Suffix Class-3: Designation suffixes for qMRI maps**
+***
 
 **Function:** Denotes the parameter contained within a single file of a quantitative map.  
 
@@ -401,10 +406,14 @@ sub-01_T1map.json
 
 ```
 
-##### List of available suffixes for anatomy imaging data
+**List of available suffixes for anatomy imaging data**
+***
 
 For the sake of clarity, suffix descriptions are preceded by a single letter 
-(`G`,`M`,`W`), indicating the class that they belong to.    
+(`G`,`M`,`W`), indicating the suffix class that they belong to with respect to the following :    
+* The `(W) -->` notation stands for `suffixes for conventional MRI contrasts`.  
+* The `(G) -->` notation stands for `grouping suffixes`.
+* The `(M) -->` notaiton stands for `designation suffixes for qMRI maps`. 
 
 | Name                                                   | _suffix   | (Class) --> Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 |--------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
