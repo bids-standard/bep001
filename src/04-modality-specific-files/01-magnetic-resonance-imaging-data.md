@@ -243,13 +243,13 @@ the key-value pairs are used only for categorization, whereas the respective seq
 are contained in the sidecar JSON files.
 
 
-* _JSON Hierarchy for `grouping suffixes`_ 
+* _Hierarchy of JSON files for `grouping suffixes`_ 
 
 In case of the `parametrically linked anatomical scans`, majority of the acquisition parameters remain 
 constant across multiple runs of the same sequence. However, some of the parameters are intentionally
 modified to collect a dataset suitable for quantitative parameter mapping. To avoid redundancy of the 
 constant parameters and to ease the readibility of those varying from scan to scan, a parent-child 
-hierarchy is defined between the JSON files containing a grouping suffix.       
+hierarchy is defined between the JSON files containing a `grouping suffix`.       
 
 **Parent JSON:** The constant parameters are stored in a `parent` JSON file that is named only by a `sub-<index>` 
 key-value pair and a `grouping suffix`. For example: 
@@ -281,11 +281,11 @@ fitting process:
     * DeviceSerialNumber            
     * StationName                   
     * SoftwareVersions              
-    * MagneticFieldStrength                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    * MagneticFieldStrength                                                                               
     * ReceiveCoilName               
     * ReceiveCoilActiveElements     
     * GradientSetType               
-    * MRTransmitCoilSequence                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+    * MRTransmitCoilSequence                                                                              
     * MatrixCoilMode                
     * CoilCombinationMethod
 * Sequence specific parameters primarily including:   
@@ -308,7 +308,7 @@ in the `child` JSON files depend on the type qMRI application.
 
 The following table identifies _method-specific priority levels for qMRI metadata_: 
 
-| Grouping suffix             | REQUIRED `child` fields   | OPTIONAL `child` fields | REQUIRED `parent` fields | OPTIONAL `parent` fields |
+| Grouping suffix             | REQUIRED `child` metadata fields   | OPTIONAL `child` metadata fields | REQUIRED `parent` metadata fields | OPTIONAL `parent` metadata fields |
 | :-------------------------- | :---------------- | :--------------| :--------------| :--------------|
 | VFA                         | FlipAngle         |     N/A | SequenceType, RepetitionTimeExcitation | PhaseIncrement|
 | IRT1                        | InversionTime     |     N/A | N/A| N/A|
@@ -319,7 +319,7 @@ The following table identifies _method-specific priority levels for qMRI metadat
 | MTS                         | FlipAngle, MTState  |  N/A | RepetitionTimeExcitation| N/A|
 | MPM                         | FlipAngle, MTState, EchoTime, RepetitionTimeExcitation |  N/A | N/A| N/A|
 
-**IMPORTANT:** Some qMRI (sub-) methods can be derived from an existing `grouping suffix` only by 
+> **IMPORTANT:** Some qMRI (sub-) methods can be derived from an existing `grouping suffix`  by 
 populating the OPTIONAL columns in the table above (e.g. `VFA`). If such inheritance relationship 
 is possible, the inheritor qMRI method is listed in the table below instead of being assigned with
 a new `grouping suffix`. This approach:    
@@ -328,11 +328,38 @@ a new `grouping suffix`. This approach:
 * provides qMRI-focused BIDS applications with a set of meta-data driven rules to infer possible fitting options
 * keep an inheritance track of the qMRI methods described within the specification.
 
-| Grouping suffix             | REQUIRED `parent`:Value | OPTIONAL `child` | OPTIONAL `parent` | Derived qMRI application|
+_Table of qMRI applications that can be derived from an existing `grouping suffix`_: 
+
+| Grouping suffix             | REQUIRED `parent` metadata fields==Value | OPTIONAL `child` metadata fields | OPTIONAL `parent` metadata fields| Derived qMRI application|
 | :-------------------------- | :---------------- | :--------------|:--------------| :--------------| 
-| VFA | SequenceType:SPGR | - | -| `DESPOT1`|
-| VFA | SequenceType:SSFP | - | PhaseIncrement| `DESPOT2`|
-| VFA | SequenceType:SSFP | PhaseIncrement | -| `DESPOT2FM`|
+| VFA | SequenceType==SPGR | - | -| `DESPOT1`|
+| VFA | SequenceType==SSFP | - | PhaseIncrement| `DESPOT2`|
+| VFA | SequenceType==SSFP | PhaseIncrement | -| `DESPOT2FM`|
+
+A derived qMRI application becomes avaiable if all the OPTIONAL metadata fields listed for a   
+a `grouping suffix` is provided in the data. In addition, conditional rules based on the value 
+of a given REQUIRED `parent` metada field can be set for the description of a derived qMRI 
+application.
+
+For example, if the REQUIRED `parent` metadata field of `SequenceType` is SPGR for a collection
+of anatomical images listed by the `VFA` suffix, the data qualifies for `DESPOT1` T1 fitting. For
+the same suffix, if the `SequenceType` metadata field has the value of `SSFP`, and the `PhaseIncrement` 
+field is provided in the `parent` JSON file, then the dataset becomes eligible for `DESPOT2`
+T2 fitting application. Finally, if the `DESPOT2` data has more than one `PhaseIncrement` field, 
+and these values are included in the `child` JSON file, the dataset is valid for `DESPOT2FM`.
+
+Please note that OPTIONAL `parent` and `child` metadata fields listed in the 
+_qMRI applications that can be derived from an existing_ table MUST be also included in the 
+_method-specific priority levels for qMRI metadata_ table for completeness. 
+
+Please also note that the rules concerning the presence/value of certain metadata fields
+within the context of `grouping suffix` is not a part of the BIDS validation process. Such
+rules rather constitute a centralized guideline for creating interoperable qMRI datasets.
+
+For a dataset with a `grouping suffix`, the BIDS validation is successful if:
+* provided NIfTI and JSON file names respect the anatomy imaging dataset template
+* provided suffixes are present in the list of available suffixes 
+* sidecar JSON files follow the hierarchy defined for `grouping suffix`.  
 
 * **Suffix Class-3: Designation suffixes for qMRI maps**
 ***
@@ -393,7 +420,7 @@ sub-01_T1map.json
 “Manufacturer”: “Siemens”, 
 “ManufacturerModelName”: “TrioTim”, 
 “InstitutionName”: “xxx”,    
-“PulseSequenceType”: “SPGR”, (TODO: FIX)
+“PulseSequenceType”: “SPGR”, (FIXME: Be accurate for real data)
 “PulseSequenceDetails”: “Information beyond the sequence type that identifies the specific pulse sequence used (VB version, if not standard, Siemens WIP XXX version ### sequence written by xx using a version compiled on mm/dd/yyyy/)”, 
 "EstimationPaper":"John Doe et. al.",
 "EstimationAlgorithm":"Linear",
@@ -446,10 +473,13 @@ For the sake of clarity, suffix descriptions are preceded by a single letter
 
 #### `<indexable_metadata>-<index>` key-value pair
 
+TODO: Explain in the `grouping suffix` context. 
+
 If the grouping logic of a set of parametrically linked anatomical images is 
 (entirely or partially) bound up with a metadata field that varies from image to
 image, `<indexable_metadata>-<index>` SHOULD be included in the file name. This
-is applicable if the varying entries of the same metadata field are enumerable.
+is applicable if the varying entries of the same metadata field are enumerable and 
+the metadata field is listed in the table of allowed key tags.
 
 Unlike other key/value pairs, key tag of the `<indexable_metadata>-<index>` is 
 mutable depending on the metadata field that varies between several scans of the
@@ -468,6 +498,8 @@ appear in alphabetical order. For example:
 sub-01_echo-1_inv-1_MP2RAGE.nii.gz
 sub-01_echo-1_inv-1_MP2RAGE.json
 ```
+
+_Table of allowed key tags for the `<indexable_metadata>-<index>` key-value pair_
 
 | Allowed key tags | Value list | Associated metadata field |
 |---------|------------|---------------------|
@@ -492,17 +524,22 @@ specification is REQUIRED to extend the list above.
 
 #### `acq-<label>` key-value pair
 
+TODO: Explain in the `grouping suffix` context. 
+
 If the grouping logic of a set of parametrically linked anatomical images is
 (entirely or partially) bound up with a metadata field that varies from image to
 image, `acq-<label>` SHOULD be included in the file name. This is applicable if
-the varying entries of the metadata field are categorical. 
+the varying entries of the metadata field are categorical and the label is listed
+in the table of available `acq-<label>` labels for a given `grouping suffix`. 
 
 Note that value of the `acq-<label>` is free form. However, to enable a unified
 naming convention while combining several scans of the same modality intended to
 create quantitative maps, following labels SHOULD be included in the filename 
-where applicable:
+where applicable. FIXME: Paragraph. 
 
-| Respective suffix | Labels           | Related metadata fields   |
+_Table of allowed `<acq>-<label>` labels for `grouping suffixes`_
+
+| Grouping suffix | Labels           | Related metadata fields   |
 |-------------|------------------|------------------------------|
 | MTR         | `MTon`, `MToff`      | MTState |
 | MTS         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
