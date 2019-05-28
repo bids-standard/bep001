@@ -222,16 +222,22 @@ sub-01_fa-1_VFA.json
 sub-01_fa-2_VFA.nii.gz
 sub-01_fa-2_VFA.json
 ```
+_Some important considerations regarding `grouping suffixes`:_
 
-Please note that if a structural data is a member of parametrically linked anatomical 
+* All `grouping suffixes` MUST be capitalized.
+* `Grouping suffixes` MUST attain a clear description of the qMRI application that they relate to. Hyperlinks to example applications and/or more detailed descriptions are provided whenever
+possible.
+* Unless the pulse sequence is exclusively associated with a specific qMRI application (e.g. `MP2RAGE`), sequence names are NOT used as `grouping suffixes`.
+* If it is possible to derive a qMRI application from an already existing `grouping suffix` by
+means of defining a set of logical conditions over the metadata fields, the _table of method-specific priority levels_ and the _table of qMRI applications that can be derived from an existing `grouping suffix`_ MUST be expanded instead of creating a new `grouping suffix`. Please visit the _JSON content for `grouping suffixes` for further details.   
+* Please note that if a structural data is a member of parametrically linked anatomical 
 images, the use of `_suffix` alone cannot distinguish individual files from each 
 other, failing to identify their roles as inputs to the calculation of 
 quantitative maps. Although such images are REQUIRED to be grouped by a proper
 `grouping suffix`, they are also RECOMMENDED to include at least one of the `acq-<label>`, 
 `part-<label>` and `<indexable_metadata>-<index>` key-value pairs (please visit corresponding 
 sections for details).
-
-Please see the available `grouping suffixes` in the list of available suffixes. Descriptions
+* Please see the available `grouping suffixes` in the list of available suffixes. Descriptions
 of this type of suffixes are preceded by the `(G) -->` notation (`G` stands for grouping). 
 
 _JSON files accompanying anatomical images with `grouping suffix`_
@@ -420,9 +426,9 @@ sub-01_T1map.json
 “Manufacturer”: “Siemens”, 
 “ManufacturerModelName”: “TrioTim”, 
 “InstitutionName”: “xxx”,    
-“PulseSequenceType”: “SPGR”, (FIXME: Be accurate for real data)
+“PulseSequenceType”: “SPGR”,
 “PulseSequenceDetails”: “Information beyond the sequence type that identifies the specific pulse sequence used (VB version, if not standard, Siemens WIP XXX version ### sequence written by xx using a version compiled on mm/dd/yyyy/)”, 
-"EstimationPaper":"John Doe et. al.",
+"EstimationPaper":"Deoni et. al.MRM, 2015",
 "EstimationAlgorithm":"Linear",
 “EstimationSoftwareName”: “qMRLab”,
 “EstimationSoftwareLanguage”: “Octave”,
@@ -456,6 +462,7 @@ For the sake of clarity, suffix descriptions are preceded by a single letter
 | Magnetization transfer ratio                           | MTR       | (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-<label>` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. _Associated output suffixes:_ MTRmap                                                                                             |
 | Magnetization transfer saturation                      | MTS       | (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ T1map, MTsat  |
 | Multi-parametric mapping                               | MPM       | (G) --> Groups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                  |
+| Double-angle B1 mapping | B1DAM       | (G) --> Groups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                  |
 | Longitudinal relaxation time map                       | T1map     | (M) --> In seconds (s). T1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | True transverse relaxation time map                    | T2map     | (M) --> In seconds (s). T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | Observed transverse relaxation time map                | T2starmap | (M) --> In seconds (s). T2* maps are REQUIRED to use this suffix irrespective of the method they are related to.  _Can be generated from:_  `MEGRE`, `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -473,33 +480,13 @@ For the sake of clarity, suffix descriptions are preceded by a single letter
 
 #### `<indexable_metadata>-<index>` key-value pair
 
-TODO: Explain in the `grouping suffix` context. 
+If multiple anatomical images are bundled together by a `grouping suffix`, there
+is at least one metadata field that varies across grouped images. If the varying 
+metadata field values are enumerable and the metadata field is listed in the table
+of allowed key tags (see below), `<indexable_metadata>-<index>` SHOULD be included 
+in the file name to distinguish group members from each other.   
 
-If the grouping logic of a set of parametrically linked anatomical images is 
-(entirely or partially) bound up with a metadata field that varies from image to
-image, `<indexable_metadata>-<index>` SHOULD be included in the file name. This
-is applicable if the varying entries of the same metadata field are enumerable and 
-the metadata field is listed in the table of allowed key tags.
-
-Unlike other key/value pairs, key tag of the `<indexable_metadata>-<index>` is 
-mutable depending on the metadata field that varies between several scans of the
-same modality and can appear more than once in the filename with different keys.
-
-Please note that the order of the `index` and the value of the associated 
-metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
-correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
-values need to be stored in the corresponding metadata field of the separate 
-JSON files.
-
-If a filename contains more than one indexable metadata, included key tags MUST 
-appear in alphabetical order. For example: 
-
-```
-sub-01_echo-1_inv-1_MP2RAGE.nii.gz
-sub-01_echo-1_inv-1_MP2RAGE.json
-```
-
-_Table of allowed key tags for the `<indexable_metadata>-<index>` key-value pair_
+_Table of allowed key tags for the `<indexable_metadata>-<index>` key-value pair:_
 
 | Allowed key tags | Value list | Associated metadata field |
 |---------|------------|---------------------|
@@ -518,24 +505,36 @@ sub-01_echo-2_MEGRE.json
 sub-01_echo-3_MEGRE.nii.gz
 sub-01_echo-3_MEGRE.json
 ```
+_Some important considerations regarding the `<indexable_metadata>-<index>` key-value pair:_
 
-Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
-specification is REQUIRED to extend the list above. 
+* Unlike other key/value pairs, key tag of the `<indexable_metadata>-<index>` is 
+mutable depending on the metadata field that varies between several scans of the
+same modality and can appear more than once in the filename with different keys.
+
+* Please note that the order of the `index` and the value of the associated 
+metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
+correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
+values need to be stored in the corresponding metadata field of the separate 
+JSON files.
+
+* If a filename contains more than one indexable metadata, included key tags MUST 
+appear in alphabetical order. For example: 
+
+    ```
+    sub-01_echo-1_inv-1_MP2RAGE.nii.gz
+    sub-01_echo-1_inv-1_MP2RAGE.json
+    ```
+
+* Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
+specification is REQUIRED to extend the allowed key tags. 
 
 #### `acq-<label>` key-value pair
 
-TODO: Explain in the `grouping suffix` context. 
-
-If the grouping logic of a set of parametrically linked anatomical images is
-(entirely or partially) bound up with a metadata field that varies from image to
-image, `acq-<label>` SHOULD be included in the file name. This is applicable if
-the varying entries of the metadata field are categorical and the label is listed
-in the table of available `acq-<label>` labels for a given `grouping suffix`. 
-
-Note that value of the `acq-<label>` is free form. However, to enable a unified
-naming convention while combining several scans of the same modality intended to
-create quantitative maps, following labels SHOULD be included in the filename 
-where applicable. FIXME: Paragraph. 
+If multiple anatomical images are bundled together by a `grouping suffix`, there
+is at least one metadata field that varies across grouped images. If the varying 
+metadata field values are categorical and the label is listed in the table of 
+available `acq-<label>` labels for a given `grouping suffix` (see below), `acq-<label>` 
+SHOULD be included in the file name. 
 
 _Table of allowed `<acq>-<label>` labels for `grouping suffixes`_
 
@@ -555,6 +554,15 @@ sub-01_echo-1_acq-MToff_MPM.json
 sub-01_echo-1_acq-T1w_MPM.nii.gz
 sub-01_echo-1_acq-T1w_MPM.json
 ```
+_Some important considerations regarding the `acq-<label>` key-value pair:_
+
+* Note that value of the `acq-<label>` is free form by default, as indicated
+by the main specification. However, to enable a unified naming convention for 
+this specific use case, only the labels listed in the table of allowed `<acq>-<label>` 
+labels SHOULD be used with the corresponding `grouping suffixes`.  
+* Changes to the specification is REQUIRED to extend the table of allowed `<acq>-<label>` 
+labels. 
+
 
 #### `part-<label>` key/value pair
 
