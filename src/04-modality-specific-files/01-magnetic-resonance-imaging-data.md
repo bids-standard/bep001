@@ -257,8 +257,8 @@ modified to collect a dataset suitable for quantitative parameter mapping. To av
 constant parameters and to ease the readibility of those varying from scan to scan, a `top`-`lower` level
 hierarchy is defined between the JSON files containing a `grouping suffix`. Please visit [the inheritance principle of BIDS](https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#the-inheritance-principle) for further reading.        
 
-**Top JSON:** The constant parameters are stored in a `top` JSON file that is named only by a `sub-<index>` 
-key-value pair and a `grouping suffix`. For example: 
+**Top JSON:** The constant parameters are stored in a `top` JSON file that is named typically by a `sub-<index>` 
+key-value pair followed by `grouping suffix`, which may include `_ses-<session_label>` if applicable. For example: 
 
 ```Text
 sub-01_VFA.json 
