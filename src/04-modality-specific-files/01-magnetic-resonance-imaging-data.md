@@ -254,30 +254,30 @@ are contained in the sidecar JSON files.
 In case of the `parametrically linked anatomical scans`, majority of the acquisition parameters remain 
 constant across multiple runs of the same sequence. However, some of the parameters are intentionally
 modified to collect a dataset suitable for quantitative parameter mapping. To avoid redundancy of the 
-constant parameters and to ease the readibility of those varying from scan to scan, a parent-child 
-hierarchy is defined between the JSON files containing a `grouping suffix`.       
+constant parameters and to ease the readibility of those varying from scan to scan, a `top`-`lower` level
+hierarchy is defined between the JSON files containing a `grouping suffix`. Please visit [the inheritance principle of BIDS](https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#the-inheritance-principle) for further reading.        
 
-**Parent JSON:** The constant parameters are stored in a `parent` JSON file that is named only by a `sub-<index>` 
+**Top JSON:** The constant parameters are stored in a `top` JSON file that is named only by a `sub-<index>` 
 key-value pair and a `grouping suffix`. For example: 
 
 ```Text
 sub-01_VFA.json 
 ```
 
-**Child JSON:** All the metadata entries that are subjected to at least one change between the different runs of 
-the same sequence are stored in `child` JSON files. For example: 
+**Lower JSON:** All the metadata entries that are subjected to at least one change between the different runs of 
+the same sequence are stored in `lower` JSON files. For example: 
 
 ```Text
-sub-01_VFA.json (Parent)
+sub-01_VFA.json (Top)
 sub-01_fa-1_VFA.nii.gz 
-sub-01_fa-1_VFA.json (Child-1)
+sub-01_fa-1_VFA.json (Lower-1)
 sub-01_fa-2_VFA.nii.gz 
-sub-01_fa-2_VFA.json (Child-2)
+sub-01_fa-2_VFA.json (Lower-2)
 ```
 
 * _JSON Content for `grouping suffixes`_ 
   
-**Parent:** There is not a specific restriction to the amount of metadata contained by a `parent` JSON file. 
+**Top:** There is not a specific restriction to the amount of metadata contained by a `top` JSON file. 
 However, the following metadata is highly RECOMMENDED to be included for the provenance recording of the
 fitting process:
 
@@ -305,16 +305,16 @@ fitting process:
 * Other timing, RF, contrast, spatial encoding and acceleration related parameters.
 
 > **IMPORTANT** Depending on the qMRI application, some of the constant metadata entries may be REQUIRED
-for the intended parameter estimation. Please see the REQUIRED `parent` fields column in 
+for the intended parameter estimation. Please see the REQUIRED `top` fields column in 
 the list of method-specific priority levels for qMRI metadata below. 
 
-**Child:** The `child` JSON files MUST contain _all the metadata entries that are subjected to at least
+**Lower:** The `lower` JSON files MUST contain _all the metadata entries that are subjected to at least
 one change between different runs of the same sequence_. The metadata fields to be included
-in the `child` JSON files depend on the type qMRI application. 
+in the `lower` JSON files depend on the type qMRI application. 
 
 The following table identifies _method-specific priority levels for qMRI metadata_: 
 
-| Grouping suffix             | REQUIRED `child` metadata fields   | OPTIONAL `child` metadata fields | REQUIRED `parent` metadata fields | OPTIONAL `parent` metadata fields |
+| Grouping suffix             | REQUIRED `lower` metadata fields   | OPTIONAL `lower` metadata fields | REQUIRED `top` metadata fields | OPTIONAL `lower` metadata fields |
 | :-------------------------- | :---------------- | :--------------| :--------------| :--------------|
 | VFA                         | FlipAngle         |     N/A | SequenceType, RepetitionTimeExcitation | PhaseIncrement|
 | IRT1                        | InversionTime     |     N/A | N/A| N/A|
@@ -336,7 +336,7 @@ a new `grouping suffix`. This approach:
 
 _Table of qMRI applications that can be derived from an existing `grouping suffix`_: 
 
-| Grouping suffix             | REQUIRED `parent` metadata fields==Value | OPTIONAL `child` metadata fields | OPTIONAL `parent` metadata fields| Derived qMRI application|
+| Grouping suffix             | REQUIRED `top` metadata fields==Value | OPTIONAL `lower` metadata fields | OPTIONAL `top` metadata fields| Derived qMRI application|
 | :-------------------------- | :---------------- | :--------------|:--------------| :--------------| 
 | VFA | SequenceType==SPGR | - | -| `DESPOT1`|
 | VFA | SequenceType==SSFP | - | PhaseIncrement| `DESPOT2`|
@@ -344,17 +344,17 @@ _Table of qMRI applications that can be derived from an existing `grouping suffi
 
 A derived qMRI application becomes avaiable if all the OPTIONAL metadata fields listed for a   
 a `grouping suffix` is provided in the data. In addition, conditional rules based on the value 
-of a given REQUIRED `parent` metada field can be set for the description of a derived qMRI 
+of a given REQUIRED `top` metada field can be set for the description of a derived qMRI 
 application.
 
-For example, if the REQUIRED `parent` metadata field of `SequenceType` is SPGR for a collection
+For example, if the REQUIRED `top` metadata field of `SequenceType` is SPGR for a collection
 of anatomical images listed by the `VFA` suffix, the data qualifies for `DESPOT1` T1 fitting. For
 the same suffix, if the `SequenceType` metadata field has the value of `SSFP`, and the `PhaseIncrement` 
-field is provided in the `parent` JSON file, then the dataset becomes eligible for `DESPOT2`
+field is provided in the `top` JSON file, then the dataset becomes eligible for `DESPOT2`
 T2 fitting application. Finally, if the `DESPOT2` data has more than one `PhaseIncrement` field, 
-and these values are included in the `child` JSON file, the dataset is valid for `DESPOT2FM`.
+and these values are included in the `lower` JSON file, the dataset is valid for `DESPOT2FM`.
 
-Please note that OPTIONAL `parent` and `child` metadata fields listed in the 
+Please note that OPTIONAL `top` and `lower` metadata fields listed in the 
 _qMRI applications that can be derived from an existing_ table MUST be also included in the 
 _method-specific priority levels for qMRI metadata_ table for completeness. 
 
@@ -393,10 +393,10 @@ _Content of the JSON files accompanying qMRI maps_
 
 Metadata fields listed in the sidecar JSON of the quantitative maps depend on the
 way they are generated:
-* If a quantitative map is generated at the scanner site through non-transparent vendor 
+* If a quantitative map is generated at the scanner site through non-transtop vendor 
 implementations, the content is confined to the available metadata. 
 * If a quantitative map is generated using an open-source software, the sidecar JSON file
-MUST inherit all the fields from the `parent` JSON file of the input data (grouped by a
+MUST inherit all the fields from the `top` JSON file of the input data (grouped by a
 `grouping suffix`) and MUST include the following metadata fields: 
 
 | Field name                  | Definition                                                     |
