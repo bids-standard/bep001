@@ -36,6 +36,8 @@ For some anatomical MRI acquisitions, especially when doing quantiative MRI (qMR
 
 ### Proposed Change
 
+Add a new subsection to detail different use cases of `suffix` based on three
+`suffix` classes:  i) `suffixes for conventional MRI contrasts`, ii) `grouping suffixes` and iii) `designation suffixes for qMRI maps`. 
 
 ### Justification 
 
@@ -109,7 +111,9 @@ Updates to the specification is REQUIRED to extend the list of available suffixe
 * `Grouping suffixes` MUST attain a clear description of the qMRI application that they relate to. If available, hyperlinks to example applications and/or more detailed descriptions are encouraged.
 * If there exist an `grouping suffix` which relates to one or many `designation suffix for qMRI map`, all the relevances MUST be indicated in the description of the `grouping suffix` by the _"Associated output suffixes: "_ expression.
 * Unless the pulse sequence is exclusively associated with a specific qMRI application (e.g. `MP2RAGE`), sequence names are NOT used as `grouping suffixes`.
-* `Grouping suffixes` MUST be used in conjuction with at least one of the `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs. If existing `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs are not enough to describe a new qMRI method, additional request is needed to extend those lists.     
+* `Grouping suffixes` MUST be used in conjuction with at least one of the `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs. If existing `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs are not enough to describe a new qMRI method, additional request is needed to extend those lists. 
+* If it is possible to derive a qMRI application from an already existing `grouping suffix` by
+means of defining a set of logical conditions over the metadata fields, the _table of method-specific priority levels_ and the _table of qMRI applications that can be derived from an existing `grouping suffix`_ MUST be expanded instead of creating a new `grouping suffix`. Please visit the _JSON content for `grouping suffixes` for further details.    
 
 *** 
 
