@@ -132,7 +132,7 @@ linked images acquired on the purpose of calculating quantitative maps
 (e.g. three 3D volumes provided as an input to the multiparametric mapping 
 protocol) and/or the quantitative parameter maps themselves (e.g. T1map etc.). 
 
-All anatomy imaging data filenames can include the key/value pairs of
+All anatomy imaging data filenames can include the key-value pairs of
 `run-<index>`, `ce-<label>` or `rec-<label>`. 
 
 If the same acquisition for a given `_suffix` is repeated without any parameter 
@@ -393,7 +393,7 @@ _Content of the JSON files accompanying qMRI maps_
 
 Metadata fields listed in the sidecar JSON of the quantitative maps depend on the
 way they are generated:
-* If a quantitative map is generated at the scanner site through non-transtop vendor 
+* If a quantitative map is generated at the scanner site through non-transparent vendor 
 implementations, the content is confined to the available metadata. 
 * If a quantitative map is generated using an open-source software, the sidecar JSON file
 MUST inherit all the fields from the `top` JSON file of the input data (grouped by a

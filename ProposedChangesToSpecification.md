@@ -83,11 +83,11 @@ sub-01_acq-MToff_MTS.json [**]
 sub-01_acq-T1w_MTS.nii.gz 
 sub-01_acq-T1w_MTS.json [**]
 
-* JSON file that contains non-varying metedata fields betweeen different `MTS` files. 
-** JSON file that contains all the varying metadata fields, corresponding to the companion nifti file. 
+* JSON file that contains non-varying metedata fields betweeen different `MTS` files,a.k.a. `top` JSON file. 
+** JSON file that contains all the varying metadata fields, corresponding to the companion nifti file, a.k.a. `lower` JSON file. 
 ```
 
-In conclusion, weight tags denote the type of predominant contrast conveyed by a single file of a conventional anatomical image ONLY when used as a suffix. In all other cases,  the `acq-<label>` key-value pair can be still used to accodomate legacy naming conventions for the sake of accustomed familiarity, yet without interfering with the interchangeability principle. Nevertheless, minimizing the use of weight tags is highly encouraged to avoid confusion.  
+In conclusion, weight tags denote the type of predominant contrast conveyed by a single file of a conventional anatomical image ONLY when used as a suffix. In all other cases,  the `acq-<label>` key-value pair can be still used to accodomate legacy naming conventions for the sake of accustomed familiarity, yet without interfering with the interchangeability principle. Nevertheless, minimizing the use of weight tags outside their original purpose is highly encouraged to avoid confusion.  
 
 >  Answers to the plausible questions:
 
@@ -96,15 +96,18 @@ Q1 - For the `MTS` example given above, why two `<indexable_metadata>-<index>` k
 
 Q2 - For the `MTS` example given above, the list of `acq-<label>` key-value pairs would only define `MTon` and `MToff` instead of including `T1w`, which then could be used in conjunction with the `<indexable_metadata>-<index>` key-value pair of `fa`. Why deviate from a more weight tag agnostic convention?
 
-* A-2. Although this is a legitimate solution, it was _not preferred_ to keep convention somewhat closer to the accustomed format of `MTw`-`PDw`-`T1w` and to collapse two varying parameters (flip angle and MT) into one variable, so that the file list becomes easier to read for the multi-echo derivatives of the `MTS` method (e.g. `MPM`).              
+* A-2. Although this is a legitimate solution, it was _not preferred_. The main motive
+was to keep convention somewhat closer to the accustomed format of `MTw`-`PDw`-`T1w`,
+collapsing two varying parameters (flip angle and MT) into one variable. We acknowledge that this somewhat constitutes a trade-off between strictly respecting the principles of the each key-value pair and creating a more readable/familiar
+file list for the multi-echo derivatives of the `MTS` method (e.g. `MPM`).              
 
 #### Principles for adding a new `_suffix` entry
 
 Updates to the specification is REQUIRED to extend the list of available suffixes. A new entry request or any suggestion to modify existing entries can be made by opening a GitHub issue on [BEP001 repository](https://github.com/bids-standard/bep001). Following principles MUST be respected:  
 
 * List of available suffixes is a list of unique entries. Thus, more than one description for a single `_suffix` is not allowed. 
-* Every suffix MUST belong to one and only one of the three suffix classes of **i)** `grouping suffixes (A)`, **ii)** `designation suffixes for qMRI maps (M)` and **iii)** `suffixes for conventional MRI contrasts (W)`.
-* Corresponding suffix class (`A`, `M` or `W`) must be denoted for every entry of the list of available suffixes. 
+* Every suffix MUST belong to one and only one of the three suffix classes of **i)** `grouping suffixes (G)`, **ii)** `designation suffixes for qMRI maps (M)` and **iii)** `suffixes for conventional MRI contrasts (W)`.
+* Corresponding suffix class (`G`, `M` or `W`) must be denoted for every entry of the list of available suffixes. 
 
 *** 
 
@@ -113,7 +116,7 @@ Updates to the specification is REQUIRED to extend the list of available suffixe
 * Unless the pulse sequence is exclusively associated with a specific qMRI application (e.g. `MP2RAGE`), sequence names are NOT used as `grouping suffixes`.
 * `Grouping suffixes` MUST be used in conjuction with at least one of the `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs. If existing `<indexable_metadata>-<index>` and `acq-<label>` key-value pairs are not enough to describe a new qMRI method, additional request is needed to extend those lists. 
 * If it is possible to derive a qMRI application from an already existing `grouping suffix` by
-means of defining a set of logical conditions over the metadata fields, the _table of method-specific priority levels_ and the _table of qMRI applications that can be derived from an existing `grouping suffix`_ MUST be expanded instead of creating a new `grouping suffix`. Please visit the _JSON content for `grouping suffixes` for further details.    
+means of defining a set of logical conditions over the metadata fields, the _table of method-specific priority levels_ and the _table of qMRI applications that can be derived from an existing `grouping suffix`_ MUST be expanded instead of creating a new `grouping suffix`. Please visit the _JSON content for `grouping suffixes`_ for further details.    
 
 *** 
 
@@ -127,35 +130,87 @@ means of defining a set of logical conditions over the metadata fields, the _tab
 
 ***
 
-
 ## Indexable Metadata 
+
+### Proposed Change 
+
+Introduce a new key-value pair that can be used to distinguish images collected
+under a `grouping suffix` by naming them through enumerable indexing of metadata
+fields that vary between different runs of the same sequence. 
+
+### Justification 
+
+If the value type of a given metadata field is not categorical (e.g. `MTstate`) 
+but numeric (e.g. `FlipAngle`), indexing an abbreviated version of the metadata 
+field name (i.e. key) by enumeration (i.e. value) creates an easily scalable and 
+human readable key-value pair. 
+
+The `<indexable_metadata>` is a placeholder key tag, which is to be substituted 
+by one of the allowed key tags for `<indexable_metadata>-<index>` key-value pair.  
+This approach removes the need of introducing a new key-value pair to the anatomy
+imaging data template for every metadata field that may create a distinguishing
+condition among images collected by a `grouping suffix `.
+
+Different instances of the `<indexable_metadata>-<index>` key-value pair can
+co-exist in the same filename. However, instances MUST appear in alphabetical
+order and MUST sit next to each other within the designated key-value pair slot
+for `<indexable_metadata>-<index>` (please see the template of the anatomy 
+imaging data). Although the `<indexable_metadata>-<index>` brings some extra conditional checks to the validation and query processes, these requirements 
+can easily help mitigate such disadvantage. 
+
+The order of the enumerated `<indexable_metadata>-<index>` indexes is independent
+from the order of the metadata values stored in the `lower` JSON files. 
+
+>  Answers to the plausible questions:
+
+## Creating pre-defined labels for the free form `_<acq>-<label>` key-value pair
+
+### Proposed Change 
+
+Distinguish images collected under a `grouping suffix` by naming them through
+categorical indexing of metadata fields that vary between different runs of the same sequence, using `_<acq>-<label>`. 
+
+### Justification 
+
+Thanks to being free-form and not being included in the BIDS validation, 
+the `_<acq>-<label>` key-value pair makes an attractive tool for creating 
+work-around solutions to virtually any kind of naming conflicts. However, 
+exploiting this advantage without defining a set of case-specific 
+boundaries can simply defeat the overall logic of standardization. To
+provide a flexible yet controlled solution to the categorical indexing
+of the metadata fields included in the filename, we created a table of
+pre-defined labels for `_<acq>-<label>` key-value pair:      
+
+* Filenames attaining one of the `grouping suffixes` listed in the table
+can only use corresponding labels.   
+
+>  Answers to the plausible questions:
+
+## Sidecar JSON files of grouping suffixes 
 
 ### Proposed Change 
 
 ### Justification 
 
+>  Answers to the plausible questions:
+
 ## Sidecar JSON files of qMRI maps
 
-Which metadata fields must be included. Some of these fields are to be inherited by the input files and some of them are to be populated by the estimation software. Right now: 
+### Proposed Change 
 
-* BasedOn
-* MagneticFieldStrength
-* Manufacturer
-* ManufacturerModelName
-* InstitutionName 
-* PulseSequenceType
-* PulseSequenceDetails
-* EstimationPaper
-* EstimationAlgorithm
-* EstimationSoftwareName
-* EstimationSoftwareVersion 
-* EstimationSoftwareLanguage
-* EstimationSoftwareEnv 
+List and describe metadata fields that can facilitate the provenance
+recording of a qMRI map under the _Suffix Class-3: Designation_ 
+_suffixes for qMRI maps_ subsection.
 
-## Sidecar JSON files of grouping suffixes 
+### Justification 
 
-Mention about root JSON + repeating JSON file convention.
-Which root JSON metadata fields are optional/required. 
+Metadata fields listed in the sidecar JSON of the quantitative maps depend on the
+way they are generated:
 
+* If a quantitative map is generated at the scanner site through non-transparent vendor implementations, the content is confined to the available metadata. Given
+that such maps are the products of proprietary pipelines, metadata provided by
+vendors often does not contribute to the reproducibility of the outputs. Nonetheless, 
+storing them along with the maps provides supporting information.    
 
-
+* If a quantitative map is generated using an open-source software, the sidecar JSON file MUST inherit all the fields from the `top` JSON file of the input data (grouped by a `grouping suffix`) and MUST include some additional metadata fields, which are
+to be populated by a BIDS application. 
