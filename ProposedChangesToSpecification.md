@@ -9,6 +9,8 @@ Table of contents:
 * [Repetition time](#repetition-time)
 * [Symbolic links](#symbolic-links)
 * [Suffix](#suffix)
+* [B1plus fieldmaps](#b1plus-fieldmaps)
+
 
 ## Indexable metadata
 
@@ -63,3 +65,14 @@ For example MP2RAGE images are sometimes used to construct `_T1uni`-images and `
 The original specification uses `modality_label` at the end of each file name.
 We have updated this to `suffix` as there are multiple modalities that are not captured in the proposed options, and because the boundaries between "modalities" differ by domain specification.
 This change was made in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data`
+
+## B1+ Fieldmaps
+
+### Proposed Change
+
+Extend the part on `Fieldmaps` in [4.1.x Task (including resting state) imaging data](src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) by also allowing
+for storing B1+ fieldmaps.
+
+### Justification
+
+For some anatomical MRI acquisitions, especially when doing quantiative MRI (qMRI), B1+ fieldmaps can be useful to get better estimates of the underlying physical parameters (e.g., T1 in T1 maps obtained with MP2RAGE-sequence, see Marques et al., 2013).
