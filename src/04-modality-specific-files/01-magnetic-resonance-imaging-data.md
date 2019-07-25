@@ -194,13 +194,8 @@ the use of `_suffix` alone cannot distinguish individual acquisitions from each
 other, failing to identify their roles as inputs to the calculation of
 quantitative maps. Although, such images are REQUIRED to be grouped by a proper
 `_suffix` (please see the list of available suffixes), they are also RECOMMENDED
-<<<<<<< HEAD
 to include at least one of the `acq-<label>`, `part-<mag/phase>` and 
 `<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
-=======
-to include at least one of the `acq-<label>`, `part-<label>` and
-`<indexable_metadata>-<index>` key/value pairs (please visit corresponding
->>>>>>> 544e60440a1a7c1bc0b1cda33ae3eb320e22a5fa
 sections for details).  
 
 Please note that not only parametrically linked anatomical images, but also
