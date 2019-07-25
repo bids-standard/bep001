@@ -54,6 +54,52 @@ Our goal is to build up the accepted individual proposal files in the master bra
 (There will then be some wrangling to make the one big pull request to the bids-specification.
 We'll cross that bridge when we come to it! :sparkles:)
 
+## Proposed changes to specification
+
+We have a file in the root directory called [ProposedChangesToSpecification.md](ProposedChangesToSpecification.md).
+As you might guess, that is where we collect together the proposed changes.
+
+It is a really important file to keep updated because it will help us write the extension pull request when it goes to the main specification for review.
+
+## Finding information and getting in touch
+
+### Google doc
+
+The BEP001 proposal started life as a [google doc](https://docs.google.com/document/d/1QwfHyBzOyFWOLO4u_kkojLpUhW0-4_M7Ubafu9Gf4Gg/edit#heading=h.6e5avk8akeqj) and you may still find it useful to read it and see where the ideas have come from.
+
+We aren't using that document anymore though, so if you have any suggestions or comments, please open an issue at this repository.
+
+### Issues list
+
+We're using the issues at this repository to project manage the different parts of the work we have to do.
+
+Please open an issue if you have a question or a suggestion.
+Take a look through the open issues to see if there are any discussions or tasks that you can help to resolve.
+
+### Mailing list
+
+It's also worth joining the [BIDS mailing list](https://groups.google.com/forum/#!forum/bids-discussion).
+If you search the list for [[BEP001]](https://groups.google.com/forum/#!searchin/bids-discussion/%5BBEP001%5D%7Csort:date) you should end up with a nice filtered list of relevant emails.
+
+If you're starting a thread on the BIDS mailing list that is relevant to BEP001 please start the subject line with **[BEP001]** so it is easy to identify for people monitoring the forum and so it shows up in the filtered list above.
+
+When you have a point that you'd like to discuss related to BEP001 please try to **start a new thread** so that we can keep discussions reasonably on track.
+
+### Monthly meetings
+
+We try to have zoom meetings once per month.
+Keep an eye on the mailing list or this repository's issue tracker for announcements :smiley_cat:
+
+## Licence
+
+The work contained in this repository is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](LICENSE).
+
+Please acknowledge the **BIDS Extension Proposal 001 community** when reusing content.
+
+---
+
+:warning: This section might be a little out of date....sorry :sob:
+
 ### An example: RepetitionTime
 
 For example: Kirstie is currently working on a proposal to *"Adjust the definition of RepetitionTime in section 4.1.x Task (including resting state) imaging data and add two new fields to section 4.1.y Anatomy imaging data."*.
@@ -105,37 +151,3 @@ This github repo contains multiple branches that are used to work on different a
  * [examples](https://github.com/INCF/BEP001/tree/examples) This repo contains some fake datasets that illustrate BEP001 in practice.
 
 
-## Finding information and getting in touch
-
-### Google doc
-
-The BEP001 proposal started life as a [google doc](https://docs.google.com/document/d/1QwfHyBzOyFWOLO4u_kkojLpUhW0-4_M7Ubafu9Gf4Gg/edit#heading=h.6e5avk8akeqj) and you may still find it useful to read it and see where the ideas have come from.
-
-We aren't using that document anymore though, so if you have any suggestions or comments, please open an issue at this repository.
-
-### Issues list
-
-We're using the issues at this repository to project manage the different parts of the work we have to do.
-
-Please open an issue if you have a question or a suggestion.
-Take a look through the open issues to see if there are any discussions or tasks that you can help to resolve.
-
-### Mailing list
-
-It's also worth joining the [BIDS mailing list](https://groups.google.com/forum/#!forum/bids-discussion).
-If you search the list for [[BEP001]](https://groups.google.com/forum/#!searchin/bids-discussion/%5BBEP001%5D%7Csort:date) you should end up with a nice filtered list of relevant emails.
-
-If you're starting a thread on the BIDS mailing list that is relevant to BEP001 please start the subject line with **[BEP001]** so it is easy to identify for people monitoring the forum and so it shows up in the filtered list above.
-
-When you have a point that you'd like to discuss related to BEP001 please try to **start a new thread** so that we can keep discussions reasonably on track.
-
-### Monthly meetings
-
-We try to have zoom meetings once per month.
-Keep an eye on the mailing list or this repository's issue tracker for announcements :smiley_cat:
-
-## Licence
-
-The work contained in this repository is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](LICENSE).
-
-Please acknowledge the **BIDS Extension Proposal 001 community** when reusing content.
