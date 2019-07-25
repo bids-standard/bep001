@@ -23,13 +23,22 @@ The use is described in `src/04-modality-specific-files/01-magnetic-resonance-im
 The keys can be pulled from the "Sequence specifics" table (`src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#sequence-specifics`).
 This table was updated to include metadata fields for MT sequences and to include metadata fields for any sequence with spoiling gradients.
 
-## Additional metadata fields
+## Acquisition metadata field
 
-The `acq-<label>` key-value pair was added to capture a group of parametrically linked anatomical images.
+### Proposed change
+
+Add `acq-<label>` key-value pair to capture a group of parametrically linked anatomical images.
 This was updated in `src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#acq-label-key-value-pair`.
 
+## Part metadata field
+
+### Proposed change
+
+Change in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#part-magphase-keyvalue-pair`.
+
 The `part-<mag/phase>` key-value pair was added to distinguish the magnitude and phase parts of an acquisition.
-This was updated in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#part-magphase-keyvalue-pair`.
+
+We additionally recommend (but do not require) that phase images should be in radians and have a range of 0 (inclusive) to 2pi (not included).
 
 ## Repetition Time
 
