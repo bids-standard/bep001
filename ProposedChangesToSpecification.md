@@ -6,6 +6,7 @@ Table of contents:
 
 * [Repetition Time](#repetition-time)
 * [B1plus fieldmaps](#b1plus-fieldmaps)
+* [S0map](#s0map)
 
 ## Repetition Time
 
