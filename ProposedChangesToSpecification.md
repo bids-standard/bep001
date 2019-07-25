@@ -16,19 +16,19 @@ Table of contents:
 
 ## Indexable metadata
 
-Change in `src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md`.
+Change in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md`.
 
 There are a lot of different additional metadata fields that may be needed for structural brain imaging.
 In this change we added a field called `indexable_metadata` to capture those changes.
-The use is described in `src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair`.
+The use is described in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair`.
 
-The keys can be pulled from the "Sequence specifics" table (`src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#sequence-specifics`).
+The keys can be pulled from the "Sequence specifics" table (`/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#sequence-specifics`).
 This table was updated to include metadata fields for MT sequences and to include metadata fields for any sequence with spoiling gradients.
 
 ## Additional metadata fields
 
 The `acq-<label>` key-value pair was added to capture a group of parametrically linked anatomical images.
-This was updated in `src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#acq-label-key-value-pair`.
+This was updated in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#acq-label-key-value-pair`.
 
 The `part-<mag/phase>` key-value pair was added to distinguish the magnitude and phase parts of an acquisition.
 This was updated in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#part-magphase-keyvalue-pair`.
@@ -52,7 +52,7 @@ Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `Repe
 Files in the derived folder can be symbolically linked to the main BIDS folder.
 For example, a derived quantitative map `derivatives/sub-01/anat/sub-01_R1.nii.gz` may be linked as `sub-01/anat/sub-01_T1w.nii.gz` to be used as a standard structural image for functional MRI processing pipelines.
 
-This change was made in `src/02-common-principles.md#symbolic-links`.
+This change was made in `/src/02-common-principles.md#symbolic-links`.
 
 ### Justification
 
@@ -72,7 +72,7 @@ This change was made in `/src/04-modality-specific-files/01-magnetic-resonance-i
 
 ### Proposed Change
 
-Extend the part on `Fieldmaps` in [4.1.x Task (including resting state) imaging data](src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) by also allowing
+Extend the part on `Fieldmaps` in [4.1.x Task (including resting state) imaging data](/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) by also allowing
 for storing B1+ fieldmaps.
 
 ### Justification
