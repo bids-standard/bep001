@@ -5,7 +5,8 @@ This document captures all of the changes that the BEP001 team are proposing to 
 Table of contents:
 
 * [Indexable metadata](#indexable-metadata)
-* [Additional metadata fields](#additional-metadata-fields)
+* [Acquisition metadata field](#acquisition-metadata-field)
+* [Part metadata field](#part-metadata-field)
 * [Repetition time](#repetition-time)
 * [Symbolic links](#symbolic-links)
 * [Suffix](#suffix)
