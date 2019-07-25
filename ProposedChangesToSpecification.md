@@ -37,6 +37,8 @@ For some anatomical MRI acquisitions, especially when doing quantiative MRI (qMR
 
 Add a suffix `_S0map` to store the intercept-parameter for when T2\*-decay curves are fit, for example using a multi-echo Gradien-Recalled Echo (GRE)-sequence.
 
+Change in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#suffix`.
+
 ### Justification
 
 Both structural and functional multi-echo sequences are becoming more and more common. By fitting an exponential T2\*-model to such data, a `S0-map` remains that contains contrast for proton density (PD) and B1+ and B1--effects. This can be useful for for example skull-stripping.
