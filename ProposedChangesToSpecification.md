@@ -5,29 +5,35 @@ This document captures all of the changes that the BEP001 team are proposing to 
 Table of contents:
 
 * [Indexable metadata](#indexable-metadata)
+* [Additional metadata fields](#additional-metadata-fields)
 * [Repetition time](#repetition-time)
 * [Symbolic links](#symbolic-links)
 * [Suffix](#suffix)
 
 ## Indexable metadata
 
-`src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md`
+Change in `src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md`.
 
-"Sequence specifics" updated to include metadata for MT sequences and to include metadata for any sequence with spoiling gradients.
+There are a lot of different additional metadata fields that may be needed for structural brain imaging.
+In this change we added a field called `indexable_metadata` to capture those changes.
+The use is described in `src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair`.
 
-In "Anatomy imaging data" added indexable-metadata
+The keys can be pulled from the "Sequence specifics" table (`src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#sequence-specifics`).
+This table was updated to include metadata fields for MT sequences and to include metadata fields for any sequence with spoiling gradients.
 
-`<indexable_metadata>-<index>` key-value pair
+## Additional metadata fields
 
-`acq-<label>` key-value pair
+The `acq-<label>` key-value pair was added to capture a group of parametrically linked anatomical images.
+This was updated in `src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#acq-label-key-value-pair`.
 
-`part-<label>` key/value pair
+The `part-<mag/phase>` key-value pair was added to distinguish the magnitude and phase parts of an acquisition.
+This was updated in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#part-magphase-keyvalue-pair`.
 
 ## Repetition Time
 
 ### Proposed Change
 
-Adjust the definition of `RepetitionTime` in section [4.1.x Task (including resting state) imaging data](https://github.com/bids-standard/bids-specification/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) and add two new fields to section [4.1.y Anatomy imaging data](https://github.com/bids-standard/bids-specification/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data).
+Adjust the definition of `RepetitionTime` in section [4.1.x Task (including resting state) imaging data](/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) and add two new fields to section [4.1.y Anatomy imaging data](/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data).
 
 ### Justification
 
@@ -42,6 +48,8 @@ Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `Repe
 Files in the derived folder can be symbolically linked to the main BIDS folder.
 For example, a derived quantitative map `derivatives/sub-01/anat/sub-01_R1.nii.gz` may be linked as `sub-01/anat/sub-01_T1w.nii.gz` to be used as a standard structural image for functional MRI processing pipelines.
 
+This change was made in `src/02-common-principles.md#symbolic-links`.
+
 ### Justification
 
 Whether a file is "derived" or "raw" depends on where you're starting from.
@@ -52,5 +60,6 @@ For example MP2RAGE images are sometimes used to construct `_T1uni`-images and `
 
 ## Suffix
 
-Updated "modality label" to "suffix".
-
+The original specification uses `modality_label` at the end of each file name.
+We have updated this to `suffix` as there are multiple modalities that are not captured in the proposed options, and because the boundaries between "modalities" differ by domain specification.
+This change was made in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data`
