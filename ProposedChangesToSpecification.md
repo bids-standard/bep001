@@ -4,15 +4,48 @@ This document captures all of the changes that the BEP001 team are proposing to 
 
 Table of contents:
 
+* [Indexable metadata](#indexable-metadata)
+* [Acquisition metadata field](#acquisition-metadata-field)
+* [Part metadata field](#part-metadata-field)
+* [Repetition time](#repetition-time)
+* [Symbolic links](#symbolic-links)
+* [Suffix](#suffix)
+* [B1plus fieldmaps](#b1plus-fieldmaps)
 * [Repetition Time](#repetition-time)
 * [B1plus fieldmaps](#b1plus-fieldmaps)
 * [S0map](#s0map)
+
+## Indexable metadata
+
+Change in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md`.
+
+There are a lot of different additional metadata fields that may be needed for structural brain imaging.
+In this change we added a field called `indexable_metadata` to capture those changes.
+The use is described in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair`.
+
+The keys can be pulled from the "Sequence specifics" table (`/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#sequence-specifics`).
+This table was updated to include metadata fields for MT sequences and to include metadata fields for any sequence with spoiling gradients.
+
+## Acquisition metadata field
+
+The `acq-<label>` key-value pair was added to capture a group of parametrically linked anatomical images.
+This was updated in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#acq-label-key-value-pair`.
+
+## Part metadata field
+
+### Proposed change
+
+Change in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#part-magphase-keyvalue-pair`.
+
+The `part-<mag/phase>` key-value pair was added to distinguish the magnitude and phase parts of an acquisition.
+
+We additionally recommend (but do not require) that phase images should be in radians and have a range of 0 (inclusive) to 2pi (not included).
 
 ## Repetition Time
 
 ### Proposed Change
 
-Adjust the definition of `RepetitionTime` in section [4.1.x Task (including resting state) imaging data](https://github.com/bids-standard/bids-specification/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) and add two new fields to section [4.1.y Anatomy imaging data](https://github.com/bids-standard/bids-specification/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data).
+Adjust the definition of `RepetitionTime` in section [4.1.x Task (including resting state) imaging data](/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) and add two new fields to section [4.1.y Anatomy imaging data](/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data).
 
 ### Justification
 
@@ -20,12 +53,35 @@ Adjust the definition of `RepetitionTime` in section [4.1.x Task (including rest
 However there are structural scans that collect multiple volumes during an acquisition.
 Here we adjust the definition of `RepetitionTime` in section 4.1.x and add `RepetitionTimeExcitation` and `RepetitionTimePreparation` as two additional terms for structural acquisitions that include multiple contrasts in 4.1.y.
 
-## Repetition Time
+## Symbolic links
+
+### Proposed change
+
+Files in the derived folder can be symbolically linked to the main BIDS folder.
+For example, a derived quantitative map `derivatives/sub-01/anat/sub-01_R1.nii.gz` may be linked as `sub-01/anat/sub-01_T1w.nii.gz` to be used as a standard structural image for functional MRI processing pipelines.
+
+This change was made in `/src/02-common-principles.md#symbolic-links`.
+
+### Justification
+
+Whether a file is "derived" or "raw" depends on where you're starting from.
+To give a specific example, some researchers will be working on _creating_ quantitative maps, while others will want to _use_ the map as an input file to a structural processing pipeline.
+There is a possible natural cut off by saying that files in the BIDS specification are "raw" as they come off the scanner, and "derived" if offline processing has happened.
+Unfortunately, it is not possible to harmonize datasets across different scanners when following this rule.
+For example MP2RAGE images are sometimes used to construct `_T1uni`-images and `_T1map`s on the scanner system, but on some systems, this only happens post-hoc/"offline".
+
+## Suffix
+
+The original specification uses `modality_label` at the end of each file name.
+We have updated this to `suffix` as there are multiple modalities that are not captured in the proposed options, and because the boundaries between "modalities" differ by domain specification.
+This change was made in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#anatomy-imaging-data`
+
+## B1+ Fieldmaps
 
 ### Proposed Change
 
-Extend the part on `Fieldmaps` in [4.1.x Task (including resting state) imaging data](https://github.com/bids-standard/bids-specification/blob/master/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) by also allowing
-for storing B1+ fielmaps.
+Extend the part on `Fieldmaps` in [4.1.x Task (including resting state) imaging data](/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#task-including-resting-state-imaging-data) by also allowing
+for storing B1+ fieldmaps.
 
 ### Justification
 

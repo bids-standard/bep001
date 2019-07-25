@@ -194,8 +194,8 @@ the use of `_suffix` alone cannot distinguish individual acquisitions from each
 other, failing to identify their roles as inputs to the calculation of
 quantitative maps. Although, such images are REQUIRED to be grouped by a proper
 `_suffix` (please see the list of available suffixes), they are also RECOMMENDED
-to include at least one of the `acq-<label>`, `part-<label>` and
-`<indexable_metadata>-<index>` key/value pairs (please visit corresponding
+to include at least one of the `acq-<label>`, `part-<mag/phase>` and 
+`<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
 sections for details).  
 
 Please note that not only parametrically linked anatomical images, but also
@@ -213,7 +213,7 @@ list of available suffixes.
 | Proton density weighted images                         | PDw       | Denotes images with predominant PD contrast.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | Variable flip angle                                    | VFA       | Groups together parametrically linked anatomical images for T1 mapping. The VFA method involves at least two spoiled gradient echo images with different flip angles. The `<indexable_metadata>-<index>` of `fa-<index>` is REQUIRED for the images grouped by this suffix. Associated output suffixes: T1map                                                                                                                                                                                                                                      |
 | Inversion recovery (for T1 mapping)                    | IRT1      | Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `<indexable_metadata>-<index>` of `inv-<index>` is REQUIRED for the images grouped by this suffix. Associated output suffixes: T1map                                                                                                                                                                                                                      |
-| Magnetization prepared two gradient echoes             | MP2RAGE   | Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `<indexable_metadata>-<index>` key/value pairs of `inv-<index>` and `fa-<index>`, and `part-<label>` key/value pair are REQUIRED for the images grouped by this suffix. Associated output suffixes: T1map, UNIT1                                              |
+| Magnetization prepared two gradient echoes             | MP2RAGE   | Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `<indexable_metadata>-<index>` key/value pairs of `inv-<index>` and `fa-<index>`, and `part-<mag/phase>` key/value pair are REQUIRED for the images grouped by this suffix. Associated output suffixes: T1map, UNIT1                                              |
 | Multi-echo spin echo                                   | MESET2    | Groups together parametrically linked anatomical images for T2 mapping.The MESET2 method involves multiple spin echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. Associated output suffixes: T2map                                                                                                                                                                                                                             |
 | Multi-echo gradient echo                               | MEGRE     | Groups together parametrically linked multiple anatomical gradient echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. Associated output suffixes can be: T2starmap, R2starmap, when used for T2* mapping.                                                                                                                                                                                                                            |
 | Magnetization transfer ratio                           | MTR       | Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-<label>` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. Associated output suffixes: MTRmap                                                                                             |
@@ -309,11 +309,18 @@ sub-01_echo-1_acq-T1w_MPM.nii.gz
 sub-01_echo-1_acq-T1w_MPM.json
 ```
 
-#### `part-<label>` key/value pair
+#### `part-<mag/phase>` key/value pair
 
 Some parametrically linked anatomical images involve both magnitude and phase  
+<<<<<<< HEAD
 reconstructed images in the calculation of a parameter map. In that case, the
 filename MUST make use of this key/value pair to distinguish between them.
+=======
+reconstructed images in the calculation of a parameter map. In that case, the 
+filename MUST make use of this key/value pair to distinguish between them. 
+Phase images SHOULD be in radians and have a range of (0, 2 pi]
+(including 0, excluding 2 pi).
+>>>>>>> dcab1ad3755c7cb2fbb1a7927a24bf9753f2824a
 The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
 `Image Type`.
 
