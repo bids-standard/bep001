@@ -166,7 +166,7 @@ Currently supported modalities include:
 
 #### The `run` entity
 
-If several scans with are acquired with identical acquisition parameters they
+If several scans are acquired with identical acquisition parameters they
 MUST be indexed with a key-value pair: `_run-1`, `_run-2`, `_run-3` etc.
 The run labels MUST be integer values. When there is only one scan of a given
 type the run key MAY be omitted. Please note that diffusion imaging data is
@@ -186,6 +186,33 @@ are used to record the same modality (e.g. RARE and FLASH for T1w) this field
 can also be used to make that distinction. At what level of detail to make the
 distinction (e.g. just between RARE and FLASH, or between RARE, FLASH, and
 FLASHsubsampled) remains at the discretion of the researcher.
+
+If the grouping logic of a set of parametrically linked anatomical images is
+(entirely or partially) bound up with a metadata field that varies from image to
+image, `acq-<label>` SHOULD be included in the file name. This is applicable if
+the varying entries of the metadata field are categorical.
+
+Note that value of the `acq-<label>` is free form. However, to enable a unified
+naming convention while combining several scans of the same modality intended to
+create quantitative maps, following labels SHOULD be included in the filename
+where applicable:
+
+| Respective suffix | Labels           | Related metadata fields   |
+|-------------|------------------|------------------------------|
+| MTR         | `MTon`, `MToff`      | MTState |
+| MTS         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
+| MPM         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
+
+For example (for an `MPM` dataset):
+
+```Text
+sub-01_echo-1_acq-MTon_MPM.nii.gz
+sub-01_echo-1_acq-MTon_MPM.json
+sub-01_echo-1_acq-MToff_MPM.nii.gz
+sub-01_echo-1_acq-MToff_MPM.json
+sub-01_echo-1_acq-T1w_MPM.nii.gz
+sub-01_echo-1_acq-T1w_MPM.json
+```
 
 #### The `ce` entity
 
