@@ -133,10 +133,44 @@ linked images acquired on the purpose of calculating quantitative maps
 (e.g. three 3D volumes provided as an input to the multiparametric mapping
 protocol) and/or the quantitative parameter maps themselves (e.g. T1map etc.).
 
+#### Suffix
+
+If a structural data is not intended for creating a quantitative map, the use of
+`_suffix` is REQUIRED (along with the common key/value pairs if applicable) to
+provide a self explanatory filename. For example:
+
+```Text
+sub-01_run-1_T1w.nii.gz
+sub-01_run-1_T1w.json
+sub-01_run-2_T1w.nii.gz
+sub-01_run-2_T1w.json
+```
+
+The `run-<index>` in the example above denotes the index of the acquisition
+repeated with the identical parameters (e.g. to achieve a higher SNR). Please
+note that changing parameters between multiple acquisitions of the same sequence
+creates a different use case: parametrically linked anatomical images.
+
+If a structural data is a member of parametrically linked anatomical images,
+the use of `_suffix` alone cannot distinguish individual acquisitions from each
+other, failing to identify their roles as inputs to the calculation of
+quantitative maps. Although, such images are REQUIRED to be grouped by a proper
+`_suffix` (please see the list of available suffixes), they are also RECOMMENDED
+to include at least one of the `acq-<label>`, `part-<mag/phase>` and 
+`<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
+sections for details).  
+
+Please note that not only parametrically linked anatomical images, but also
+outputs (quantitative maps) created by processing these files fall into the
+category of anatomy imaging data. In addition, in some cases, quantitative maps
+can be obtained right off the scanner without the need of storing any
+parametrically linked anatomical images and further processing. For both cases,
+a proper `_suffix` is REQUIRED for describing quantitative maps. Please see the
+list of available suffixes.
+
 Currently supported modalities include:
 
-
-| Name                                                   | `suffix`   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Name                                                   | _suffix   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 |--------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | T1 weighted images                                     | T1w       | Denotes images with predominant T1 constrast.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | T2 weighted images                                     | T2w       | Denotes images with predominant T2 constast.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -229,9 +263,10 @@ different reconstruction algorithms (for example ones using motion correction).
 If the structural images included in the dataset were defaced (to protect
 identity of participants) one CAN provide the binary mask that was used to
 remove facial features in the form of `_defacemask` files. In such cases the
-OPTIONAL `mod-<label>` key/value pair corresponds to modality label for eg: T1w,
-inplaneT1, referenced by a defacemask image. E.g.,
-`sub-01_mod-T1w_defacemask.nii.gz`.
+OPTIONAL `mod-<label>` key/value pair corresponds to the modality (as stored in
+the `suffix`) of the acquisition eg: T1w, inplaneT1, referenced by a
+defacemask image. E.g., `sub-01_mod-T1w_defacemask.nii.gz` where `T1w` is the 
+scan suffix which becomes the value for the `mod-` entity.
 
 Some meta information about the acquisition MAY be provided in an additional
 JSON file. See [Common metadata fields](#common-metadata-fields) for a
@@ -241,6 +276,8 @@ fields specific to anatomical scans:
 | Field name              | Definition                                                                                                                                         |
 | :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ContrastBolusIngredient | OPTIONAL. Active ingredient of agent. Values MUST be one of: IODINE, GADOLINIUM, CARBON DIOXIDE, BARIUM, XENON Corresponds to DICOM Tag 0018,1048. |
+| RepetitionTimeExcitation | OPTIONAL. The time in seconds between successive excitation pulses that excite the same tissue. The DICOM tag that best refers to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)). This field may be superseded by `RepetitionTimePreparation` for certain use cases, such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf). Use `RepetitionTimeExcitation` (in combination with `RepetitionTimePreparation` if needed) for anatomy imaging data rather than `RepetitionTime` as it is already defined as the amount of time that it takes to acquire a single volume in section 4.1.x. |
+| RepetitionTimePreparation | OPTIONAL. The period of time in seconds that it takes a preparation pulse block to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. |
 
 ### Task (including resting state) imaging data
 
