@@ -590,7 +590,7 @@ JSON example:
 
 ### Fieldmap data
 
-Data acquired to correct for B0 inhomogeneities can come in different forms. 
+Data acquired to correct for B0 inhomogeneities can come in different forms.
 B0 (static magnetic field strength pattern), B1+ (transmit field pattern),
 and B1- (receive field pattern; not yet supported) maps can be useful in
 post-processing both raw functional and anatomical data.
@@ -601,7 +601,7 @@ data acquired with EPI sequences.
 B1+ and B1- maps are mostly used in anatomical imaging, especially when
 applying quantitative MRI (qMRI) techniques.
 
-The current version of this standard considers four different scenarios. Please 
+The current version of this standard considers four different scenarios. Please
 note that in all cases fieldmap data can be linked to a specific scan(s) it was
 acquired for by filling the IntendedFor field in the corresponding JSON file.
 
@@ -609,7 +609,7 @@ acquired for by filling the IntendedFor field in the corresponding JSON file.
 #### B0 fieldmaps
 
 Data acquired to correct spatial distortions due to B0 inhomogeneities can come in
-different forms. The current version of this standard considers four different 
+different forms. The current version of this standard considers four different
 scenarios. Please note that in all cases fieldmap data can be linked to a specific
 scan(s) it was acquired for by filling the IntendedFor field in the corresponding
 JSON file.
@@ -765,7 +765,7 @@ latter case all timepoints share the same scanning parameters. To indicate which
 run is intended to be used with which functional or diffusion scan the
 IntendedFor field in the JSON file should be used.
 
-#### B1+ fieldmaps 
+#### B1+ fieldmaps
 
 Template:
 
@@ -786,9 +786,9 @@ sub-<participant_label>/[ses-<session_label>/]
 }
 ```
 
-B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_ 
+B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_
 flip angle that is transmited across the different locations in the image.
-The image is thus 3D and its values should mostly be close to 1.  B1+ 
+The image is thus 3D and its values should mostly be close to 1.  B1+
 fieldmaps are stored in the `fmap`-folder and use the suffix `_B1plusmap`.
 The `IntendedFor`-field in the JSON file can be used to indicate which
 images it is intended to be be used with.
