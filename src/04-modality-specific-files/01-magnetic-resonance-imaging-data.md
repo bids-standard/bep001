@@ -325,6 +325,26 @@ sub-01_echo-3_MEGRE.json
 Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
 specification is REQUIRED to extend the list above. 
 
+#### `part-<mag/phase>` key/value pair
+
+Some parametrically linked anatomical images involve both magnitude and phase  
+reconstructed images in the calculation of a parameter map. In that case, the 
+filename MUST make use of this key/value pair to distinguish between them. 
+Phase images SHOULD be in radians and have a range of (0, 2 pi]
+(including 0, excluding 2 pi).
+The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
+`Image Type`.
+
+For example (for an `MP2RAGE` dataset):
+
+```Text
+sub-01_inv-1_part-mag_MP2RAGE.nii.gz
+sub-01_inv-1_part-phase_MP2RAGE.nii.gz
+sub-01_inv-1_MP2RAGE.json
+sub-01_inv-2_part-mag_MP2RAGE.nii.gz
+sub-01_inv-2_part-phase_MP2RAGE.nii.gz
+sub-01_inv-2_MP2RAGE.json
+```
 
 ### Task (including resting state) imaging data
 
