@@ -279,6 +279,53 @@ fields specific to anatomical scans:
 | RepetitionTimeExcitation | OPTIONAL. The time in seconds between successive excitation pulses that excite the same tissue. The DICOM tag that best refers to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)). This field may be superseded by `RepetitionTimePreparation` for certain use cases, such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf). Use `RepetitionTimeExcitation` (in combination with `RepetitionTimePreparation` if needed) for anatomy imaging data rather than `RepetitionTime` as it is already defined as the amount of time that it takes to acquire a single volume in section 4.1.x. |
 | RepetitionTimePreparation | OPTIONAL. The period of time in seconds that it takes a preparation pulse block to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. |
 
+#### `<indexable_metadata>-<index>` key-value pair
+
+If the grouping logic of a set of parametrically linked anatomical images is
+(entirely or partially) bound up with a metadata field that varies from image to
+image, `<indexable_metadata>-<index>` SHOULD be included in the file name. This
+is applicable if the varying entries of the same metadata field are enumerable.
+
+Unlike other key/value pairs, key tag of the `<indexable_metadata>-<index>` is
+mutable depending on the metadata field that varies between several scans of the
+same modality and can appear more than once in the filename with different keys.
+
+Please note that the order of the `index` and the value of the associated
+metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
+correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
+values need to be stored in the corresponding metadata field of the separate 
+JSON files.
+
+If a filename contains more than one indexable metadata, included key tags MUST 
+appear in alphabetical order. For example: 
+
+```
+sub-01_echo-1_inv-1_MP2RAGE.nii.gz
+sub-01_echo-1_inv-1_MP2RAGE.json
+```
+
+| Allowed key tags | Value list | Associated metadata field |
+|---------|------------|---------------------|
+| echo    | 1,2,... N  | EchoTime            |
+| fa      | 1,2,... N  | FlipAngle           |
+| inv     | 1,2,... N  | InversionTime       |
+| tsl     | 1,2,... N  | SpinLockTime        |
+
+For example (for a multi-echo gradient echo dataset):
+
+```Text
+sub-01_echo-1_MEGRE.nii.gz
+sub-01_echo-1_MEGRE.json
+sub-01_echo-2_MEGRE.nii.gz
+sub-01_echo-2_MEGRE.json
+sub-01_echo-3_MEGRE.nii.gz
+sub-01_echo-3_MEGRE.json
+```
+
+Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
+specification is REQUIRED to extend the list above. 
+
+
 ### Task (including resting state) imaging data
 
 Currently supported image contrasts include:
