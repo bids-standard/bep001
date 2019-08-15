@@ -422,7 +422,9 @@ sub-01/
 
 Please note that the `<index>` denotes the number/index (in a form of an
 integer) of the echo not the echo time value which needs to be stored in the
-field EchoTime of the separate JSON file.
+field EchoTime of the separate JSON file. This is an example of the
+`indexable_metadata` entity as described
+[here](src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair)).
 
 Some meta information about the acquisition MUST be provided in an additional
 JSON file.
