@@ -156,9 +156,9 @@ the use of `_suffix` alone cannot distinguish individual acquisitions from each
 other, failing to identify their roles as inputs to the calculation of
 quantitative maps. Although, such images are REQUIRED to be grouped by a proper
 `_suffix` (please see the list of available suffixes), they are also RECOMMENDED
-to include at least one of the `acq-<label>`, `part-<mag/phase>` and 
-`<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
-sections for details).  
+to include at least one of the `acq-<label>`, `part-<mag/phase>` and
+`<indexable_metadata>-<index>` key/value pairs (please visit corresponding
+sections for details).
 
 Please note that not only parametrically linked anatomical images, but also
 outputs (quantitative maps) created by processing these files fall into the
@@ -265,7 +265,7 @@ identity of participants) one CAN provide the binary mask that was used to
 remove facial features in the form of `_defacemask` files. In such cases the
 OPTIONAL `mod-<label>` key/value pair corresponds to the modality (as stored in
 the `suffix`) of the acquisition eg: T1w, inplaneT1, referenced by a
-defacemask image. E.g., `sub-01_mod-T1w_defacemask.nii.gz` where `T1w` is the 
+defacemask image. E.g., `sub-01_mod-T1w_defacemask.nii.gz` where `T1w` is the
 scan suffix which becomes the value for the `mod-` entity.
 
 Some meta information about the acquisition MAY be provided in an additional
@@ -293,11 +293,11 @@ same modality and can appear more than once in the filename with different keys.
 Please note that the order of the `index` and the value of the associated
 metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
 correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
-values need to be stored in the corresponding metadata field of the separate 
+values need to be stored in the corresponding metadata field of the separate
 JSON files.
 
-If a filename contains more than one indexable metadata, included key tags MUST 
-appear in alphabetical order. For example: 
+If a filename contains more than one indexable metadata, included key tags MUST
+appear in alphabetical order. For example:
 
 ```
 sub-01_echo-1_inv-1_MP2RAGE.nii.gz
@@ -323,13 +323,13 @@ sub-01_echo-3_MEGRE.json
 ```
 
 Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
-specification is REQUIRED to extend the list above. 
+specification is REQUIRED to extend the list above.
 
 #### `part-<mag/phase>` key/value pair
 
-Some parametrically linked anatomical images involve both magnitude and phase  
-reconstructed images in the calculation of a parameter map. In that case, the 
-filename MUST make use of this key/value pair to distinguish between them. 
+Some parametrically linked anatomical images involve both magnitude and phase
+reconstructed images in the calculation of a parameter map. In that case, the
+filename MUST make use of this key/value pair to distinguish between them.
 Phase images SHOULD be in radians and have a range of (0, 2 pi]
 (including 0, excluding 2 pi).
 The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
