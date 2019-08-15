@@ -159,6 +159,17 @@ prescribe the `sourcedata`, `derivatives`, or `rawdata` folder names. The above
 example is just a convention that can be useful for organizing raw, source, and
 derived data while maintaining BIDS compliancy of the raw data folder.
 
+### Symbolic links
+
+Quantitative images/maps should be stored in the `derivatives` folder, but can
+be symbolic linked to the corresponding raw data directory to facilitate the
+easy use of these images as input to processing workflows implemented as
+BIDS-apps.
+
+For example, the quantitative map `derivatives/sub-01/anat/sub-01_R1.nii.gz`
+may be linked as `sub-01/anat/sub-01_T1w.nii.gz` to be used as a standard
+structural image for functional MRI processing pipelines.
+
 ## The Inheritance Principle
 
 Any metadata file (`.json`, `.bvec`, `.tsv`, etc.) may be defined at any
