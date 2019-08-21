@@ -194,9 +194,9 @@ the use of `_suffix` alone cannot distinguish individual acquisitions from each
 other, failing to identify their roles as inputs to the calculation of
 quantitative maps. Although, such images are REQUIRED to be grouped by a proper
 `_suffix` (please see the list of available suffixes), they are also RECOMMENDED
-to include at least one of the `acq-<label>`, `part-<mag/phase>` and 
-`<indexable_metadata>-<index>` key/value pairs (please visit corresponding 
-sections for details).  
+to include at least one of the `acq-<label>`, `part-<mag/phase>` and
+`<indexable_metadata>-<index>` key/value pairs (please visit corresponding
+sections for details).
 
 Please note that not only parametrically linked anatomical images, but also
 outputs (quantitative maps) created by processing these files fall into the
@@ -204,7 +204,7 @@ category of anatomy imaging data. In addition, in some cases, quantitative maps
 can be obtained right off the scanner without the need of storing any
 parametrically linked anatomical images and further processing. For both cases,
 a proper `_suffix` is REQUIRED for describing quantitative maps. Please see the
-list of available suffixes.   
+list of available suffixes.
 
 | Name                                                   | _suffix   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 |--------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -248,11 +248,11 @@ same modality and can appear more than once in the filename with different keys.
 Please note that the order of the `index` and the value of the associated
 metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
 correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
-values need to be stored in the corresponding metadata field of the separate 
+values need to be stored in the corresponding metadata field of the separate
 JSON files.
 
-If a filename contains more than one indexable metadata, included key tags MUST 
-appear in alphabetical order. For example: 
+If a filename contains more than one indexable metadata, included key tags MUST
+appear in alphabetical order. For example:
 
 ```
 sub-01_echo-1_inv-1_MP2RAGE.nii.gz
@@ -278,7 +278,7 @@ sub-01_echo-3_MEGRE.json
 ```
 
 Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
-specification is REQUIRED to extend the list above. 
+specification is REQUIRED to extend the list above.
 
 #### `acq-<label>` key-value pair
 
@@ -311,9 +311,11 @@ sub-01_echo-1_acq-T1w_MPM.json
 
 #### `part-<mag/phase>` key/value pair
 
+
 Some parametrically linked anatomical images involve both magnitude and phase  
 reconstructed images in the calculation of a parameter map. In that case, the 
 filename MUST make use of this key/value pair to distinguish between them. 
+
 Phase images SHOULD be in radians and have a range of (0, 2 pi]
 (including 0, excluding 2 pi).
 The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
@@ -384,7 +386,7 @@ sub-01/
 
 Please note that the `<index>` denotes the number/index (in a form of an
 integer) of the echo not the echo time value which needs to be stored in the
-field EchoTime of the separate JSON file (see [here](src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair)). 
+field EchoTime of the separate JSON file (see [here](src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md#indexable_metadata-index-key-value-pair)).
 
 Some meta information about the acquisition MUST be provided in an additional
 JSON file.
@@ -534,7 +536,7 @@ JSON example:
 
 ### Fieldmap data
 
-Both B0 (static magnetic field strength pattern), B1+ (transmit field pattern), and 
+Both B0 (static magnetic field strength pattern), B1+ (transmit field pattern), and
 B1- (receive field pattern; not yet supported) maps can be useful in post-processing
 both raw functional and anatomical data.
 
@@ -547,7 +549,7 @@ quantitative MRI (qMRI) techniques.
 #### B0 fieldmaps
 
 Data acquired to correct spatial distortions due to B0 inhomogeneities can come in
-different forms. The current version of this standard considers four different 
+different forms. The current version of this standard considers four different
 scenarios. Please note that in all cases fieldmap data can be linked to a specific
 scan(s) it was acquired for by filling the IntendedFor field in the corresponding
 JSON file.
@@ -702,7 +704,7 @@ latter case all timepoints share the same scanning parameters. To indicate which
 run is intended to be used with which functional or diffusion scan the
 IntendedFor field in the JSON file should be used.
 
-#### B1+ fieldmaps 
+#### B1+ fieldmaps
 
 Template:
 
@@ -723,9 +725,9 @@ sub-<participant_label>/[ses-<session_label>/]
 }
 ```
 
-B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_ 
+B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_
 flip angle that is transmited across the different locations in the image.
-The image is thus 3D and its values should mostly be close to 1.  B1+ 
+The image is thus 3D and its values should mostly be close to 1.  B1+
 fieldmaps are stored in the `fmap`-folder and use the suffix `_B1plusmap`.
 The `IntendedFor`-field in the JSON file can be used to indicate which
 images it is intended to be be used with.

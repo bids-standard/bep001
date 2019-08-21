@@ -1,15 +1,15 @@
 # BEP001
 
-This repository is primarily used for the issues, as a way to project manage ***[BIDS Extension Proposal 001](https://docs.google.com/document/d/1QwfHyBzOyFWOLO4u_kkojLpUhW0-4_M7Ubafu9Gf4Gg/edit#heading=h.6e5avk8akeqj): Structural acquisitions that include multiple contrasts***.
+This repository contains ***BIDS Extension Proposal 001: Structural acquisitions that include multiple contrasts***.
 
 ## Our goal
 
 The first version of BIDS was created with the most common use cases from neuroscience and cognitive psychology in mind.
 This is entirely in keeping with the [Pareto_principle](https://en.wikipedia.org/wiki/Pareto_principle): that 80% of the use cases come from 20% of the many types of brain imaging acquisitions.
 
-However, there's a huge field of MRI physicists who work on quantiative anatomical imaging for whom 80% of the use cases fall outside of those covered by the current BIDS specification.
+However, there's a huge field of MRI physicists who work on quantitative anatomical imaging for whom 80% of the use cases fall outside of those covered by the current BIDS specification.
 
-Our goal is to extend the [BIDS specification](https://bids-specification.readthedocs.io/en/stable/) to accomodate (at least some of) the most common quantitative MRI acquisitions so they can be shared in BIDS compliant folders.
+Our goal is to extend the [BIDS specification](https://bids-specification.readthedocs.io/en/stable/) to accommodate (at least some of) the most common quantitative MRI acquisitions so they can be shared in BIDS compliant folders.
 
 ## Who is building BEP 001
 
@@ -23,7 +23,7 @@ We don't have a process for acknowledging our community, if you have any ideas o
 
 ## How to help
 
-[Our goal](#our-goal) is to extend BIDS to be able to accomodate qMRI datasets.
+[Our goal](#our-goal) is to extend BIDS to be able to accommodate qMRI datasets.
 
 What that means in practise is that we have to **propose changes to the BIDS specification**.
 
@@ -44,7 +44,7 @@ However, there are quite a few changes to make, and quite a lot of conversation 
 Each conceptual update to the specification should have a "proposal file".
 This file should explain what change it is proposing and provide a justification for the change.
 
-The developer should also change the file in the BIDS specification (saved in `src` in the master branch of the BEP001 repository) to refect the proposed changes.
+The developer should also change the file in the BIDS specification (saved in `src` in the master branch of the BEP001 repository) to reflect the proposed changes.
 
 Once the proposal is ready, the developer should **open a pull request** to the master branch of the BEP001 repository (this one).
 If everyone agrees on the proposal, the file will be merged to master.
@@ -54,56 +54,12 @@ Our goal is to build up the accepted individual proposal files in the master bra
 (There will then be some wrangling to make the one big pull request to the bids-specification.
 We'll cross that bridge when we come to it! :sparkles:)
 
-### An example: RepetitionTime
+## Proposed changes to specification
 
-For example: Kirstie is currently working on a proposal to *"Adjust the definition of RepetitionTime in section 4.1.x Task (including resting state) imaging data and add two new fields to section 4.1.y Anatomy imaging data."*.
-You can see her suggestion at: https://github.com/KirstieJane/bep001/blob/repetitiontime/Proposal_RepetitionTime.md
+We have a file in the root directory called [ProposedChangesToSpecification.md](ProposedChangesToSpecification.md).
+As you might guess, that is where we collect together the proposed changes.
 
-#### Proposal top line (title) and introduction
-
-Start with a one sentence explanation of what you're proposing and a justification for why it needs to change.
-
-![](images/proposal_example_1.png)
-
-#### Add the proposed text
-
-Start by linking to the section of the file you want to change, and the current line number of that section
-
-![](images/proposal_example_2.png)
-
-#### Repeat the text but in "diff" format
-
-This is to make it very explicit what has change and what has not.
-
-This is a bit of a pain to do, but will make reviews by the community *much* easier in the long run.
-
-![](images/proposal_example_3.png)
-
-The following screenshot shows what you can see when you're editing the markdown file.
-
-![](images/proposal_example_6.png)
-
-
-#### If there's a different section that needs to change, repeat the previous two steps
-
-Link to the section of the file you want to change.
-Add the proposed text.
-Repeat the text making clear what has changed using the "diff" formatting.
-
-![](images/proposal_example_4.png)
-
-![](images/proposal_example_5.png)
-
-
-### Current proposals under development
-
-:construction: **THIS SECTION IS NOT UP TO DATE! HELP! :construction:
-
-This github repo contains multiple branches that are used to work on different aspects of the project:
- * [master](https://github.com/INCF/BEP001/tree/master) This repo contains only content that has been "signed off on" by the community.
- * [repetitiontime](https://github.com/INCF/BEP001/tree/repetitiontime) This repo contains text we want to change in the main BIDS standard about the definition of _RepetitionTime_.
- * [examples](https://github.com/INCF/BEP001/tree/examples) This repo contains some fake datasets that illustrate BEP001 in practice.
-
+It is a really important file to keep updated because it will help us write the extension pull request when it goes to the main specification for review.
 
 ## Finding information and getting in touch
 
@@ -139,3 +95,4 @@ Keep an eye on the mailing list or this repository's issue tracker for announcem
 The work contained in this repository is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](LICENSE).
 
 Please acknowledge the **BIDS Extension Proposal 001 community** when reusing content.
+
