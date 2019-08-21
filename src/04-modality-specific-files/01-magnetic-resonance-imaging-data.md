@@ -142,6 +142,8 @@ Given the broad scope, a key label (e.g. modality) for the naming entity of anat
 semantically hold ture for all the cases outlined above. To circumvent this problem, the `_suffix` 
 entity is used for identifying anatomical imaging data, as it does not have a key label. 
 
+#### The `_suffix` entity 
+
 To ensure an apprehensible directory for the naming of anatomical images, the `_suffix` entity
 is divided into three subgroups:
 
@@ -153,7 +155,7 @@ is divided into three subgroups:
 
 The following three subsections expand on each of these `_suffix` classes.
 
-* **Suffix Class-1: Sufixes for conventional MRI contrasts**
+* **Suffix Part-1: Sufixes for conventional MRI contrasts**
 ***
 
 **Function:** Denotes the type of the predominant contrast conveyed by a
@@ -193,12 +195,108 @@ sub-01_mod-T1w_defacemask.nii.gz
 sub-01_mod-T1w_defacemask.json 
 ```
 
-* **Suffix Class-2: Grouping suffixes**
+* **Suffix Part-2: Suffixes for qMRI maps**
+***
+
+**Function:** Denotes the parameter contained within a single file of a quantitative map.  
+
+| Name                                                   | _suffix   | _suffix type | Description                                                                                                                                                                                                                                                                          |
+|--------------------------------------------------------|-----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Longitudinal relaxation time map                       | T1map     | Parametric   | In seconds (s). T1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`. You can visit [this interactive book for T1 mapping](https://qmrlab.org/t1_book/intro) for further reading.  |
+| True transverse relaxation time map                    | T2map     | Parametric   | In seconds (s). T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                       |
+| Observed transverse relaxation time map                | T2starmap | Parametric   | In seconds (s). T2* maps are REQUIRED to use this suffix irrespective of the method they are related to._Can be generated from:_,`MEGRE`, `MPM`                                                                                                                                      |
+| Longitudinal relaxation rate map                       | R1map     | Parametric   | In seconds-1 (1/s). R1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`                                                                                                           |
+| True transverse relaxation rate map                    | R2map     | Parametric   | In seconds-1 (1/s). R2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                   |
+| Observed transverse relaxation rate map                | R2starmap | Parametric   | In seconds-1 (1/s). R2* maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_,`MEGRE`, `MPM`                                                                                                                                 |
+| Proton density map                                     | PDmap     | Parametric   | In arbitrary units (a.u.). PD maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MPM`                                                                                                                                    |
+| Magnetization transfer ratio map                       | MTRmap    | Parametric   | In percentage (%). MTR maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTR`                                                                                                                                           |
+| Magnetization transfer saturation index map            | MTSat     | Parametric   | In arbitrary units (a.u.). MTsat maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTS`, `MPM`                                                                                                                          |
+| Homogeneous (flat) T1 image by MP2RAGE                 | UNIT1     | Parametric   | In arbitrary units (a.u.). UNIT1 maps are REQUIRED to use this suffix irrespective of the method they are related to.,_Can be generated from:_ `MP2RAGE`                                                                                                                             |
+| Longutidunal relaxation in rotating frame (T1 rho) map | T1rho     | Parametric   | In seconds (s). T1-rho maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ N/A                                                                                                                                             |
+| Myelin water fraction map                              | MWFmap    | Parametric   | In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to.,_Can be generated from:_ `MESE`                                                                                                                                          |
+| Combined PD/T2 map                                     | PDT2map   | Parametric   | In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. N/A                                                                                                                                                   |
+| RF transmit field map                                  | B1plusmap | Parametric   | In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.                                                                        |
+
+Not only parametrically linked anatomical images, but also 
+outputs (quantitative maps) created by processing these files fall into the 
+category of anatomy imaging data. In addition, in some cases, quantitative maps 
+can be obtained right off the scanner without the need of storing any 
+parametrically linked anatomical images and further processing. For both cases,
+a proper `_suffix` is REQUIRED for describing quantitative maps. For example:
+
+```Text
+sub-01_T1map.nii.gz
+sub-01_T1map.json 
+```
+
+_Content of the JSON files accompanying qMRI maps_ 
+***
+
+Metadata fields listed in the sidecar JSON of the quantitative maps depend on the
+way they are generated:
+* If a quantitative map is generated at the scanner site through non-transparent vendor 
+implementations, the content is confined to the available metadata. 
+* If a quantitative map is generated using an open-source software, the sidecar JSON file
+MUST inherit all the fields from the `top` JSON file of the input data (grouped by a
+`grouping suffix`) and MUST include the following metadata fields: 
+
+| Field name                  | Definition                                                     |
+| :-------------------------- | :------------------------------------------------------------- |
+| BasedOn | List of files gruoped by an `grouping suffix` to generate the map. The fieldmaps are also listed if involved in the processing.|
+| EstimationReference | Reference to the study/studies on which the implementation is based.|
+| EstimationAlgorithm | Type of algoritm used to perform fitting (e.g. linear, non-linear, LM etc.)|
+| EstimationSoftwareName | The name of the open-source tool used for fitting (e.g. qMRLab, QUIT, hMRI-Toolbox etc.)|
+| EstimationSoftwareVer | Version of the open-source tool used for fitting (e.g. v2.3.0 etc.)|
+| EstimationSoftwareLang | Language in which the software is natively developed (e.g. MATLAB, CPP, Python etc.)|
+| EstimationSoftwareEnv | Operation system on which the application was run (e.g. OSX Mojave, Ubuntu 18.04, Win10 etc.)|
+
+Example: 
+
+```Text
+sub-01_T1map.nii.gz
+sub-01_T1map.json 
+```
+
+```Text
+sub-01_T1map.json
+{
+"BasedOn":["anat/sub-01_fa-1_VFA.nii.gz",
+           "anat/sub-01_fa-2_VFA.nii.gz",
+           "fmap/sub-01_B1plusmap.nii.gz"],
+“MagneticFieldStrength”: “3”, 
+“Manufacturer”: “Siemens”, 
+“ManufacturerModelName”: “TrioTim”, 
+“InstitutionName”: “xxx”,    
+“PulseSequenceType”: “SPGR”,
+“PulseSequenceDetails”: “Information beyond the sequence type that identifies the specific pulse sequence used (VB version, if not standard, Siemens WIP XXX version ### sequence written by xx using a version compiled on mm/dd/yyyy/)”, 
+"EstimationPaper":"Deoni et. al.MRM, 2015",
+"EstimationAlgorithm":"Linear",
+“EstimationSoftwareName”: “qMRLab”,
+“EstimationSoftwareLanguage”: “Octave”,
+“EstimationSoftwareVersion”: “2.3.0”,
+“EstimationSoftwareEnv”: “Ubuntu 16.04” 
+}
+
+
+```
+
+* **Suffix Part-3: Grouping suffixes**
 ***
 
 **Function:** Groups together files that belong to parametrically linked multiple 
 scans, which are intended for a well-defined qMRI application. For example:
 
+| Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------------------------------------|---------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Variable flip angle                        | VFA     | Grouping     | Groups together parametrically linked anatomical images (primarily) for relaxometry mapping. The VFA method involves at least two spoiled gradient echo (SPGR) of steady-state free precession (SSFP) images acquired at different flip angles. Therefore, `-` of `fa-` is REQUIRED for the images grouped by this suffix. Depending on the provided metadata fields and the sequence type, data may be eligible for `DESPOT1`, `DESPOT2` and their variants. Please visit the method-specific list of priority levels for qMRI metadata for details. _Associated output suffixes:_ T1map, T2map, R1map, R2map |
+| Inversion recovery (for T1 mapping)        | IRT1    | Grouping     | Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `-` of `inv-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, R1map                                                                                                                                                                                                                                                                                                           |
+| Magnetization prepared two gradient echoes | MP2RAGE | Grouping     | Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `-` key/value pairs of `inv-` and `fa-`, and `part-` key/value pair are REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, UNIT1                                                                                                                                                        |
+| Multi-echo spin echo                       | MESE    | Grouping     | Groups together parametrically linked anatomical images (commonlly) for T2 mapping.The MESE method involves multiple spin echo images acquired at different echo times. The `-` key/value pair of `echo-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2map, R2map                                                                                                                                                                                                                                                                                                        |
+| Multi-echo gradient echo                   | MEGRE   | Grouping     | Groups together parametrically linked multiple anatomical gradient echo images acquired at different echo times. The `-` key/value pair of `echo-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2starmap, R2starmap, when used for T2* mapping.                                                                                                                                                                                                                                                                                                                           |
+| Magnetization transfer ratio               | MTR     | Grouping     | Magnetization transfer ratio,| MTR,| (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. _Associated output suffixes:_ MTRmap                                                                                                                 |
+| Magnetization transfer saturation          | MTS     | Grouping     | Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ T1map, MTsat                                                                                                     |
+| Multi-parametric mapping                   | MPM     | Grouping     | roups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                                                                                                 |
+| Double-angle B1 mapping                    | B1DAM   | Grouping     | Groups together parametrically linked anatomical images for RF transmit field (B1 plus) mapping. Double angle method is based on the calculation of the actual angles from signal ratios, collected by two acquisitions at different nominal excitation angles. Common sequence types for this application include spin echo and echo planar imaging. _Associated output suffixes:_ B1plusmap                                                                                                                                                                                                                  |
 ```Text
 sub-01_VFA.json 
 sub-01_fa-1_VFA.nii.gz
@@ -351,116 +449,6 @@ For a dataset with a `grouping suffix`, the BIDS validation is successful if:
 * provided suffixes are present in the list of available suffixes 
 * sidecar JSON files follow the hierarchy defined for `grouping suffix`.  
 
-* **Suffix Class-3: Designation suffixes for qMRI maps**
-***
-
-**Function:** Denotes the parameter contained within a single file of a quantitative map.  
-
-Not only parametrically linked anatomical images, but also 
-outputs (quantitative maps) created by processing these files fall into the 
-category of anatomy imaging data. In addition, in some cases, quantitative maps 
-can be obtained right off the scanner without the need of storing any 
-parametrically linked anatomical images and further processing. For both cases,
-a proper `_suffix` is REQUIRED for describing quantitative maps. For example:
-
-```Text
-sub-01_T1map.nii.gz
-sub-01_T1map.json 
-```
-
-Please see the available `designation suffixes for qMRI maps` in the list of 
-available suffixes. Descriptions of this type of suffixes are preceded by the 
-`(M) -->` notation (`M` stands for maps). 
-
-_Content of the JSON files accompanying qMRI maps_ 
-***
-
-Metadata fields listed in the sidecar JSON of the quantitative maps depend on the
-way they are generated:
-* If a quantitative map is generated at the scanner site through non-transparent vendor 
-implementations, the content is confined to the available metadata. 
-* If a quantitative map is generated using an open-source software, the sidecar JSON file
-MUST inherit all the fields from the `top` JSON file of the input data (grouped by a
-`grouping suffix`) and MUST include the following metadata fields: 
-
-| Field name                  | Definition                                                     |
-| :-------------------------- | :------------------------------------------------------------- |
-| BasedOn | List of files gruoped by an `grouping suffix` to generate the map. The fieldmaps are also listed if involved in the processing.|
-| EstimationReference | Reference to the study/studies on which the implementation is based.|
-| EstimationAlgorithm | Type of algoritm used to perform fitting (e.g. linear, non-linear, LM etc.)|
-| EstimationSoftwareName | The name of the open-source tool used for fitting (e.g. qMRLab, QUIT, hMRI-Toolbox etc.)|
-| EstimationSoftwareVer | Version of the open-source tool used for fitting (e.g. v2.3.0 etc.)|
-| EstimationSoftwareLang | Language in which the software is natively developed (e.g. MATLAB, CPP, Python etc.)|
-| EstimationSoftwareEnv | Operation system on which the application was run (e.g. OSX Mojave, Ubuntu 18.04, Win10 etc.)|
-
-Example: 
-
-```Text
-sub-01_T1map.nii.gz
-sub-01_T1map.json 
-```
-
-```Text
-sub-01_T1map.json
-{
-"BasedOn":["anat/sub-01_fa-1_VFA.nii.gz",
-           "anat/sub-01_fa-2_VFA.nii.gz",
-           "fmap/sub-01_B1plusmap.nii.gz"],
-“MagneticFieldStrength”: “3”, 
-“Manufacturer”: “Siemens”, 
-“ManufacturerModelName”: “TrioTim”, 
-“InstitutionName”: “xxx”,    
-“PulseSequenceType”: “SPGR”,
-“PulseSequenceDetails”: “Information beyond the sequence type that identifies the specific pulse sequence used (VB version, if not standard, Siemens WIP XXX version ### sequence written by xx using a version compiled on mm/dd/yyyy/)”, 
-"EstimationPaper":"Deoni et. al.MRM, 2015",
-"EstimationAlgorithm":"Linear",
-“EstimationSoftwareName”: “qMRLab”,
-“EstimationSoftwareLanguage”: “Octave”,
-“EstimationSoftwareVersion”: “2.3.0”,
-“EstimationSoftwareEnv”: “Ubuntu 16.04” 
-}
-
-
-```
-
-**List of available suffixes for anatomy imaging data**
-***
-
-For the sake of clarity, suffix descriptions are preceded by a single letter 
-(`G`,`M`,`W`), indicating the suffix class that they belong to with respect to the following :    
-* The `(W) -->` notation stands for `suffixes for conventional MRI contrasts`.  
-* The `(G) -->` notation stands for `grouping suffixes`.
-* The `(M) -->` notaiton stands for `designation suffixes for qMRI maps`. 
-
-| Name                                                   | _suffix   | (Class) --> Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|--------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| T1 weighted images                                     | T1w       | (W) --> Denotes images with predominant T1 contribution.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| T2 weighted images                                     | T2w       | (W) --> Denotes images with predominant T2 contribution.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| Proton density weighted images                         | PDw       | (W) --> Denotes images with predominant proton density (PD) contribution.                            |
-| T2 star weighted images                                | T2starw   | (W) --> Denotes images with predominant T2<sup>*</sup> contribution, typically images acquired using a GRE sequence with low flip angle, long echo time and long repetition time. Please note that this suffix is not a surrogate for `T2starmap`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Variable flip angle                                    | VFA       | (G) --> Groups together parametrically linked anatomical images (primarily) for relaxometry mapping. The VFA method involves at least two spoiled gradient echo (SPGR) of steady-state free precession (SSFP) images acquired at different flip angles. Therefore, `<indexable_metadata>-<index>` of `fa-<index>` is REQUIRED for the images grouped by this suffix. Depending on the provided metadata fields and the sequence type, data may be eligible for `DESPOT1`, `DESPOT2` and their variants. Please visit the method-specific list of priority levels for qMRI metadata for details. _Associated output suffixes:_ T1map, T2map, R1map, R2map          |
-| Inversion recovery (for T1 mapping)                    | IRT1      | (G) --> Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `<indexable_metadata>-<index>` of `inv-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, R1map                                                                                                                                                                                                                      |
-| Magnetization prepared two gradient echoes             | MP2RAGE   | (G) --> Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `<indexable_metadata>-<index>` key/value pairs of `inv-<index>` and `fa-<index>`, and `part-<label>` key/value pair are REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, UNIT1                                              |
-| Multi-echo spin echo                                   | MESE      | (G) --> Groups together parametrically linked anatomical images (commonlly) for T2 mapping.The MESE method involves multiple spin echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2map, R2map                                                                                                                                                                                                                             |
-| Multi-echo gradient echo                               | MEGRE     | (G) --> Groups together parametrically linked multiple anatomical gradient echo images acquired at different echo times. The `<indexable_metadata>-<index>` key/value pair of `echo-<index>` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2starmap, R2starmap, when used for T2* mapping.                                                                                                                                                                                                                            |
-| Magnetization transfer ratio                           | MTR       | (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-<label>` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. _Associated output suffixes:_ MTRmap                                                                                             |
-| Magnetization transfer saturation                      | MTS       | (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ T1map, MTsat  |
-| Multi-parametric mapping                               | MPM       | (G) --> Groups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `<indexable_metadata>-<index>` key/value pair of `fa-<index>` and `acq-<label>` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                  |
-| Double-angle B1 mapping | B1DAM       | (G) --> Groups together parametrically linked anatomical images for RF transmit field (B1 plus) mapping. Double angle method is based on the calculation of the actual angles from signal ratios, collected by two acquisitions at different nominal excitation angles. Common sequence types for this application include spin echo and echo planar imaging. _Associated output suffixes:_ B1plusmap        |
-| Longitudinal relaxation time map                       | T1map     | (M) --> In seconds (s). T1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| True transverse relaxation time map                    | T2map     | (M) --> In seconds (s). T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| Observed transverse relaxation time map                | T2starmap | (M) --> In seconds (s). T2* maps are REQUIRED to use this suffix irrespective of the method they are related to.  _Can be generated from:_  `MEGRE`, `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| Longitudinal relaxation rate map                       | R1map     | (M) --> In seconds<sup>-1</sup> (1/s). R1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| True transverse relaxation rate map                    | R2map     | (M) --> In seconds<sup>-1</sup> (1/s). R2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| Observed transverse relaxation rate map                | R2starmap | (M) --> In seconds<sup>-1</sup> (1/s). R2* maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_  `MEGRE`, `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| Proton density map                                     | PDmap     | (M) --> In arbitrary units (a.u.). PD maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| Magnetization transfer ratio map                       | MTRmap    | (M) --> In percentage (%). MTR maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTR`                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Magnetization transfer saturation index map            | MTsat     | (M) --> In arbitrary units (a.u.). MTsat maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTS`, `MPM`                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| Homogeneous (flat) T1 image by MP2RAGE                 | UNIT1     | (M) --> In arbitrary units (a.u.). UNIT1 maps are REQUIRED to use this suffix irrespective of the method they are related to.  _Can be generated from:_ `MP2RAGE`                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| Longutidunal relaxation in rotating frame (T1 rho) map | T1Rmap    | (M) --> In seconds (s). T1-rho maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ N/A                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Myelin water fraction map                              | MWFmap    | (M) --> In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to.  _Can be generated from:_ `MESE`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| Combined PD/T2 map                                     | PDT2map   | (M) --> In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. N/A                                                                                                                                                                                                                                                                                                                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                               |
-| B1<sup>+</sup> map                                     | B1plusmap | (M) --> In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.                                                                                                                                                                                                                                                                                                                                                                                                                      |                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 #### The `indexable_metadata` entity
 
