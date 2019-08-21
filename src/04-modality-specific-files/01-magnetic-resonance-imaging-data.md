@@ -284,7 +284,7 @@ sub-01_T1map.json
 ***
 
 **Function:** Groups together files that belong to parametrically linked multiple 
-scans, which are intended for a well-defined qMRI application. For example:
+scans, which are intended for a well-defined qMRI application. 
 
 | Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 |--------------------------------------------|---------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -296,7 +296,11 @@ scans, which are intended for a well-defined qMRI application. For example:
 | Magnetization transfer ratio               | MTR     | Grouping     | Magnetization transfer ratio,| MTR,| (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. _Associated output suffixes:_ MTRmap                                                                                                                 |
 | Magnetization transfer saturation          | MTS     | Grouping     | Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ T1map, MTsat                                                                                                     |
 | Multi-parametric mapping                   | MPM     | Grouping     | roups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                                                                                                 |
-| Double-angle B1 mapping                    | B1DAM   | Grouping     | Groups together parametrically linked anatomical images for RF transmit field (B1 plus) mapping. Double angle method is based on the calculation of the actual angles from signal ratios, collected by two acquisitions at different nominal excitation angles. Common sequence types for this application include spin echo and echo planar imaging. _Associated output suffixes:_ B1plusmap                                                                                                                                                                                                                  |
+| Double-angle B1 mapping                    | B1DAM   | Grouping     | Groups together parametrically linked anatomical images for RF transmit field (B1 plus) mapping. Double angle method is based on the calculation of the actual angles from signal ratios, collected by two acquisitions at different nominal excitation angles. Common sequence types for this application include spin echo and echo planar imaging. _Associated output suffixes:_ B1plusmap                                                                                           
+|
+
+For example:
+
 ```Text
 sub-01_VFA.json 
 sub-01_fa-1_VFA.nii.gz
@@ -304,6 +308,8 @@ sub-01_fa-1_VFA.json
 sub-01_fa-2_VFA.nii.gz
 sub-01_fa-2_VFA.json
 ```
+[PLACEHOLDER: Visit here for more examples?]()
+
 _Some important considerations regarding `grouping suffixes`:_
 
 * All `grouping suffixes` MUST be capitalized.
