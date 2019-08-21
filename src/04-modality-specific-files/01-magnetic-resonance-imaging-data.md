@@ -126,60 +126,30 @@ sub-<participant_label>/[ses-<session_label>/]
         sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<suffix>.nii[.gz]
         sub-<participant_label>[_ses-<session_label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<suffix>.json
 ```
-Anatomical (structural) data for a participant may refer to a simple standalone
-data (e.g. a 3D high resolution T1 weighted image), or a group of parametrically 
-linked images acquired on the purpose of calculating quantitative maps
-(e.g. three 3D volumes provided as an input to the multiparametric mapping 
-protocol) and/or the quantitative parameter maps themselves (e.g. T1map etc.). 
 
-All anatomy imaging data filenames can include the key-value pairs of
-`run-<index>`, `ce-<label>` or `rec-<label>`. 
+#### Supported modalities, quantitative maps and grouped scan collections
 
-If the same acquisition for a given `_suffix` is repeated without any parameter 
-changes, they must be indexed with the key/value pair of `run-<index>`:
-`_run-1`, `_run-2`, `_run-3` etc. (only integers are allowed as run numbers).
-When there is only one scan of a given type, the run key MAY be omitted.
+Anatomical imaging data comes in different flavors. An anatomical image
+may be one of the commonly used conventional MRI modalities (e.g. T1-weighted image) or
+may belong to the family of parametric quantitative maps (e.g. T1 map). 
 
-The OPTIONAL `ce-<label>` key/value can be used to distinguish
-sequences using different contrast enhanced images. The label is the name of the
-contrast agent. The key `ContrastBolusIngredient` MAY be also be added in the
-JSON file, with the same label.
+There are also cases where multiple images are collected by purposefully varying scan parameters.
+These grouped scan collections are processed for deriving parametric quantitative maps or
+enhancing certain contrast properties. Constituent images of a given grouped scan collection are
+referred by their grouping condition (e.g. MPM), rather than attaining individual labels.
 
-The OPTIONAL `rec-<label>` key/value can be used to distinguish
-different reconstruction algorithms (for example ones using motion correction).
+Given the broad scope, a key label (e.g. modality) for the naming entity of anatomical imaging data cannot 
+semantically hold ture for all the cases outlined above. To circumvent this problem, the `_suffix` 
+entity is used for identifying anatomical imaging data, as it does not have a key label. 
 
-If the structural images included in the dataset were defaced (to protect
-identity of participants) one CAN provide the binary mask that was used to
-remove facial features in the form of `_defacemask` files. In such cases the
-OPTIONAL `mod-<label>` key/value pair corresponds to the suffix for example: T1w,
-referenced by a defacemask image:
-
-```
-sub-01_mod-T1w_defacemask.nii.gz
-sub-01_mod-T1w_defacemask.json 
-```
-
-Some meta information about the acquisition MAY be provided in an additional
-JSON file. See Common MR metadata fields for a list of terms and their
-definitions. There are also some OPTIONAL JSON fields specific to anatomical
-scans:
-
-| Field name              | Definition                                                                                                                                         |
-| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ContrastBolusIngredient | OPTIONAL. Active ingredient of agent. Values MUST be one of: IODINE, GADOLINIUM, CARBON DIOXIDE, BARIUM, XENON Corresponds to DICOM Tag 0018,1048. |
-| RepetitionTimeExcitation | OPTIONAL. The time in seconds between successive excitation pulses that excite the same tissue. The DICOM tag that best refers to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)). This field may be superseded by `RepetitionTimePreparation` for certain use cases, such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf). Use `RepetitionTimeExcitation` (in combination with `RepetitionTimePreparation` if needed) for anatomy imaging data rather than `RepetitionTime` as it is already defined as the amount of time that it takes to acquire a single volume in section 4.1.x. |
-| RepetitionTimePreparation | OPTIONAL. The period of time in seconds that it takes a preparation pulse block to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. |
-
-
-#### Suffix
-
-Based on their function, suffixes are divided into three classes:
+To ensure an apprehensible directory for the naming of anatomical images, the `_suffix` entity
+is divided into three subgroups:
 
 1. `Suffixes for conventional MRI contrasts`
 
-2. `Grouping suffixes`
+3. `Suffixes for qMRI maps`
 
-3. `Designation suffixes for qMRI maps`
+2. `Grouping suffixes`
 
 The following three subsections expand on each of these `_suffix` classes.
 
@@ -205,9 +175,16 @@ repeated with the **identical parameters **(e.g. to achieve a higher SNR). Pleas
 note that changing parameters between multiple acquisitions of the same sequence
 creates a different use case: `parametrically linked anatomical images`.
 
-The entries listed for `suffixes for conventional MRI contrasts` in the list of 
-available suffixes are immutable. Descriptions of this type of suffixes are preceded 
-by the `(W) -->` notation (`W` stands for grouping).
+If the structural images included in the dataset were defaced (to protect
+identity of participants) one CAN provide the binary mask that was used to
+remove facial features in the form of `_defacemask` files. In such cases the
+OPTIONAL `mod-<label>` key/value pair corresponds to the suffix for example: T1w,
+referenced by a defacemask image:
+
+```
+sub-01_mod-T1w_defacemask.nii.gz
+sub-01_mod-T1w_defacemask.json 
+```
 
 * **Suffix Class-2: Grouping suffixes**
 ***
@@ -478,7 +455,7 @@ For the sake of clarity, suffix descriptions are preceded by a single letter
 | Combined PD/T2 map                                     | PDT2map   | (M) --> In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. N/A                                                                                                                                                                                                                                                                                                                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                               |
 | B1<sup>+</sup> map                                     | B1plusmap | (M) --> In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.                                                                                                                                                                                                                                                                                                                                                                                                                      |                                                                                                                                                                                                                                                                                                                                                                                                               |
 
-#### `<indexable_metadata>-<index>` key-value pair
+#### The `indexable_metadata` entity
 
 If multiple anatomical images are bundled together by a `grouping suffix`, there
 is at least one metadata field that varies across grouped images. If the varying 
@@ -528,7 +505,7 @@ appear in alphabetical order. For example:
 * Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
 specification is REQUIRED to extend the allowed key tags. 
 
-#### `acq-<label>` key-value pair
+#### The `acq` entity
 
 If multiple anatomical images are bundled together by a `grouping suffix`, there
 is at least one metadata field that varies across grouped images. If the varying 
@@ -564,7 +541,7 @@ labels SHOULD be used with the corresponding `grouping suffixes`.
 labels. 
 
 
-#### `part-<label>` key/value pair
+#### The `part` entity
 
 Some parametrically linked anatomical images involve both magnitude and phase  
 reconstructed images in the calculation of a parameter map. In that case, the 
@@ -582,6 +559,40 @@ sub-01_inv-2_part-mag_MP2RAGE.nii.gz
 sub-01_inv-2_part-phase_MP2RAGE.nii.gz
 sub-01_inv-2_MP2RAGE.json
 ```
+
+#### The `ce` entity
+
+The OPTIONAL `ce-<label>` key/value can be used to distinguish
+sequences using different contrast enhanced images. The label is the name of the
+contrast agent. The key `ContrastBolusIngredient` MAY be also be added in the
+JSON file, with the same label.
+
+#### The `rec` entity
+
+The OPTIONAL `rec-<label>` key/value can be used to distinguish
+different reconstruction algorithms (for example ones using motion correction).
+
+#### The `run` entity
+
+If the same acquisition for a given `_suffix` is repeated without any parameter 
+changes, they must be indexed with the key/value pair of `run-<index>`:
+`_run-1`, `_run-2`, `_run-3` etc. (only integers are allowed as run numbers).
+When there is only one scan of a given type, the run key MAY be omitted.
+
+#### Other OPTIONAL metadata
+
+Some meta information about the acquisition MAY be provided in an additional
+JSON file. See Common MR metadata fields for a list of terms and their
+definitions. There are also some OPTIONAL JSON fields specific to anatomical
+scans:
+
+| Field name              | Definition                                                                                                                                         |
+| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ContrastBolusIngredient | OPTIONAL. Active ingredient of agent. Values MUST be one of: IODINE, GADOLINIUM, CARBON DIOXIDE, BARIUM, XENON Corresponds to DICOM Tag 0018,1048. |
+| RepetitionTimeExcitation | OPTIONAL. The time in seconds between successive excitation pulses that excite the same tissue. The DICOM tag that best refers to this parameter is [(0018, 0080)](http://dicomlookup.com/lookup.asp?sw=Tnumber&q=(0018,0080)). This field may be superseded by `RepetitionTimePreparation` for certain use cases, such as [MP2RAGE](https://infoscience.epfl.ch/record/172927/files/mp2rage.pdf). Use `RepetitionTimeExcitation` (in combination with `RepetitionTimePreparation` if needed) for anatomy imaging data rather than `RepetitionTime` as it is already defined as the amount of time that it takes to acquire a single volume in section 4.1.x. |
+| RepetitionTimePreparation | OPTIONAL. The period of time in seconds that it takes a preparation pulse block to re-appear at the beginning of the succeeding (essentially identical) pulse sequence. |
+
+
 
 ### Task (including resting state) imaging data
 
