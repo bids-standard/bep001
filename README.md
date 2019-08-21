@@ -95,4 +95,3 @@ Keep an eye on the mailing list or this repository's issue tracker for announcem
 The work contained in this repository is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](LICENSE).
 
 Please acknowledge the **BIDS Extension Proposal 001 community** when reusing content.
-
