@@ -147,7 +147,7 @@ is divided into three subgroups:
 
 1. `Suffixes for conventional MRI contrasts`
 
-3. `Suffixes for qMRI maps`
+3. `Suffixes for quantitative MRI (qMRI) maps`
 
 2. `Grouping suffixes`
 
@@ -158,6 +158,14 @@ The following three subsections expand on each of these `_suffix` classes.
 
 **Function:** Denotes the type of the predominant contrast conveyed by a
 single file of a conventional anatomical image.
+
+| Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                     |
+|--------------------------------------------|---------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| T1 weighted images                         | T1w     | Conventional | Denotes images with predominant T1 contribution.                                                                                                                                                                                |
+| T2 weighted images                         | T2w     | Conventional | Denotes images with predominant T2 contribution.                                                                                                                                                                                |
+| Proton density weighted images             | PDw     | Conventional | Denotes images with predominant proton density (PD) contribution.                                                                                                                                                               |
+| T2 star weighted images                    | T2starw | Conventional | Denotes images with predominant T2* contribution, typically images acquired using a GRE sequence with low flip angle, long echo time and long repetition time. Please note that this suffix is not a surrogate for `T2starmap`. |
+| Fluid Attenuated Inversion Recovery Images | FLAIR   | Conventional | To be edited.                                                                                                                                                                                                                   |
 
 If a structural data is not intended for creating a quantitative map, the use of
 `_suffix` is REQUIRED (along with the common key/value pairs if applicable) to 
@@ -170,16 +178,15 @@ sub-01_run-2_T1w.nii.gz
 sub-01_run-2_T1w.json
 ```
 
-The `run-<index>` in the example above denotes the index of the acquisition 
+The `run` entity in the example above denotes the index of the acquisition 
 repeated with the **identical parameters **(e.g. to achieve a higher SNR). Please 
 note that changing parameters between multiple acquisitions of the same sequence
-creates a different use case: `parametrically linked anatomical images`.
+creates a different use case: `grouped scan collections`.
 
-If the structural images included in the dataset were defaced (to protect
-identity of participants) one CAN provide the binary mask that was used to
-remove facial features in the form of `_defacemask` files. In such cases the
-OPTIONAL `mod-<label>` key/value pair corresponds to the suffix for example: T1w,
-referenced by a defacemask image:
+**NOTE:** If the anatomical images are defaced for anonymization, one CAN provide 
+the binary mask that was used to remove facial features in the form of `_defacemask` 
+files. In such cases the OPTIONAL `mod-<suffix>` entity is used. For example, deface
+mask image belonging to a T1 weighted image is named as follows:
 
 ```
 sub-01_mod-T1w_defacemask.nii.gz
