@@ -300,8 +300,10 @@ If a filename contains more than one indexable metadata, included key tags MUST
 appear in alphabetical order. For example:
 
 ```
-sub-01_echo-1_inv-1_MP2RAGE.nii.gz
-sub-01_echo-1_inv-1_MP2RAGE.json
+sub-01_echo-1_inv-1_part-mag_MP2RAGE.nii.gz
+sub-01_echo-1_inv-1_part-mag_MP2RAGE.json
+sub-01_echo-1_inv-1_part-phase_MP2RAGE.nii.gz
+sub-01_echo-1_inv-1_part-phase_MP2RAGE.json
 ```
 
 | Allowed key tags | Value list | Associated metadata field |
