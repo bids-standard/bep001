@@ -234,8 +234,8 @@ where applicable:
 | Respective suffix | Labels           | Related metadata fields   |
 |-------------|------------------|------------------------------|
 | MTR         | `MTon`, `MToff`      | MTState |
-| MTS         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
-| MPM         | `MTon`, `MToff`, `T1w` | MTstate, FlipAngle |
+| MTS         | `MTon`, `MToff`, `T1w` | MTState, FlipAngle |
+| MPM         | `MTon`, `MToff`, `T1w` | MTState, FlipAngle |
 
 For example (for an `MPM` dataset):
 
