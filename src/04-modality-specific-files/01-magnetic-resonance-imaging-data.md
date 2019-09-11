@@ -536,6 +536,25 @@ For a dataset with a `grouping suffix`, the BIDS validation is successful if:
 * provided suffixes are present in the list of available suffixes 
 * sidecar JSON files follow the hierarchy defined for `grouping suffix`.  
 
+##### Legacy suffixes (to be deprecated)
+
+Some suffixes were defined in the original BIDS 1.0.0 - 1.2.0 specification, 
+but it is recommended not to use them any more, because they are inconsistent 
+and/or ambiguous. They will most likely be deprecated in later main versions of 
+BIDS.
+
+However, they are still part of the BIDS 1.x specification for legacy reasons.
+Thus, the following suffixes are VALID, but NOT RECOMENDED:
+
+| Name                                                   | _suffix   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|--------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| T2\*               | T2star           | High resolution T2\* image                                                                                                                                                                                                              |                                                                                                                                                                                                                                     |
+| FLASH              | FLASH            |                                                                                                                                                                                                                                         |
+| Proton density     | PD               |                                                                                                                                                                                                                                         |
+| Combined PD/T2     | PDT2             |                                                                                                                                                                                                                                         |
+| Inplane T1         | inplaneT1        | T1-weighted anatomical image matched to functional acquisition                                                                                                                                                                          |
+| Inplane T2         | inplaneT2        | T2-weighted anatomical image matched to functional acquisition                                                                                                                                                                          |
+
 #### The `indexable_metadata` entity
 
 If multiple anatomical images are bundled together by a `grouping suffix`, there
