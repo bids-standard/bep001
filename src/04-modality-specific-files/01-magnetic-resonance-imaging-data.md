@@ -129,37 +129,40 @@ sub-<participant_label>/[ses-<session_label>/]
 
 #### Supported modalities, quantitative maps and grouped scan collections
 
-Anatomical imaging data comes in different flavors. An anatomical image
-may be one of the commonly used conventional MRI modalities (e.g. T1-weighted image) or
+Anatomical imaging data comes in different flavors. An anatomical image may be 
+one of the commonly used conventional MRI modalities (e.g. T1-weighted image) or
 may belong to the family of parametric quantitative maps (e.g. T1 map). 
 
-There are also cases where multiple images are collected by purposefully varying scan parameters.
-These grouped scan collections are processed for deriving parametric quantitative maps or
-enhancing certain contrast properties. Constituent images of a given grouped scan collection are
-referred by their grouping condition (e.g. MPM), rather than attaining individual labels.
+There are also cases where multiple images are collected by purposefully varying 
+scan parameters. These grouped scan collections are processed for deriving 
+parametric quantitative maps or enhancing certain contrast properties. In this 
+kind of applications, every constituent image of a given grouped scan collection
+is addressed by an abbreviation of its grouping condition (e.g. MPM, VFA etc.).
 
-Given the broad scope, a key label (e.g. modality) for the naming entity of anatomical imaging data cannot 
-semantically hold ture for all the cases outlined above. To circumvent this problem, the `_suffix` 
-entity is used for identifying anatomical imaging data, as it does not have a key label. 
+Given the broad scope of anatomical imaging data, a key label (e.g. modality) for
+its naming cannot semantically hold ture for all the cases outlined above. To 
+circumvent this problem, the `_suffix`  entity is used for identifying anatomical 
+imaging data, as it does not have a key label.
 
 #### The `_suffix` entity 
 
-To ensure an apprehensible directory for the naming of anatomical images, the `_suffix` entity
-is divided into three subgroups:
+To ensure an apprehensible directory for the naming of anatomical images, the 
+`_suffix` entity is divided into three subgroups:
 
 1. `Suffixes for conventional MRI contrasts`
 
-3. `Suffixes for quantitative MRI (qMRI) maps`
+2. `Suffixes for quantitative MRI (qMRI) maps`
 
-2. `Grouping suffixes`
+3. `Grouping suffixes`
 
 The following three subsections expand on each of these `_suffix` classes.
 
 * **Suffix Part-1: Sufixes for conventional MRI contrasts**
 ***
 
-**Function:** Denotes the type of the predominant contrast conveyed by a
-single file of a conventional anatomical image.
+**Function:** Denotes the type of the predominant contrast conveyed by an
+individual file of a conventional anatomical image. Changes to the specification
+is REQUIRED to expand or to modify following table.
 
 | Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                     |
 |--------------------------------------------|---------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -169,9 +172,10 @@ single file of a conventional anatomical image.
 | T2 star weighted images                    | T2starw | Conventional | Denotes images with predominant T2* contribution, typically images acquired using a GRE sequence with low flip angle, long echo time and long repetition time. Please note that this suffix is not a surrogate for `T2starmap`. |
 | Fluid Attenuated Inversion Recovery Images | FLAIR   | Conventional | To be edited.                                                                                                                                                                                                                   |
 
-If a structural data is not intended for creating a quantitative map, the use of
-`_suffix` is REQUIRED (along with the common key/value pairs if applicable) to 
-provide a self explanatory filename. For example: 
+If an anatomical imaging data is neither a parametric map nor belongs to a 
+`grouped scan collection`, one of the `_suffix` entries listed in the table above
+is REQUIRED (with additional entities where applicable) to provide a self 
+explanatory file name. Example use for conventional `T1 weighted images`: 
 
 ```Text
 sub-01_run-1_T1w.nii.gz
@@ -181,14 +185,17 @@ sub-01_run-2_T1w.json
 ```
 
 The `run` entity in the example above denotes the index of the acquisition 
-repeated with the **identical parameters **(e.g. to achieve a higher SNR). Please 
-note that changing parameters between multiple acquisitions of the same sequence
-creates a different use case: `grouped scan collections`.
+repeated with the identical scan parameters (e.g. to achieve a higher SNR).
+Note that changing parameters between multiple acquisitions of the same sequence
+creates a different use case: `grouped scan collections`. For more reading on 
+this topic, please see _Suffix Part-3: Grouping suffixes_ subsection. 
 
-**NOTE:** If the anatomical images are defaced for anonymization, one CAN provide 
-the binary mask that was used to remove facial features in the form of `_defacemask` 
-files. In such cases the OPTIONAL `mod-<suffix>` entity is used. For example, deface
-mask image belonging to a T1 weighted image is named as follows:
+**NOTE:** If an anatomical image is defaced for anonymization, one CAN provide 
+the binary mask that was used to remove facial features. In the specific case of
+naming this binary mask, the `_suffix` entity is replaced by `_defacemask` entry. 
+Therefore, to contain the original `_suffix` entry, the OPTIONAL `mod-<suffix>` 
+entity is used. For example, deface mask image belonging to a `T1 weighted image` 
+is named as follows:
 
 ```
 sub-01_mod-T1w_defacemask.nii.gz
@@ -198,7 +205,9 @@ sub-01_mod-T1w_defacemask.json
 * **Suffix Part-2: Suffixes for qMRI maps**
 ***
 
-**Function:** Denotes the parameter contained within a single file of a quantitative map.  
+**Function:** Denotes the parameter contained within an individual file of a 
+quantitative parametric image. Changes to the specification is REQUIRED to 
+expand or to modify following table. 
 
 | Name                                                   | _suffix   | _suffix type | Description                                                                                                                                                                                                                                                                          |
 |--------------------------------------------------------|-----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -217,28 +226,43 @@ sub-01_mod-T1w_defacemask.json
 | Combined PD/T2 map                                     | PDT2map   | Parametric   | In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. N/A                                                                                                                                                   |
 | RF transmit field map                                  | B1plusmap | Parametric   | In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.                                                                        |
 
-Not only parametrically linked anatomical images, but also 
-outputs (quantitative maps) created by processing these files fall into the 
-category of anatomy imaging data. In addition, in some cases, quantitative maps 
-can be obtained right off the scanner without the need of storing any 
-parametrically linked anatomical images and further processing. For both cases,
-a proper `_suffix` is REQUIRED for describing quantitative maps. For example:
+Quantitative images can be obtained right off the scanner or by processing files 
+belonging to a `grouped scan collection`. Regardless of the method they are 
+obtained by, one of the `_suffix` entries listed in the table above is REQUIRED 
+for a proper naming. For example:
 
 ```Text
 sub-01_T1map.nii.gz
 sub-01_T1map.json 
 ```
 
+Quantitative unit of the parameter contained by a quantitative map MUST comply 
+with the unit description provided for its respective `_suffix` entry. 
+For example, a T1 map in milliseconds unit (ms) is not valid, given that the 
+description of the `T1map` suffix requires the parameter to be in seconds (s). 
+
 _Content of the JSON files accompanying qMRI maps_ 
 ***
 
-Metadata fields listed in the sidecar JSON of the quantitative maps depend on the
-way they are generated:
-* If a quantitative map is generated at the scanner site through non-transparent vendor 
-implementations, the content is confined to the available metadata. 
-* If a quantitative map is generated using an open-source software, the sidecar JSON file
-MUST inherit all the fields from the `top` JSON file of the input data (grouped by a
-`grouping suffix`) and MUST include the following metadata fields: 
+Metadata fields listed in the sidecar JSON of a quantitative image depend on the
+method by which it is obtained:
+* If a quantitative image is generated at the scanner site through non-transparent
+vendor implementations, the content is confined to the available metadata. 
+* If a quantitative map is generated using an open-source software, its sidecar 
+JSON file MUST inherit fields from the JSON files of the constituent images of a
+`grouped scan collection` by adhering to the following rules: 
+     * All the acquisition parameters that are identical across the members of a 
+     `grouped scan collection` are added to the JSON file of the resultant 
+     quantitative image. 
+     * Relevant acquisition parameters that vary across the members of a 
+     `grouped scan collection` are added to the JSON file of the resultant 
+     quantitative image in array form. To find out which varying scan parameters
+     are relevant to a given `grouped scan collection`, please see the 
+     `method-specific priority levels for qMRI metadata` table in the 
+     _Suffix Part-3: Grouping suffixes_ subsection.
+     * The JSON file accompanying a quantitative image which is obtained by 
+     using an open-source software MUST include all the metadata fields listed 
+     in the following table for the sake of provenance.     
 
 | Field name                  | Definition                                                     |
 | :-------------------------- | :------------------------------------------------------------- |
@@ -260,15 +284,35 @@ sub-01_T1map.json
 ```Text
 sub-01_T1map.json
 {
+
+<<Parameter injected by the software for provenance recording>>
+
 "BasedOn":["anat/sub-01_fa-1_VFA.nii.gz",
            "anat/sub-01_fa-2_VFA.nii.gz",
+           "anat/sub-01_fa-3_VFA.nii.gz",
+           "anat/sub-01_fa-4_VFA.nii.gz",
            "fmap/sub-01_B1plusmap.nii.gz"],
+
+<<Parameters that are constant across members of VFA grouping suffix>>
+
 “MagneticFieldStrength”: “3”, 
 “Manufacturer”: “Siemens”, 
 “ManufacturerModelName”: “TrioTim”, 
 “InstitutionName”: “xxx”,    
 “PulseSequenceType”: “SPGR”,
-“PulseSequenceDetails”: “Information beyond the sequence type that identifies the specific pulse sequence used (VB version, if not standard, Siemens WIP XXX version ### sequence written by xx using a version compiled on mm/dd/yyyy/)”, 
+“PulseSequenceDetails”: “Information beyond the sequence type that identifies
+ specific pulse sequence used (VB version, if not standard, Siemens WIP XXX 
+ ersion ### sequence written by xx using a version compiled on mm/dd/yyyy/)”, 
+"RepetitionTimeExcitation": "35",
+"EchoTime": "2.86", 
+"SliceThickness": "5",
+
+<<Relevant parameters that vary across members of VFA grouping suffix>>
+
+"FlipAngle": ["5","10","15","20"],  
+
+<<Additional parameters injected by the software for provenance recording>>
+
 "EstimationPaper":"Deoni et. al.MRM, 2015",
 "EstimationAlgorithm":"Linear",
 “EstimationSoftwareName”: “qMRLab”,
@@ -276,15 +320,14 @@ sub-01_T1map.json
 “EstimationSoftwareVersion”: “2.3.0”,
 “EstimationSoftwareEnv”: “Ubuntu 16.04” 
 }
-
-
 ```
 
 * **Suffix Part-3: Grouping suffixes**
 ***
 
-**Function:** Groups together files that belong to parametrically linked multiple 
-scans, which are intended for a well-defined qMRI application. 
+**Function:** Groups together files that belong to `grouped scan collections`, 
+which are intended for a well-defined qMRI application. Changes to the 
+specification is REQUIRED to expand or to modify following table. 
 
 | Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 |--------------------------------------------|---------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -313,55 +356,48 @@ sub-01_fa-2_VFA.json
 _Some important considerations regarding `grouping suffixes`:_
 
 * All `grouping suffixes` MUST be capitalized.
-* `Grouping suffixes` MUST attain a clear description of the qMRI application that they relate to. Hyperlinks to example applications and/or more detailed descriptions are provided whenever
-possible.
-* Unless the pulse sequence is exclusively associated with a specific qMRI application (e.g. `MP2RAGE`), sequence names are NOT used as `grouping suffixes`.
-* If it is possible to derive a qMRI application from an already existing `grouping suffix` by
-means of defining a set of logical conditions over the metadata fields, the _table of method-specific priority levels_ and the _table of qMRI applications that can be derived from an existing `grouping suffix`_ MUST be expanded instead of creating a new `grouping suffix`. Please visit the _JSON content for `grouping suffixes` for further details.   
-* Please note that if a structural data is a member of parametrically linked anatomical 
-images, the use of `_suffix` alone cannot distinguish individual files from each 
-other, failing to identify their roles as inputs to the calculation of 
-quantitative maps. Although such images are REQUIRED to be grouped by a proper
-`grouping suffix`, they are also RECOMMENDED to include at least one of the `acq-<label>`, 
-`part-<label>` and `<indexable_metadata>-<index>` key-value pairs (please visit corresponding 
-sections for details).
-* Please see the available `grouping suffixes` in the list of available suffixes. Descriptions
-of this type of suffixes are preceded by the `(G) -->` notation (`G` stands for grouping). 
+* `Grouping suffixes` MUST attain a clear description of the qMRI application 
+that they relate to. Hyperlinks to example applications and/or more detailed 
+descriptions are encouraged whenever possible.
+* Unless the pulse sequence is exclusively associated with a specific qMRI 
+application (e.g. `MP2RAGE`), sequence names are NOT used as `grouping suffixes`.
+* If it is possible to derive a qMRI application from an already existing 
+`grouping suffix` by means of defining a set of logical conditions over the 
+metadata fields, the _table of method-specific priority levels_ and the 
+_table of qMRI applications that can be derived from an existing `grouping suffix`_
+ MUST be expanded instead of introducing a new `grouping suffix`. 
+ Please visit the _JSON content for `grouping suffixes` for further details.   
+* Please note that if a structural data has the type of `grouped scan collection`,
+the use of `_suffix` alone cannot distinguish its members from each other, 
+failing to identify their roles as inputs to the calculation of quantitative 
+maps. Although such images are REQUIRED to be grouped by a proper
+`grouping suffix`, they are also RECOMMENDED to include at least one of the `acq`, 
+`part` and `indexable_metadata` entities (please visit corresponding sections 
+for details).
 
 _JSON files accompanying anatomical images with `grouping suffix`_
 ***
 
-In conformity with the main BIDS specification, key-value pairs involved in the naming of an
-anatomy imaging data can NOT explicitly relay information regarding the sequence parameters. Instead, 
-the key-value pairs are used only for categorization, whereas the respective sequence parameters
-are contained in the sidecar JSON files.
+Please note that key-value pairs involved in the naming of an anatomy imaging 
+data can NOT explicitly relay information regarding the sequence parameters. 
+Instead,the key-value pairs are used only for categorization, whereas the 
+respective sequence parameters are contained in the sidecar JSON files.
 
+For the `grouped scan collections`, majority of the acquisition parameters
+remain constant across multiple runs of the same sequence. However, some of the 
+parameters are intentionally modified to collect a dataset suitable for 
+quantitative parameter mapping. 
 
-* _Hierarchy of JSON files for `grouping suffixes`_ 
-
-In case of the `parametrically linked anatomical scans`, majority of the acquisition parameters remain 
-constant across multiple runs of the same sequence. However, some of the parameters are intentionally
-modified to collect a dataset suitable for quantitative parameter mapping. To avoid redundancy of the 
-constant parameters and to ease the readibility of those varying from scan to scan, a `top`-`lower` level
-hierarchy is defined between the JSON files containing a `grouping suffix`. Please visit [the inheritance principle of BIDS](https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#the-inheritance-principle) for further reading.        
-
-**Top JSON:** The constant parameters are stored in a `top` JSON file that is named typically by a `sub-<index>` 
-key-value pair followed by `grouping suffix`, which may include `_ses-<session_label>` if applicable. For example: 
-
-```Text
-sub-01_VFA.json 
-```
-
-**Lower JSON:** All the metadata entries that are subjected to at least one change between the different runs of 
-the same sequence are stored in `lower` JSON files. For example: 
-
-```Text
-sub-01_VFA.json (Top)
-sub-01_fa-1_VFA.nii.gz 
-sub-01_fa-1_VFA.json (Lower-1)
-sub-01_fa-2_VFA.nii.gz 
-sub-01_fa-2_VFA.json (Lower-2)
-```
+In conformity with [the inheretence principle](https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#the-inheritance-principle) one JSON file can point to only one 
+image file at the same directory level. This does not allow splitting JSON files 
+with respect to the invariance of parameters. Therefore, some of the parameters
+that are identical across the members of a `grouped scan collection` MAY repeat 
+in every JSON file belonging to that group. To avoid such redundancy, all the 
+constant metadata fields MAY be included only in the JSON file of the first 
+member of a `grouped scan collection`, where member images are sorted in 
+ascending alphabetical order. If this convention is followed, then the remaining
+JSON files MAY only contain parameters that are subjected to at least one change
+across all the member images.   
 
 * _JSON Content for `grouping suffixes`_ 
   
@@ -462,7 +498,7 @@ If multiple anatomical images are bundled together by a `grouping suffix`, there
 is at least one metadata field that varies across grouped images. If the varying 
 metadata field values are enumerable and the metadata field is listed in the table
 of allowed key tags (see below), `<indexable_metadata>-<index>` SHOULD be included 
-in the file name to distinguish group members from each other.   
+in the file name to distinguish group members from each other. 
 
 _Table of allowed key tags for the `<indexable_metadata>-<index>` key-value pair:_
 
