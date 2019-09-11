@@ -155,7 +155,9 @@ To ensure an apprehensible directory for the naming of anatomical images, the
 
 3. `Grouping suffixes`
 
-The following three subsections expand on each of these `_suffix` classes.
+Suffixes that are still part of the BIDS 1.x specification; however, likely
+to be deprecated in later main versions of the BIDS can be found in the 
+`Legacy suffixes` subsection. 
 
 ##### Conventional MRI suffixes
 
