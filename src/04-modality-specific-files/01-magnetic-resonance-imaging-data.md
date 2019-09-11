@@ -357,7 +357,7 @@ sub-01_fa-2_VFA.nii.gz
 sub-01_fa-2_VFA.json
 ```
 
-[PLACEHOLDER: Visit here for more examples?]()
+[Example real-world datasets can be downloaded here.](https://osf.io/k4bs5/)
 
 **Some important considerations regarding `grouping suffixes`:**
 
