@@ -129,20 +129,26 @@ sub-<participant_label>/[ses-<session_label>/]
 
 #### Supported modalities, quantitative maps and grouped scan collections
 
-Anatomical imaging data comes in different flavors. An anatomical image may be 
-one of the commonly used conventional MRI modalities (e.g. T1-weighted image) or
-may belong to the family of parametric quantitative maps (e.g. T1 map). 
+The term anatomical imaging data spans a broad range of structural MRI 
+applications. These applications share in common the ability to convey 
+substantial information about the imaged anatomy, but differ by the nature of
+the data they create. The main distinction can be drawn between anatomical
+imaging data those report `conventional MRI contrasts` (i.e. weightings) in  
+an arbitrary gray-scale range and those provide quantitative parameters 
+characterizing underlying tissue properties. The latter type of anatomical 
+imaging data is commonly referred as `quantitative MRI (qMRI) maps`. 
 
-There are also cases where multiple images are collected by purposefully varying 
-scan parameters. These grouped scan collections are processed for deriving 
-parametric quantitative maps or enhancing certain contrast properties. In this 
-kind of applications, every constituent image of a given grouped scan collection
-is addressed by an abbreviation of its grouping condition (e.g. MPM, VFA etc.).
+There are also cases where multiple anatomical images are collected by 
+purposefully varying MRI acquisition parameters. These `grouped scan collections` 
+are processed for deriving qMRI maps or enhancing certain contrast properties. 
+Every constituent of a `grouped scan collection` is addressed by the same  
+group abbreviation, as their intended use becomes meaningful when considered 
+collectively.
 
-Given the broad scope of anatomical imaging data, a key label (e.g. modality) for
-its naming cannot semantically hold ture for all the cases outlined above. To 
+Given the broad scope of anatomical imaging data, one key label (e.g. modality) 
+cannot identify semantic attributes of all the data types outlined above. To 
 circumvent this problem, the `_suffix`  entity is used for identifying anatomical 
-imaging data, as it does not have a key label.
+imaging data, as it does not require the use of a key label.
 
 #### The `_suffix` entity 
 
