@@ -130,17 +130,19 @@ sub-<participant_label>/[ses-<session_label>/]
 #### Supported modalities, quantitative maps and grouped scan collections
 
 The term anatomical imaging data spans a broad range of  MRI applications. 
-These applications share in common the ability to convey 
-structural information about the imaged anatomy, but differ by the nature of
-the data they create. The main distinction can be drawn between anatomical
-imaging data those report `conventional MRI contrasts` (i.e. weightings) in  
-an arbitrary gray-scale range and those provide quantitative parameters 
+These applications share in common the ability to convey structural information 
+about the imaged anatomy, but differ by the nature of the data they create. The 
+main distinction can be drawn between anatomical imaging data i) those report 
+`conventional MRI` images with typical contrasts (i.e. weightings) in an 
+arbitrary gray-scale range and ii) those provide quantitative parameters 
 characterizing underlying tissue properties. The latter type of anatomical 
 imaging data is commonly referred as `quantitative MRI (qMRI) maps`. 
 
-There are also cases where multiple anatomical images are collected by 
-purposefully varying MRI acquisition parameters. These `grouped scan collections` 
-are then processed for deriving qMRI maps or enhancing certain contrast properties. 
+There are also special cases where multiple anatomical images are collected by 
+varying MRI acquisition parameters on purpose. These `grouped scan collections` 
+are then processed for deriving qMRI maps or to enhance certain contrast/signal
+features that would not be possible to do so without combining multiple 
+images. 
 
 Given the broad scope of anatomical imaging data, one key label (e.g. modality) 
 cannot identify semantic attributes of all the data types outlined above. To 
