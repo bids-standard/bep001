@@ -140,7 +140,7 @@ imaging data is commonly referred as `quantitative MRI (qMRI) maps`.
 
 There are also special cases where multiple anatomical images are collected by 
 varying MRI acquisition parameters on purpose. These `grouped scan collections` 
-are then processed for deriving qMRI maps or to enhance certain contrast/signal
+are then processed for deriving qMRI maps or to enhance certain contrast
 features that would not be possible to do so without combining multiple 
 images. 
 
@@ -608,29 +608,31 @@ the filename with different keys.
 * Please note that the order of the `index` and the value of the associated 
 metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
 correspond to the `FlipAngle` of `35`, `10` and `25` degrees), and the actual
-values need to be stored in the corresponding metadata field of the separate 
+values need to be stored in the corresponding metadata field of the accompanying 
 JSON files.
 
-* If a filename contains more than one indexable metadata, included key tags MUST 
-appear in alphabetical order. For example: 
+* Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
+specification is REQUIRED to extend the allowed key tags. 
+
+**Important:**
+
+If a file name contains more than one `indexable_metadata` entity, existent key 
+tags MUST appear in alphabetical order in the file name. For example: 
 
     ```
     sub-01_echo-1_inv-1_MP2RAGE.nii.gz
     sub-01_echo-1_inv-1_MP2RAGE.json
     ```
 
-* Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
-specification is REQUIRED to extend the allowed key tags. 
-
 #### The `acq` entity
 
 If multiple anatomical images are bundled together by a `grouping suffix`, there
-is at least one metadata field that varies across grouped images. If the varying 
-metadata field values are categorical and the label is listed in the table of 
-available `acq-<label>` labels for a given `grouping suffix` (see below), 
+is at least one metadata field that varies across constituent images. If the 
+varying metadata field values are categorical and the label is listed in the 
+table of available `acq` entity labels for a given `grouping suffix` (see below), 
 `acq-<label>` SHOULD be included in the file name. 
 
-_Table of allowed `<acq>-<label>` labels for `grouping suffixes`_
+_Table of allowed `<acq>` entity labels for `grouping suffixes`_
 
 | Grouping suffix | Labels           | Related metadata fields   |
 |-------------|------------------|------------------------------|
@@ -652,17 +654,18 @@ sub-01_echo-1_acq-T1w_MPM.json
 
 * Note that value of the `acq-<label>` is free form by default, as indicated
 by the main specification. However, to enable a unified naming convention for 
-this specific use case, only the labels listed in the table of allowed `<acq>-<label>` 
-labels SHOULD be used with the corresponding `grouping suffixes`.  
-* Changes to the specification is REQUIRED to extend the table of allowed `<acq>-<label>` 
-labels. 
+this specific use case, only the labels listed in the table of allowed `acq` 
+entity labels SHOULD be used with the corresponding `grouping suffixes`.  
+* Changes to the specification is REQUIRED to extend the table of allowed `acq` 
+entity labels. 
 
 
 #### The `part` entity
 
-Some parametrically linked anatomical images involve both magnitude and phase  
-reconstructed images in the calculation of a parameter map. In that case, the 
-filename MUST make use of this key/value pair to distinguish between them. 
+Some  anatomical images involve both magnitude and phase reconstructed images in 
+the calculation of a qMRI map. In that case, the filename MUST make use of this 
+entity to distinguish between them.
+
 The `part-<mag/phase>` key/value pair is associated with the DICOM tag 0008,0008
 `Image Type`.
 
@@ -697,8 +700,8 @@ different reconstruction algorithms (for example ones using motion correction).
 
 #### The `run` entity
 
-If the same acquisition for a given `_suffix` is repeated without any parameter 
-changes, they must be indexed with the key/value pair of `run-<index>`:
+If the same acquisition for a given `_suffix` is repeated **without any parameter** 
+**changes**, they must be indexed with the key/value pair of `run-<index>`:
 `_run-1`, `_run-2`, `_run-3` etc. (only integers are allowed as run numbers).
 When there is only one scan of a given type, the run key MAY be omitted.
 
