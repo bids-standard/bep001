@@ -129,9 +129,9 @@ sub-<participant_label>/[ses-<session_label>/]
 
 #### Supported modalities, quantitative maps and grouped scan collections
 
-The term anatomical imaging data spans a broad range of structural MRI 
-applications. These applications share in common the ability to convey 
-substantial information about the imaged anatomy, but differ by the nature of
+The term anatomical imaging data spans a broad range of  MRI applications. 
+These applications share in common the ability to convey 
+structural information about the imaged anatomy, but differ by the nature of
 the data they create. The main distinction can be drawn between anatomical
 imaging data those report `conventional MRI contrasts` (i.e. weightings) in  
 an arbitrary gray-scale range and those provide quantitative parameters 
@@ -140,10 +140,7 @@ imaging data is commonly referred as `quantitative MRI (qMRI) maps`.
 
 There are also cases where multiple anatomical images are collected by 
 purposefully varying MRI acquisition parameters. These `grouped scan collections` 
-are processed for deriving qMRI maps or enhancing certain contrast properties. 
-Every constituent of a `grouped scan collection` is addressed by the same  
-group abbreviation, as their intended use becomes meaningful when considered 
-collectively.
+are then processed for deriving qMRI maps or enhancing certain contrast properties. 
 
 Given the broad scope of anatomical imaging data, one key label (e.g. modality) 
 cannot identify semantic attributes of all the data types outlined above. To 
@@ -362,6 +359,14 @@ sub-01_fa-1_VFA.json
 sub-01_fa-2_VFA.nii.gz
 sub-01_fa-2_VFA.json
 ```
+
+Every constituent of a `grouped scan collection` is addressed by the same  
+group abbreviation within the specification, since their intended use becomes 
+clear when considered collectively. Nonetheless, this does not prevent the use 
+of one of the constituent images as a surrogate input to a structural image
+processing step (e.g. parcellation), if the contrast and resolution yielded by
+the acqusition parameters of that image satisfy a set of neccesary criteria
+perteaning to such operation.  
 
 [Example real-world datasets can be downloaded here.](https://osf.io/k4bs5/)
 
