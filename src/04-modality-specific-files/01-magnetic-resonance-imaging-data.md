@@ -574,10 +574,10 @@ Thus, the following suffixes are VALID, but NOT RECOMENDED:
 #### The `indexable_metadata` entity
 
 If multiple anatomical images are bundled together by a `grouping suffix`, there
-is at least one metadata field that varies across grouped images. If the varying 
-metadata field values are enumerable and the metadata field is listed in the table
-of allowed key tags (see below), `<indexable_metadata>-<index>` SHOULD be included 
-in the file name to distinguish group members from each other. 
+is at least one metadata field that varies across constituent images. If the 
+varying metadata field values are enumerable and the metadata field is listed 
+in the table of allowed key tags (see below), `indexable_metadata` entity SHOULD 
+be included in the file name to distinguish constituent images from each other. 
 
 _Table of allowed key tags for the `indexable_metadata` entity_
 
@@ -600,9 +600,10 @@ sub-01_echo-3_MEGRE.json
 ```
 **Some important considerations regarding the `indexable_metadata` entity:**
 
-* Unlike other key/value pairs, key tag of the `<indexable_metadata>-<index>` is 
-mutable depending on the metadata field that varies between several scans of the
-same modality and can appear more than once in the filename with different keys.
+* Unlike other entities, key tag of the `indexable_metadata` entity is 
+mutable depending on the metadata field that varies across the constituents of a 
+`grouping scan collection`. Therefore, this entity can appear more than once in 
+the filename with different keys.
 
 * Please note that the order of the `index` and the value of the associated 
 metadata field do NOT have to be coherent (i.e. `fa-1`,`fa-2` and `fa-3` can
