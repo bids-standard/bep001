@@ -127,38 +127,32 @@ sub-<label>/[ses-<label>/]
         sub-<label>[_ses-<label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>][_mod-<suffix>]_defacemask.nii[.gz]
 ```
 
-Anatomical (structural) data for a participant may refer to a simple standalone
-data (e.g. a 3D high resolution T1 weighted image), or a group of parametrically
-linked images acquired on the purpose of calculating quantitative maps
-(e.g. three 3D volumes provided as an input to the multiparametric mapping
-protocol) and/or the quantitative parameter maps themselves (e.g. T1map etc.).
+The term anatomical imaging data spans a broad range of MRI applications.
+These applications share in common the ability to convey structural information
+about the imaged anatomy, but differ by the nature of the data they create. Anatomical (structural) data for a participant may refer to i) a single standalone
+data set (e.g. a 3D high resolution T1 weighted image), ii) a group of images acquired for the purpose of calculating quantitative maps (`quantitative MRI`, or `qMRI`)
+(e.g. four 3D volumes provided as an input to a MP2RAGE calculation), and iii) the quantitative parameter maps themselves (e.g. `T1map` etc.).
 
 #### Supported modalities, quantitative maps and grouped scan collections
 
-The term anatomical imaging data spans a broad range of  MRI applications.
-These applications share in common the ability to convey structural information
-about the imaged anatomy, but differ by the nature of the data they create. The
-main distinction can be drawn between anatomical imaging data i) those report
-`conventional MRI` images with typical contrasts (i.e. weightings) in an
-arbitrary gray-scale range and ii) those provide quantitative parameters
-characterizing underlying tissue properties. The latter type of anatomical
-imaging data is commonly referred as `quantitative MRI (qMRI) maps`.
+<NOTE: We should probably lead with some information and examples about a standard T1w conventional acquisition!>
 
-There are also special cases where multiple anatomical images are collected by
-varying MRI acquisition parameters on purpose. These `grouped scan collections`
-are then processed for deriving qMRI maps or to enhance certain contrast
-features that would not be possible to do so without combining multiple
-images.
+Quantitative MRI maps are calculated from multiple anatomical images with varying MRI acquisition parameters. These `grouped scan collections`
+are then processed to derive `qMRI maps`.
+Alternatively, grouped scans may be collected to enhance certain contrast
+features, such as to calculate a weighted average of multi-echo gradient echo (`ME-GRE`) images to improve segmentation algorithms.
 
-There is not a key label (e.g. modality, contrast or sequence name) that can act
-as a universal solvent to identify semantic attributes of all three anatomical
-imaging data types outlined above. To circumvent this problem, the `_suffix`
-entity is used for identifying anatomical imaging data, as it is free from
-the use of a key label.
+As the acquisition parameters change parametrically across grouped scan collections, it is not possible to label them with one consistent modality, contrast or key label.
+For example, changing the flip angle of a spolied gradient echo acquisition (while keeping all other parameters equal) will change the image contrast from being T1 weighted to proton desity weighted.
+
+To circumvent this problem, the `_suffix`
+entity is used to identify anatomical imaging data.
+For conventional MRI the suffixes will correspond to common anatomical contrasts and imaging modalities such as `T1w`, `T2w`, `T2starw` etc.
+For groups of scans acquired with the purpose of combining them together to generate quantitative maps or images with improved structural contrast, the `_suffix` indicates the collection that the scans belong to.
 
 #### The `_suffix` entity
 
-To ensure an apprehensible directory for the naming of anatomical imaging data,
+To ensure an comprehensible, human readable directory that contains anatomical imaging data,
 the `_suffix` entity is divided into three subgroups:
 
 1. `Conventional MRI suffixes`
@@ -167,17 +161,21 @@ the `_suffix` entity is divided into three subgroups:
 
 3. `Grouping suffixes`
 
-Suffixes that are still part of the BIDS 1.x specification; however, likely
-to be deprecated in later main versions of the BIDS can be found in the
-`Legacy suffixes` subsection.
+This distinction was added to the specification on acceptance of the BEP001 proposal in version `1.x.x`.
+As a result there are some additional suffixes that are no longer recommended but remain part of the specification in order to maintain backwards compatability with previous versions of the specification.
+These can be found in the [legacy suffixes](#legacy-suffixes) section below.
 
 ##### Conventional MRI suffixes
 
 **Function:**
 
 Denotes the type of the predominant contrast conveyed by an individual file of
-a conventional anatomical image. Changes to the specification is REQUIRED to
-expand or to modify the following table.
+a conventional anatomical image.
+One of the `_suffix` entries listed in the table below
+is REQUIRED (with additional entities where applicable) to provide a self
+explanatory file name.
+
+A change to the specification is REQUIRED to expand or to modify the following table.
 
 | Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                     |
 |--------------------------------------------|---------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -185,12 +183,9 @@ expand or to modify the following table.
 | T2 weighted images                         | T2w     | Conventional | Denotes images with predominant T2 contribution.                                                                                                                                                                                |
 | Proton density weighted images             | PDw     | Conventional | Denotes images with predominant proton density (PD) contribution.                                                                                                                                                               |
 | T2 star weighted images                    | T2starw | Conventional | Denotes images with predominant T2* contribution, typically images acquired using a GRE sequence with low flip angle, long echo time and long repetition time. Please note that this suffix is not a surrogate for `T2starmap`. |
-| Fluid Attenuated Inversion Recovery Images | FLAIR   | Conventional | To be edited.                                                                                                                                                                                                                   |
+| Fluid Attenuated Inversion Recovery Images | FLAIR   | Conventional | ***To be edited.***                                                                                                                                                                                                                   |
 
-If an anatomical imaging data is neither a qMRI map nor belongs to a
-`grouped scan collection`, one of the `_suffix` entries listed in the table above
-is REQUIRED (with additional entities where applicable) to provide a self
-explanatory file name. Example use for conventional `T1 weighted images`:
+Example use for conventional `T1 weighted images`:
 
 ```Text
 sub-01_run-1_T1w.nii.gz
@@ -199,28 +194,11 @@ sub-01_run-2_T1w.nii.gz
 sub-01_run-2_T1w.json
 ```
 
-If a structural data is a member of parametrically linked anatomical images,
-the use of `_suffix` alone cannot distinguish individual acquisitions from each
-other, failing to identify their roles as inputs to the calculation of
-quantitative maps. Although, such images are REQUIRED to be grouped by a proper
-`_suffix` (please see the list of available suffixes), they are also RECOMMENDED
-to include at least one of the `acq-<label>`, `part-<mag/phase>` and
-`<indexable_metadata>-<index>` key/value pairs (please visit corresponding
-sections for details).
-
-Please note that not only parametrically linked anatomical images, but also
-outputs (quantitative maps) created by processing these files fall into the
-category of anatomy imaging data. In addition, in some cases, quantitative maps
-can be obtained right off the scanner without the need of storing any
-parametrically linked anatomical images and further processing. For both cases,
-a proper `_suffix` is REQUIRED for describing quantitative maps. Please see the
-list of available suffixes.
-
 The `run` entity in the example above denotes the index of the acquisition
 repeated with the identical scan parameters (e.g. to achieve a higher SNR).
 Note that changing parameters between multiple acquisitions of the same sequence
 creates a different use case: `grouped scan collections`. For more reading on
-this topic, please see _Grouping suffixes_ subsection.
+this topic, please see the [Grouping suffixes](#grouping-suffixes) subsection.
 
 **Important:**
 
@@ -241,23 +219,25 @@ sub-01_mod-T1w_defacemask.json
 **Function:**
 
 Denotes the parameter contained within an individual file of a
-quantitative parametric image. Changes to the specification is REQUIRED to
+quantitative parametric image.
+
+Changes to the specification is REQUIRED to
 expand or to modify the following table.
 
 | Name                                                   | _suffix   | _suffix type | Description                                                                                                                                                                                                                                                                          |
 |--------------------------------------------------------|-----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Longitudinal relaxation time map                       | T1map     | Parametric   | In seconds (s). T1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`. You can visit [this interactive book for T1 mapping](https://qmrlab.org/t1_book/intro) for further reading.  |
 | True transverse relaxation time map                    | T2map     | Parametric   | In seconds (s). T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                       |
-| Observed transverse relaxation time map                | T2starmap | Parametric   | In seconds (s). T2* maps are REQUIRED to use this suffix irrespective of the method they are related to._Can be generated from:_,`MEGRE`, `MPM`                                                                                                                                      |
-| Longitudinal relaxation rate map                       | R1map     | Parametric   | In seconds-1 (1/s). R1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`                                                                                                           |
+| Observed transverse relaxation time map                | T2starmap | Parametric   | In seconds (s). T2* maps are REQUIRED to use this suffix irrespective of the method they are related to._Can be generated from:_ `MEGRE`, `MPM`                                                                                                                                      |
+| Longitudinal relaxation rate map                       | R1map     | Parametric   | In seconds-1 (1/s). R1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`, `MPM`                                                                                                           |
 | True transverse relaxation rate map                    | R2map     | Parametric   | In seconds-1 (1/s). R2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                   |
-| Observed transverse relaxation rate map                | R2starmap | Parametric   | In seconds-1 (1/s). R2* maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_,`MEGRE`, `MPM`                                                                                                                                 |
+| Observed transverse relaxation rate map                | R2starmap | Parametric   | In seconds-1 (1/s). R2* maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_`MEGRE`, `MPM`                                                                                                                                 |
 | Proton density map                                     | PDmap     | Parametric   | In arbitrary units (a.u.). PD maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MPM`                                                                                                                                    |
 | Magnetization transfer ratio map                       | MTRmap    | Parametric   | In percentage (%). MTR maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTR`                                                                                                                                           |
 | Magnetization transfer saturation index map            | MTSat     | Parametric   | In arbitrary units (a.u.). MTsat maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTS`, `MPM`                                                                                                                          |
-| Homogeneous (flat) T1 image by MP2RAGE                 | UNIT1     | Parametric   | In arbitrary units (a.u.). UNIT1 maps are REQUIRED to use this suffix irrespective of the method they are related to.,_Can be generated from:_ `MP2RAGE`                                                                                                                             |
+| Homogeneous (flat) T1 image by MP2RAGE                 | UNIT1     | Parametric   | In arbitrary units (a.u.). UNIT1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MP2RAGE`                                                                                                                             |
 | Longutidunal relaxation in rotating frame (T1 rho) map | T1rho     | Parametric   | In seconds (s). T1-rho maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ N/A                                                                                                                                             |
-| Myelin water fraction map                              | MWFmap    | Parametric   | In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to.,_Can be generated from:_ `MESE`                                                                                                                                          |
+| Myelin water fraction map                              | MWFmap    | Parametric   | In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`                                                                                                                                          |
 | Combined PD/T2 map                                     | PDT2map   | Parametric   | In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. N/A                                                                                                                                                   |
 | RF transmit field map                                  | B1plusmap | Parametric   | In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.                                                                        |
 
@@ -301,7 +281,7 @@ file MUST inherit content from the JSON files of the constituent images of a
 
 | Field name                  | Definition                                                     |
 | :-------------------------- | :------------------------------------------------------------- |
-| BasedOn | List of files gruoped by an `grouping suffix` to generate the map. The fieldmaps are also listed, if involved in the processing.|
+| BasedOn | List of files grouped by an `grouping suffix` to generate the map. The fieldmaps are also listed, if involved in the processing. |
 | EstimationReference | Reference to the study/studies on which the implementation is based.|
 | EstimationAlgorithm | Type of algoritm used to perform fitting (e.g. linear, non-linear, LM etc.)|
 | EstimationSoftwareName | The name of the open-source tool used for fitting (e.g. qMRLab, QUIT, hMRI-Toolbox etc.)|
