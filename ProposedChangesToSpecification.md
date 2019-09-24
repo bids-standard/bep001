@@ -12,12 +12,7 @@ Table of contents:
 * [B1plus fieldmaps](#b1plus-fieldmaps)
 * [Repetition Time](#repetition-time)
 * [B1plus fieldmaps](#b1plus-fieldmaps)
-<<<<<<< HEAD
-* [Suffix](#suffix)
-* [Indexable metadata](#indexable-metadata)
-=======
 * [S0map](#s0map)
-
 
 ## Acquisition metadata field
 
@@ -33,7 +28,6 @@ Change in `/src/04-modality-specific-files/01-magnetic-resonance-imaging-data.md
 The `part-<mag/phase>` key-value pair was added to distinguish the magnitude and phase parts of an acquisition.
 
 We additionally recommend (but do not require) that phase images should be in radians and have a range of 0 (inclusive) to 2pi (not included).
->>>>>>> d07489f3801a3dd39947be6d6dc9bc55200bdc7b
 
 ## Repetition Time
 
