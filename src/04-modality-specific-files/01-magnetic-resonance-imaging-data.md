@@ -116,15 +116,15 @@ When adding additional metadata please use the camelcase version of
 [DICOM ontology terms](https://scicrunch.org/scicrunch/interlex/dashboard)
 whenever possible.
 
-### Anatomy imaging data
+### Anatomical imaging data
 
 Template:
 
 ```Text
 sub-<label>/[ses-<label>/]
     anat/
-        sub-<label>[_ses-<label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<suffix>.nii[.gz]
-        sub-<label>[_ses-<label>][_<indexable_metadata>-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>][_mod-<suffix>]_defacemask.nii[.gz]
+        sub-<label>[_ses-<label>][_echo-<index>][_fa-<index>][_inv-<index>][_tsl-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>]_<suffix>.nii[.gz]
+        sub-<label>[_ses-<label>][_echo-<index>][_fa-<index>][_inv-<index>][_tsl-<index>][_acq-<label>][_part-<mag/phase>][_ce-<label>][_rec-<label>][_run-<index>][_mod-<suffix>]_defacemask.nii[.gz]
 ```
 
 The term anatomical imaging data spans a broad range of MRI applications.
@@ -133,33 +133,33 @@ about the imaged anatomy, but differ by the nature of the data they create. Anat
 data set (e.g. a 3D high resolution T1 weighted image), ii) a group of images acquired for the purpose of calculating quantitative maps (`quantitative MRI`, or `qMRI`)
 (e.g. four 3D volumes provided as an input to a MP2RAGE calculation), and iii) the quantitative parameter maps themselves (e.g. `T1map` etc.).
 
-#### Supported modalities, quantitative maps and grouped scan collections
+#### Conventional structural acquisitions
 
 <NOTE: We should probably lead with some information and examples about a standard T1w conventional acquisition!>
+
+#### Supported modalities, quantitative maps and grouped scan collections
 
 Quantitative MRI maps are calculated from multiple anatomical images with varying MRI acquisition parameters. These `grouped scan collections`
 are then processed to derive `qMRI maps`.
 Alternatively, grouped scans may be collected to enhance certain contrast
 features, such as to calculate a weighted average of multi-echo gradient echo (`ME-GRE`) images to improve segmentation algorithms.
 
-As the acquisition parameters change parametrically across grouped scan collections, it is not possible to label them with one consistent modality, contrast or key label.
-For example, changing the flip angle of a spolied gradient echo acquisition (while keeping all other parameters equal) will change the image contrast from being T1 weighted to proton desity weighted.
+As the acquisition parameters change parametrically across grouped scan collections, it is not possible to label them with one consistent suffix label (eg: `T1w` or `T2w`).
+For example, changing the flip angle of a spoiled gradient echo acquisition (while keeping all other parameters equal) will change the image contrast from being T1-weighted to proton density-weighted.
 
-To circumvent this problem, the `_suffix`
+To circumvent this problem, the `_<suffix>`
 entity is used to identify anatomical imaging data.
 For conventional MRI the suffixes will correspond to common anatomical contrasts and imaging modalities such as `T1w`, `T2w`, `T2starw` etc.
-For groups of scans acquired with the purpose of combining them together to generate quantitative maps or images with improved structural contrast, the `_suffix` indicates the collection that the scans belong to.
+For groups of scans acquired with the purpose of combining them together to generate quantitative maps or images with improved structural contrast, the `_<suffix>` indicates the collection that the scans belong to.
 
-#### The `_suffix` entity
+#### The `_<suffix>` entity
 
 To ensure an comprehensible, human readable directory that contains anatomical imaging data,
-the `_suffix` entity is divided into three subgroups:
+the `_<suffix>` entity can be used in one of three ways:
 
-1. `Conventional MRI suffixes`
-
-2. `Quantitative MRI (qMRI) map suffixes`
-
-3. `Grouping suffixes`
+1. Conventional MRI suffixes
+1. Grouping suffixes
+1. Quantitative MRI (qMRI) map suffixes
 
 This distinction was added to the specification on acceptance of the BEP001 proposal in version `1.x.x`.
 As a result there are some additional suffixes that are no longer recommended but remain part of the specification in order to maintain backwards compatability with previous versions of the specification.
@@ -171,7 +171,7 @@ These can be found in the [legacy suffixes](#legacy-suffixes) section below.
 
 Denotes the type of the predominant contrast conveyed by an individual file of
 a conventional anatomical image.
-One of the `_suffix` entries listed in the table below
+One of the `_<suffix>` entries listed in the table below
 is REQUIRED (with additional entities where applicable) to provide a self
 explanatory file name.
 
@@ -185,7 +185,7 @@ A change to the specification is REQUIRED to expand or to modify the following t
 | T2 star weighted images                    | T2starw | Conventional | Denotes images with predominant T2* contribution, typically images acquired using a GRE sequence with low flip angle, long echo time and long repetition time. Please note that this suffix is not a surrogate for `T2starmap`. |
 | Fluid Attenuated Inversion Recovery Images | FLAIR   | Conventional | ***To be edited.***                                                                                                                                                                                                                   |
 
-Example use for conventional `T1 weighted images`:
+Example use for conventional **T1 weighted images**:
 
 ```Text
 sub-01_run-1_T1w.nii.gz
@@ -195,24 +195,159 @@ sub-01_run-2_T1w.json
 ```
 
 The `run` entity in the example above denotes the index of the acquisition
-repeated with the identical scan parameters (e.g. to achieve a higher SNR).
+repeated with the identical scan parameters (e.g. to achieve a higher SNR by averaging the scans together).
 Note that changing parameters between multiple acquisitions of the same sequence
-creates a different use case: `grouped scan collections`. For more reading on
+creates a different use case: **grouped scan collections**. For more reading on
 this topic, please see the [Grouping suffixes](#grouping-suffixes) subsection.
 
 **Important:**
 
 If an anatomical image is defaced for anonymization, one MAY provide
 the binary mask that was used to remove facial features. In the specific case of
-naming this binary mask, the `_suffix` entity is replaced by `_defacemask` entry.
-Therefore, to contain the original `_suffix` entry, the OPTIONAL `mod-<suffix>`
-entity is used. For example, deface mask image belonging to a `T1 weighted image`
+naming this binary mask, the `_<suffix>` entity is replaced by `_<defacemask>` entry.
+Therefore, to contain the original `_<suffix>` entry, the OPTIONAL `mod-<suffix>`
+entity is used. For example, deface mask image belonging to a **T1 weighted image**
 is named as follows:
 
 ```
 sub-01_mod-T1w_defacemask.nii.gz
 sub-01_mod-T1w_defacemask.json
 ```
+
+##### Grouping suffixes
+
+**Function:**
+
+Files that belong to a **grouped scan collection** are intended to be used together within a qMRI analysis framework.
+The quantitative maps that are output from these calculations (e.g., `T1map`, `T2map` etc) are described in the [qMRI map suffixes](#qmri-map-suffixes) section below.
+A change to the specification is REQUIRED to expand or to modify the following table.
+
+| Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------------------------------------|---------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Variable flip angle                        | VFA     | Grouping     | Groups together parametrically linked anatomical images (primarily) for relaxometry mapping. The VFA method involves at least two spoiled gradient echo (SPGR) of steady-state free precession (SSFP) images acquired at different flip angles. Therefore, `-` of `fa-` is REQUIRED for the images grouped by this suffix. Depending on the provided metadata fields and the sequence type, data may be eligible for `DESPOT1`, `DESPOT2` and their variants. Please visit the method-specific list of priority levels for qMRI metadata for details. _Associated output suffixes:_ T1map, T2map, R1map, R2map |
+| Inversion recovery (for T1 mapping)        | IRT1    | Grouping     | Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `-` of `inv-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, R1map                                                                                                                                                                                                                                                                                                           |
+| Magnetization prepared two gradient echoes | MP2RAGE | Grouping     | Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `-` key/value pairs of `inv-` and `fa-`, and `part-` key/value pair are REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, UNIT1                                                                                                                                                        |
+| Multi-echo spin echo                       | MESE    | Grouping     | Groups together parametrically linked anatomical images (primarily) for T2 mapping.The MESE method involves multiple spin echo images acquired at different echo times. The `-` key/value pair of `echo-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2map, R2map                                                                                                                                                                                                                                                                                                        |
+| Multi-echo gradient echo                   | MEGRE   | Grouping     | Groups together parametrically linked multiple anatomical gradient echo images acquired at different echo times. The `-` key/value pair of `echo-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2starmap, R2starmap, when used for T2* mapping.                                                                                                                                                                                                                                                                                                                           |
+| Magnetization transfer ratio               | MTR     | Grouping     | Magnetization transfer ratio,| MTR,| (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. _Associated output suffixes:_ MTRmap                                                                                                                 |
+| Magnetization transfer saturation          | MTS     | Grouping     | Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ T1map, MTsat                                                                                                     |
+| Multi-parametric mapping                   | MPM     | Grouping     | roups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                                                                                                 |
+| Double-angle B1 mapping                    | B1DAM   | Grouping     | Groups together parametrically linked anatomical images for RF transmit field (B1 plus) mapping. Double angle method is based on the calculation of the actual angles from signal ratios, collected by two acquisitions at different nominal excitation angles. Common sequence types for this application include spin echo and echo planar imaging. _Associated output suffixes:_ B1plusmap
+|
+
+For example:
+
+```Text
+sub-01_fa-1_VFA.nii.gz
+sub-01_fa-1_VFA.json
+sub-01_fa-2_VFA.nii.gz
+sub-01_fa-2_VFA.json
+```
+
+Note that every image in a **grouped scan collection** has the same `_<suffix>` as they are likely to be used together.
+Although the acquisitions will have many identical acquisition parameters, only one `.json`-sidecar file is permitted per image within a single folder (following the [inheritance principle](../02-common-principles#the-inheritance-principle)).
+This means that parameter values that are identical across a set of grouped scans will still have to be stored separately in each `.json`-sidecar file.
+
+Individual images within a grouped scan collection may be used for any purpose.
+For example, the acquisition that is most similar to a `T1w` image may be used in analysis pipelines needing a conventional T1-weighted image.
+
+<NOTE: The real world data sets probably need more documentation than a link here 😬>
+[Example real-world datasets can be downloaded here.](https://osf.io/k4bs5/)
+
+**Method-specific priority levels for qMRI metadata:**
+
+Although there is not an upper limit to the amount of metadata
+for images collected by a `grouping suffix`, some of the metadata entries become
+REQUIRED when considered within the context of a specific qMRI
+application.
+
+<NOTE: Potentially re-format this table into just required metadata?>
+
+_Table of method-specific priority levels for qMRI metadata_
+
+| Grouping suffix             | REQUIRED `varying` metadata fields   | OPTIONAL `varying` metadata fields | REQUIRED `constant` metadata fields | OPTIONAL `constant` metadata fields |
+| :-------------------------- | :---------------- | :--------------| :--------------| :--------------|
+| VFA                         | FlipAngle         |    - | SequenceType, RepetitionTimeExcitation | PhaseIncrement|
+| IRT1                        | InversionTime     |     - | -| - |
+| MP2RAGE                     | FlipAngle, InversionTime |  EchoTime | RepetitionTimeExcitation, RepetitionTimePreperation | |
+| MESE                        | EchoTime         |   - | - | -|
+| MEGRE                       | EchoTime         |   - | - | -|
+| MTR                         | MTState         |     - | - | - |
+| MTS                         | FlipAngle, MTState  | - | RepetitionTimeExcitation| - |
+| MPM                         | FlipAngle, MTState, EchoTime, RepetitionTimeExcitation |  - | - | - |
+
+Explanation of the table:
+
+* The metadata fields listed in the REQUIRED columns are needed to perform a
+minimum viable qMRI application for the corresponding `grouping suffix`.
+* Note that some of the metadata fields may be unaltered across different members
+of a given `grouped scan collection`, yet still needed as an input to a qMRI
+model for parameter fitting. These fields are listed under the
+`REQUIRED constant metadata fields` column.
+* The `REQUIRED varying metadata fields ` column lists metadata entries that are
+subjected to at least one change across the members of a given
+`grouped scan collection` and needed as an input for parameter fitting.
+* The metadata fields listed in the OPTIONAL columns can be used to derive
+different flavors of the minimum viable qMRI application for the respective
+`grouping suffix`. The following section expands on the set of rules governing
+the derivation of qMRI applications from an existing `grouping suffix`.
+
+**qMRI applications that can be derived from an existing `grouping suffix`:**
+
+Certain grouping suffixes may refer to a generic data collection regime such as
+variable flip angle (VFA), rather than a more specific acquisition, e.g.,
+magnetization prepared two gradient echoes (MP2RAGE). Such generic acquisition
+schemas can serve as a basis to derive various qMRI applications by changes to
+the acquisition sequence or varying additional scan parameters.
+
+If such inheritance relationship is applicable between an already existing
+`grouping suffix` and a new qMRI application to be included in the specification,
+the inheritor qMRI method MUST be listed in the table below instead of
+introducing a new `grouping suffix`. This approach:
+
+* prevents the list of available suffixes from over-proliferation
+* provides qMRI-focused BIDS applications with a set of meta-data driven rules
+to infer possible fitting options
+* keep an inheritance track of the qMRI methods described within the
+specification.
+
+_Table of qMRI applications that can be derived from an existing `grouping suffix`_
+
+| Grouping suffix             | REQUIRED `constant` metadata fields==Value | OPTIONAL `varying` metadata fields | OPTIONAL `constant` metadata fields| Derived qMRI application|
+| :-------------------------- | :---------------- | :--------------|:--------------| :--------------|
+| VFA | SequenceType==SPGR | - | -| `DESPOT1`|
+| VFA | SequenceType==SSFP | - | PhaseIncrement| `DESPOT2`|
+| VFA | SequenceType==SSFP | PhaseIncrement | -| `DESPOT2FM`|
+
+A derived qMRI application becomes avaiable if all the OPTIONAL metadata fields
+listed for a `grouping suffix` is provided in the data. In addition, conditional
+rules based on the value of a given REQUIRED `constant` metada field can be set
+for the description of a derived qMRI application.
+
+For example, if the REQUIRED `constant` metadata field of `SequenceType` is SPGR
+for a collection of anatomical images listed by the `VFA` suffix, the data
+qualifies for `DESPOT1` T1 fitting. For the same suffix, if the `SequenceType`
+metadata field has the value of `SSFP`, and the `PhaseIncrement` is provided
+as a `constant` metadata field, then the dataset becomes eligible for `DESPOT2`
+T2 fitting application. Finally, if the `DESPOT2` data has more than one
+`PhaseIncrement` field as a `varying` metadata field, the dataset is valid
+for `DESPOT2FM`.
+
+Please note that OPTIONAL `constant` and `varying` metadata fields listed in the
+_qMRI applications that can be derived from an existing_ table MUST be also
+included in the _method-specific priority levels for qMRI metadata_ table for
+the sake of completeness.
+
+Please also note that the rules concerning the presence/value of certain metadata
+fields within the context of `grouping suffix` is not a part of the BIDS
+validation process. Such rules rather constitute a centralized guideline for
+creating interoperable qMRI datasets.
+
+For a dataset with a `grouping suffix`, the BIDS validation is successful if:
+
+* provided NIfTI and JSON file names respect the anatomy imaging dataset template
+* provided suffixes are present in the list of available suffixes
+* sidecar JSON files follow the hierarchy defined for `grouping suffix`.
 
 #### qMRI map suffixes
 
@@ -336,224 +471,6 @@ sub-01_T1map.json
 “EstimationSoftwareEnv”: “Ubuntu 16.04”
 }
 ```
-
-##### Grouping suffixes
-
-**Function:**
-
-Groups together files that belong to `grouped scan collections`, which are
-intended for a well-defined qMRI application. Changes to the specification is
-REQUIRED to expand or to modify the following table.
-
-| Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|--------------------------------------------|---------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Variable flip angle                        | VFA     | Grouping     | Groups together parametrically linked anatomical images (primarily) for relaxometry mapping. The VFA method involves at least two spoiled gradient echo (SPGR) of steady-state free precession (SSFP) images acquired at different flip angles. Therefore, `-` of `fa-` is REQUIRED for the images grouped by this suffix. Depending on the provided metadata fields and the sequence type, data may be eligible for `DESPOT1`, `DESPOT2` and their variants. Please visit the method-specific list of priority levels for qMRI metadata for details. _Associated output suffixes:_ T1map, T2map, R1map, R2map |
-| Inversion recovery (for T1 mapping)        | IRT1    | Grouping     | Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. The `-` of `inv-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, R1map                                                                                                                                                                                                                                                                                                           |
-| Magnetization prepared two gradient echoes | MP2RAGE | Grouping     | Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. The `-` key/value pairs of `inv-` and `fa-`, and `part-` key/value pair are REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T1map, UNIT1                                                                                                                                                        |
-| Multi-echo spin echo                       | MESE    | Grouping     | Groups together parametrically linked anatomical images (commonlly) for T2 mapping.The MESE method involves multiple spin echo images acquired at different echo times. The `-` key/value pair of `echo-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2map, R2map                                                                                                                                                                                                                                                                                                        |
-| Multi-echo gradient echo                   | MEGRE   | Grouping     | Groups together parametrically linked multiple anatomical gradient echo images acquired at different echo times. The `-` key/value pair of `echo-` is REQUIRED for the images grouped by this suffix. _Associated output suffixes:_ T2starmap, R2starmap, when used for T2* mapping.                                                                                                                                                                                                                                                                                                                           |
-| Magnetization transfer ratio               | MTR     | Grouping     | Magnetization transfer ratio,| MTR,| (G) --> Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer ratio map. The MTR method involves two sets of anatomical images that differ in terms of the application of a magnetization transfer RF pulse (`MTon` or `MToff`). The `acq-` key/value pair is REQUIRED to be used with `MTon` and `MToff` labels for the images grouped by this suffix. _Associated output suffixes:_ MTRmap                                                                                                                 |
-| Magnetization transfer saturation          | MTS     | Grouping     | Groups together parametrically linked anatomical images for calculating a semi-quantitative magnetization transfer saturation index map. The MTS method involves three sets of anatomical images that differ in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`) and flip angle. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ T1map, MTsat                                                                                                     |
-| Multi-parametric mapping                   | MPM     | Grouping     | roups together parametrically linked anatomical images for multiparametric mapping (a.k.a hMRI). The MPM method involves anatomical images differing in terms of application of a magnetization transfer RF pulse (`MTon` or `MToff`), flip angle and (optionally) echo time. The `-` key/value pair of `fa-` and `acq-` key/value pair (with `MTon`, `MToff` and `T1w` labels) are REQUIRED for images grouped by this suffix. _Associated output suffixes:_ R1map, R2starmap, MTsat, PDmap, T1map, T2starmap                                                                                                 |
-| Double-angle B1 mapping                    | B1DAM   | Grouping     | Groups together parametrically linked anatomical images for RF transmit field (B1 plus) mapping. Double angle method is based on the calculation of the actual angles from signal ratios, collected by two acquisitions at different nominal excitation angles. Common sequence types for this application include spin echo and echo planar imaging. _Associated output suffixes:_ B1plusmap
-|
-
-For example:
-
-```Text
-sub-01_fa-1_VFA.nii.gz
-sub-01_fa-1_VFA.json
-sub-01_fa-2_VFA.nii.gz
-sub-01_fa-2_VFA.json
-```
-
-Every constituent of a `grouped scan collection` is addressed by the same
-group abbreviation within the specification, since their intended use becomes
-clear when considered collectively. Nonetheless, this does not prevent the use
-of one of the constituent images as a surrogate input to a structural image
-processing step (e.g. parcellation), if the contrast and resolution yielded by
-the acqusition parameters of that image satisfy a set of neccesary criteria
-perteaning to such operation.
-
-[Example real-world datasets can be downloaded here.](https://osf.io/k4bs5/)
-
-**Some important considerations regarding `grouping suffixes`:**
-
-* All `grouping suffixes` MUST be capitalized.
-* `Grouping suffixes` MUST attain a clear description of the qMRI application
-that they relate to. Hyperlinks to example applications and/or more detailed
-descriptions are encouraged whenever possible.
-* Unless the pulse sequence is exclusively associated with a specific qMRI
-application (e.g. `MP2RAGE`), sequence names are NOT used as `grouping suffixes`.
-* If it is possible to derive a qMRI application from an already existing
-`grouping suffix` by defining a set of logical conditions over the metadata
-fields, the _table of method-specific priority levels_ and the
-_table of qMRI applications that can be derived from an existing `grouping suffix`_
- MUST be expanded instead of introducing a new `grouping suffix`.
- Please visit the _JSON content for `grouping suffixes`_ for further details.
-* Please note that if a structural data has the type of `grouped scan collection`,
-the use of `_suffix` alone cannot distinguish its members from each other,
-failing to identify their roles as inputs to the calculation of qMRI maps.
-Although such images are REQUIRED to be grouped by a proper `grouping suffix`,
-they are also RECOMMENDED to include at least one of the `acq`, `part` and
-`indexable_metadata` entities (please visit corresponding sections for details).
-
-**JSON files accompanying anatomical images with `grouping suffix`:**
-
-Please note that the entities involved in the naming of an anatomy imaging
-data can NOT explicitly relay information regarding the sequence parameters.
-Instead,the entities are used only for categorization, whereas the corresponding
-sequence parameters are contained in the sidecar JSON files.
-
-For the `grouped scan collections`, majority of the acquisition parameters
-remain unchanged across multiple runs of the same sequence (i.e constituents).
-However, some of the parameters are intentionally modified to collect a dataset
-suitable for quantitative parameter mapping.
-
-In conformity with [the inheretence principle](https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#the-inheritance-principle) one JSON file can point to only one
-image file at the same directory level. This does not allow splitting JSON files
-with respect to the invariance of parameters.
-
-***
-**>>>> TO BE DISCUSSED START**
-__
-***
-_Good practice recommendations:_
-
-Parameters that are unchanged across the constituents of a
-`grouped scan collection` MAY repeat in every JSON file belonging to that group.
-To avoid such redundancy, all the fixed metadata fields MAY be included only
-in the JSON file of the first member of a `grouped scan collection`, where
-constituent images are sorted in ascending alphabetical order. If this convention
-is followed, then the remaining JSON files MAY only contain parameters that are
-subjected to at least one change across all the member images.
-***
-**TO BE DISCUSSED END <<<<**
-***
-
-**JSON Content for `grouping suffixes`:**
-
-There is not an upper limit to the amount of metadata contained by the JSON
-files of constituent images belonging to a `grouped scan collection`. However,
-the following metadata is highly RECOMMENDED to be included to facilitate the
-provenance recording for the calculation of a qMRI map:
-
-* All the sccanner hardware parameters primarily including:
-    * Manufacturer
-    * ManufacturersModelName
-    * DeviceSerialNumber
-    * StationName
-    * SoftwareVersions
-    * MagneticFieldStrength
-    * ReceiveCoilName
-    * ReceiveCoilActiveElements
-    * GradientSetType
-    * MRTransmitCoilSequence
-    * MatrixCoilMode
-    * CoilCombinationMethod
-* Sequence specific parameters primarily including:
-    * PulseSequenceType
-    * ScanningSequence
-    * SequenceVariant
-    * ScanOptions
-    * SequenceName
-    * PulseSequenceDetails
-    * NonlinearGradientCorrection
-* Other timing, RF, contrast, spatial encoding and acceleration related
-parameters.
-
-**Method-specific priority levels for qMRI metadata:**
-
-Although there is not an upper limit to the amount of metadata
-for images collected by a `grouping suffix`, some of the metadata entries become
-REQUIRED when considered within the context of a specific qMRI
-application.
-
-_Table of method-specific priority levels for qMRI metadata_
-
-| Grouping suffix             | REQUIRED `varying` metadata fields   | OPTIONAL `varying` metadata fields | REQUIRED `constant` metadata fields | OPTIONAL `constant` metadata fields |
-| :-------------------------- | :---------------- | :--------------| :--------------| :--------------|
-| VFA                         | FlipAngle         |     N/A | SequenceType, RepetitionTimeExcitation | PhaseIncrement|
-| IRT1                        | InversionTime     |     N/A | N/A| N/A|
-| MP2RAGE                     | FlipAngle, InversionTime |  EchoTime | RepetitionTimeExcitation, RepetitionTimePreperation | |
-| MESE                        | EchoTime         |   N/A | N/A | N/A|
-| MEGRE                       | EchoTime         |   N/A | N/A | N/A|
-| MTR                         | MTState         |     N/A | N/A| N/A|
-| MTS                         | FlipAngle, MTState  |  N/A | RepetitionTimeExcitation| N/A|
-| MPM                         | FlipAngle, MTState, EchoTime, RepetitionTimeExcitation |  N/A | N/A| N/A|
-
-Explanaiton of the table:
-
-* The metadata fields listed in the REQUIRED columns are needed to perform a
-minimum viable qMRI application for the corresponding `grouping suffix`.
-* Note that some of the metadata fields may be unaltered across different members
-of a given `grouped scan collection`, yet still needed as an input to a qMRI
-model for parameter fitting. These fields are listed under the
-`REQUIRED constant metadata fields` column.
-* The `REQUIRED varying metadata fields ` column lists metadata entries that are
-subjected to at least one change across the members of a given
-`grouped scan collection` and needed as an input for parameter fitting.
-* The metadata fields listed in the OPTIONAL columns can be used to derive
-different flavors of the minimum viable qMRI application for the respective
-`grouping suffix`. The following section expands on the set of rules governing
-the derivation of qMRI applications from an existing `grouping suffix`.
-
-**qMRI applications that can be derived from an existing `grouping suffix`:**
-
-Certain grouping suffixes may refer to a generic data collection regime such as
-variable flip angle (VFA), rather than a more specific acquisition, e.g.,
-magnetization prepared two gradient echoes (MP2RAGE). Such generic acquisition
-schemas can serve as a basis to derive various qMRI applications by changes to
-the acquisition sequence or varying additional scan parameters.
-
-If such inheritance relationship is applicable between an already existing
-`grouping suffix` and a new qMRI application to be included in the specification,
-the inheritor qMRI method MUST be listed in the table below instead of
-introducing a new `grouping suffix`. This approach:
-
-* prevents the list of available suffixes from over-proliferation
-* provides qMRI-focused BIDS applications with a set of meta-data driven rules
-to infer possible fitting options
-* keep an inheritance track of the qMRI methods described within the
-specification.
-
-_Table of qMRI applications that can be derived from an existing `grouping suffix`_
-
-| Grouping suffix             | REQUIRED `constant` metadata fields==Value | OPTIONAL `varying` metadata fields | OPTIONAL `constant` metadata fields| Derived qMRI application|
-| :-------------------------- | :---------------- | :--------------|:--------------| :--------------|
-| VFA | SequenceType==SPGR | - | -| `DESPOT1`|
-| VFA | SequenceType==SSFP | - | PhaseIncrement| `DESPOT2`|
-| VFA | SequenceType==SSFP | PhaseIncrement | -| `DESPOT2FM`|
-
-A derived qMRI application becomes avaiable if all the OPTIONAL metadata fields
-listed for a `grouping suffix` is provided in the data. In addition, conditional
-rules based on the value of a given REQUIRED `constant` metada field can be set
-for the description of a derived qMRI application.
-
-For example, if the REQUIRED `constant` metadata field of `SequenceType` is SPGR
-for a collection of anatomical images listed by the `VFA` suffix, the data
-qualifies for `DESPOT1` T1 fitting. For the same suffix, if the `SequenceType`
-metadata field has the value of `SSFP`, and the `PhaseIncrement` is provided
-as a `constant` metadata field, then the dataset becomes eligible for `DESPOT2`
-T2 fitting application. Finally, if the `DESPOT2` data has more than one
-`PhaseIncrement` field as a `varying` metadata field, the dataset is valid
-for `DESPOT2FM`.
-
-Please note that OPTIONAL `constant` and `varying` metadata fields listed in the
-_qMRI applications that can be derived from an existing_ table MUST be also
-included in the _method-specific priority levels for qMRI metadata_ table for
-the sake of completeness.
-
-Please also note that the rules concerning the presence/value of certain metadata
-fields within the context of `grouping suffix` is not a part of the BIDS
-validation process. Such rules rather constitute a centralized guideline for
-creating interoperable qMRI datasets.
-
-For a dataset with a `grouping suffix`, the BIDS validation is successful if:
-
-* provided NIfTI and JSON file names respect the anatomy imaging dataset template
-* provided suffixes are present in the list of available suffixes
-* sidecar JSON files follow the hierarchy defined for `grouping suffix`.
 
 ##### Legacy suffixes (to be deprecated)
 
