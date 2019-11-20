@@ -319,7 +319,7 @@ specification.
 <a name="footnotederive">*</a> `var` denotes that the listed OPTIONAL metadata value changes across
  constituent images of the respective `grouping suffix`, fixed otherwise (`fix`). 
  If the OPTIONAL metadata type is `var`, respective naming entities can be found in the 
- OPTIONAL entities column of `grouping suffix` table. 
+ OPTIONAL entities column of [`grouping suffix` table](#grouping-suffix). 
 *** 
 
 A derived qMRI application becomes avaiable if all the OPTIONAL metadata fields
@@ -337,7 +337,7 @@ T2 fitting application. Finally, if the `DESPOT2` data has more than one
 `SpoilingRFPhaseIncrement` field as a metadata field, then the dataset is valid
 for `DESPOT2-FM`.
 
-Please note that OPTIONAL metadata fields listed in the qMRI applications that can be derived from an existing suffix table MUST be also included in the method sprecific priority levels for qMRI metadata table  for the sake of completeness.
+Please note that OPTIONAL metadata fields listed in the [qMRI applications that can be derived from an existing suffix table](#varianttable) MUST be also included in the [method sprecific priority levels for qMRI metadata table](#prioritylevels)  for the sake of completeness.
 
 Please also note that the rules concerning the presence/value of certain metadata
 fields within the context of `grouping suffix` is not a part of the BIDS
