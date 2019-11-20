@@ -260,20 +260,20 @@ for images collected by a `grouping suffix`, some of the metadata entries become
 REQUIRED when considered within the context of a specific qMRI
 application.
 
-<NOTE: Potentially re-format this table into just required metadata?>
-
 _Table of method-specific priority levels for qMRI metadata_
 
-| Grouping suffix             | REQUIRED `varying` metadata fields   | OPTIONAL `varying` metadata fields | REQUIRED `constant` metadata fields | OPTIONAL `constant` metadata fields |
-| :-------------------------- | :---------------- | :--------------| :--------------| :--------------|
-| VFA                         | FlipAngle         |    - | SequenceType, RepetitionTimeExcitation | PhaseIncrement|
-| IRT1                        | InversionTime     |     - | -| - |
-| MP2RAGE                     | FlipAngle, InversionTime |  EchoTime | RepetitionTimeExcitation, RepetitionTimePreperation | |
-| MESE                        | EchoTime         |   - | - | -|
-| MEGRE                       | EchoTime         |   - | - | -|
-| MTR                         | MTState         |     - | - | - |
-| MTS                         | FlipAngle, MTState  | - | RepetitionTimeExcitation| - |
-| MPM                         | FlipAngle, MTState, EchoTime, RepetitionTimeExcitation |  - | - | - |
+| Grouping suffix | REQUIRED metadata                                                                                    | OPTIONAL metadata          |
+|-----------------|------------------------------------------------------------------------------------------------------|----------------------------|
+| VFA             | `FlipAngle`, `PulseSequenceType`, `RepetitionTimeExcitation`                                         | `SpoilingRFPhaseIncrement` |
+| IRT1            | `InversionTime`                                                                                      | -                          |
+| MP2RAGE         | `FlipAngle`, `InversionTime`, `RepetitionTimeExcitation`, `RepetitionTimePreperation`, `NumberShots` | `EchoTime`                 |
+| MESE            | `EchoTime`                                                                                           | -                          |
+| MEGRE           | `EchoTime`                                                                                           | -                          |
+| MTR             | `MTState`                                                                                            | -                          |
+| MTS             | `FlipAngle`, `MTState`, `RepetitionTimeExcitation`                                                   | -                          |
+| MPM             | `FlipAngle`, `MTState`, `RepetitionTimeExcitation`                                                   | `EchoTime`                 |
+| B1DAM           | `FlipAngle`                                                                                          | -                          |
+| GRASE           | `EchoTime`                                                                                           | -                          |
 
 Explanation of the table:
 
@@ -281,11 +281,7 @@ Explanation of the table:
 minimum viable qMRI application for the corresponding `grouping suffix`.
 * Note that some of the metadata fields may be unaltered across different members
 of a given `grouped scan collection`, yet still needed as an input to a qMRI
-model for parameter fitting. These fields are listed under the
-`REQUIRED constant metadata fields` column.
-* The `REQUIRED varying metadata fields ` column lists metadata entries that are
-subjected to at least one change across the members of a given
-`grouped scan collection` and needed as an input for parameter fitting.
+model for parameter fitting (e.g. `RepetitionTimeExcitation` of `VFA`). 
 * The metadata fields listed in the OPTIONAL columns can be used to derive
 different flavors of the minimum viable qMRI application for the respective
 `grouping suffix`. The following section expands on the set of rules governing
@@ -295,9 +291,9 @@ the derivation of qMRI applications from an existing `grouping suffix`.
 
 Certain grouping suffixes may refer to a generic data collection regime such as
 variable flip angle (VFA), rather than a more specific acquisition, e.g.,
-magnetization prepared two gradient echoes (MP2RAGE). Such generic acquisition
-schemas can serve as a basis to derive various qMRI applications by changes to
-the acquisition sequence or varying additional scan parameters.
+magnetization prepared two gradient echoes (MP2RAGE). Such generic acquisitions
+can serve as a basis to derive various qMRI applications by changes to
+the acquisition sequence (e.g. readout) type or varying additional scan parameters.
 
 If such inheritance relationship is applicable between an already existing
 `grouping suffix` and a new qMRI application to be included in the specification,
@@ -312,30 +308,38 @@ specification.
 
 _Table of qMRI applications that can be derived from an existing `grouping suffix`_
 
-| Grouping suffix             | REQUIRED `constant` metadata fields==Value | OPTIONAL `varying` metadata fields | OPTIONAL `constant` metadata fields| Derived qMRI application|
-| :-------------------------- | :---------------- | :--------------|:--------------| :--------------|
-| VFA | SequenceType==SPGR | - | -| `DESPOT1`|
-| VFA | SequenceType==SSFP | - | PhaseIncrement| `DESPOT2`|
-| VFA | SequenceType==SSFP | PhaseIncrement | -| `DESPOT2FM`|
+| Grouping suffix | If REQUIRED metadata == Value | OPTIONAL metadata [`var`/`fix`]<sup>[*](#footnotederive)</sup>      | Derived application |
+|-----------------|-------------------------------|----------------------------------|---------------------|
+| VFA             | `PulseSequenceType` == `SPGR` | -                                | DESPOT1             |
+| VFA             | `PulseSequenceType` == `SSFP` | `SpoilingRFPhaseIncrement` [`fix`] | DESPOT2             |
+| VFA             | `PulseSequenceType` == `SSFP` | `SpoilingRFPhaseIncrement` [`var`] | DESPOT2-FM          |
+| MP2RAGE         | -                             | `EchoTime` [`var`]                 | MP2RAGE-ME          |
+| MPM             | -                             | `EchoTime` [`var`]                 | MPM-ME              |
+
+<a name="footnotederive">*</a> `var` denotes that the listed OPTIONAL metadata value changes across
+ constituent images of the respective `grouping suffix`, fixed otherwise (`fix`). 
+ If the OPTIONAL metadata type is `var`, respective naming entities can be found in the 
+ OPTIONAL entities column of `grouping suffix` table. 
+*** 
 
 A derived qMRI application becomes avaiable if all the OPTIONAL metadata fields
 listed for a `grouping suffix` is provided in the data. In addition, conditional
-rules based on the value of a given REQUIRED `constant` metada field can be set
-for the description of a derived qMRI application.
+rules based on the value of a given REQUIRED metada field can be set
+for the description of a derived qMRI application. Note that the value of this
+REQUIRED metadata is fixed across constituent images of a `grouping suffix`. 
 
-For example, if the REQUIRED `constant` metadata field of `SequenceType` is SPGR
+For example, if the REQUIRED metadata field of `PulseSequenceType` is SPGR
 for a collection of anatomical images listed by the `VFA` suffix, the data
-qualifies for `DESPOT1` T1 fitting. For the same suffix, if the `SequenceType`
-metadata field has the value of `SSFP`, and the `PhaseIncrement` is provided
-as a `constant` metadata field, then the dataset becomes eligible for `DESPOT2`
+qualifies for `DESPOT1` T1 fitting. For the same suffix, if the `PulseSequenceType`
+metadata field has the value of `SSFP`, and the `SpoilingRFPhaseIncrement` is 
+provided as a metadata field, then the dataset becomes eligible for `DESPOT2`
 T2 fitting application. Finally, if the `DESPOT2` data has more than one
-`PhaseIncrement` field as a `varying` metadata field, the dataset is valid
-for `DESPOT2FM`.
+`SpoilingRFPhaseIncrement` field as a metadata field, then the dataset is valid
+for `DESPOT2-FM`.
 
-Please note that OPTIONAL `constant` and `varying` metadata fields listed in the
-_qMRI applications that can be derived from an existing_ table MUST be also
-included in the _method-specific priority levels for qMRI metadata_ table for
-the sake of completeness.
+Please note that OPTIONAL metadata fields listed in the _qMRI applications that_
+_can be derived from an existing_ table MUST be also included in the _method-specific_
+_priority levels for qMRI metadata_ table for the sake of completeness.
 
 Please also note that the rules concerning the presence/value of certain metadata
 fields within the context of `grouping suffix` is not a part of the BIDS
@@ -361,19 +365,19 @@ expand or to modify the following table.
 | Name                                                   | _suffix   | _suffix type | Description                                                                                                                                                                                                                                                                          |
 |--------------------------------------------------------|-----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Longitudinal relaxation time map                       | T1map     | Parametric   | In seconds (s). T1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`,`MPM`. You can visit [this interactive book for T1 mapping](https://qmrlab.org/t1_book/intro) for further reading.  |
-| True transverse relaxation time map                    | T2map     | Parametric   | In seconds (s). T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                       |
+| True transverse relaxation time map                    | T2map     | Parametric   | In seconds (s). T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`, `GRASE`                                                                                                                                       |
 | Observed transverse relaxation time map                | T2starmap | Parametric   | In seconds (s). T2* maps are REQUIRED to use this suffix irrespective of the method they are related to._Can be generated from:_ `MEGRE`, `MPM`                                                                                                                                      |
 | Longitudinal relaxation rate map                       | R1map     | Parametric   | In seconds-1 (1/s). R1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `VFA`, `IRT1`, `MP2RAGE`, `MTS`, `MPM`                                                                                                           |
-| True transverse relaxation rate map                    | R2map     | Parametric   | In seconds-1 (1/s). R2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`                                                                                                                                   |
+| True transverse relaxation rate map                    | R2map     | Parametric   | In seconds-1 (1/s). R2 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `MPM`, `GRASE`                                                                                                                                  |
 | Observed transverse relaxation rate map                | R2starmap | Parametric   | In seconds-1 (1/s). R2* maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_`MEGRE`, `MPM`                                                                                                                                 |
 | Proton density map                                     | PDmap     | Parametric   | In arbitrary units (a.u.). PD maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MPM`                                                                                                                                    |
 | Magnetization transfer ratio map                       | MTRmap    | Parametric   | In percentage (%). MTR maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTR`                                                                                                                                           |
 | Magnetization transfer saturation index map            | MTSat     | Parametric   | In arbitrary units (a.u.). MTsat maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MTS`, `MPM`                                                                                                                          |
 | Homogeneous (flat) T1 image by MP2RAGE                 | UNIT1     | Parametric   | In arbitrary units (a.u.). UNIT1 maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MP2RAGE`                                                                                                                             |
 | Longutidunal relaxation in rotating frame (T1 rho) map | T1rho     | Parametric   | In seconds (s). T1-rho maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ N/A                                                                                                                                             |
-| Myelin water fraction map                              | MWFmap    | Parametric   | In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`                                                                                                                                          |
+| Myelin water fraction map                              | MWFmap    | Parametric   | In percentage (%). MWF maps are REQUIRED to use this suffix irrespective of the method they are related to. _Can be generated from:_ `MESE`, `GRASE`                                                                                                                                          |
 | Combined PD/T2 map                                     | PDT2map   | Parametric   | In arbitrary units (a.u.). Combined PD/T2 maps are REQUIRED to use this suffix irrespective of the method they are related to. N/A                                                                                                                                                   |
-| RF transmit field map                                  | B1plusmap | Parametric   | In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.                                                                        |
+| RF transmit field map                                  | B1plusmap | Parametric   | In arbitrary units (a.u.). Radio frequency (RF) transmit field maps are REQUIRED to use this suffix irrespective of the method they are related to. For further details please see the fieldmap data section.  _Can be generated from_: `B1DAM`                                                                      |
 
 Quantitative maps can be obtained right off the scanner or by processing files
 belonging to a `grouped scan collection`. Regardless of the method they are
@@ -572,11 +576,11 @@ where applicable:
 
 _Table of allowed `<acq>` entity labels for `grouping suffixes`_
 
-| Grouping suffix | Labels           | Related metadata fields   |
+| Grouping suffix | Labels           | Respective metadata fields and values   |
 |-------------|------------------|------------------------------|
-| MTR         | `MTon`, `MToff`      | MTState (`on`, `off`) |
-| MTS         | `MTon`, `MToff`, `T1w` | MTstate (`on`,`off`,`off`), FlipAngle (`lower`,`lower`,`higher`) |
-| MPM         | `MTon`, `MToff`, `T1w` | MTstate (`on`,`off`,`off`), FlipAngle (`lower`,`lower`,`higher`) |
+| MTR         | `MTon`, `MToff`      | MTState [`On`, `Off`] |
+| MTS         | `MTon`, `MToff`, `T1w` | MTstate [`On`,`Off`,`Off`], FlipAngle [`lower`,`lower`,`higher`] |
+| MPM         | `MTon`, `MToff`, `T1w` | MTstate [`On`,`Off`,`Off`], FlipAngle [`lower`,`lower`,`higher`] |
 
 For example (for an `MPM` dataset):
 
