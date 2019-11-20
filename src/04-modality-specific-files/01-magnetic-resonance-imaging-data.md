@@ -142,7 +142,7 @@ data set (e.g. a 3D high resolution T1 weighted image), ii) a group of images ac
 Quantitative MRI maps are calculated from multiple anatomical images with varying MRI acquisition parameters. These `grouped scan collections`
 are then processed to derive `qMRI maps`.
 Alternatively, grouped scans may be collected to enhance certain contrast
-features, such as to calculate a weighted average of multi-echo gradient echo (`ME-GRE`) images to improve segmentation algorithms.
+features, such as to calculate a weighted average of multi-echo gradient echo (`MEGRE`) images to improve segmentation algorithm outputs.
 
 The contrast characteristics change with varying acquisition parameters across `grouped scan collections`. Therefore, despite being desired for naming, it is not tenable to label all the members of a `grouped scan collection` with one conventional MRI suffix label (eg: `T1w` or `T2w`). For example, increasing the flip angle (FA) of a spoiled gradient echo acquisition (while keeping all other parameters constant) increases T1-weightning. When a group of images are acquired in this fashion with varying FA, those with low FA are more predominated by `PDw` and `T2starw` effects than those with higher FA (more `T1w` effects). 
 
@@ -182,9 +182,9 @@ A change to the specification is REQUIRED to expand or to modify the following t
 | T2 weighted images                         | T2w     | Conventional | Denotes images with predominant T2 contribution.                                                                                                                                                                                |
 | Proton density weighted images             | PDw     | Conventional | Denotes images with predominant proton density (PD) contribution.                                                                                                                                                               |
 | T2 star weighted images                    | T2starw | Conventional | Denotes images with predominant T2* contribution, typically images acquired using a GRE sequence with low flip angle, long echo time and long repetition time. Please note that this suffix is not a surrogate for `T2starmap`. |
-| Fluid Attenuated Inversion Recovery Images | FLAIR   | Conventional | ***To be edited.***                                                                                                                                                                                                                   |
+| Fluid Attenuated Inversion Recovery Images | FLAIR   | Conventional | Denotes images with predominant T2 contribution (a.k.a T2-FLAIR), in which signal from fluids (e.g. CSF) is nulled out by adjusting inversion time, coupled with notably long repetition and echo times.              |
 
-Example use for conventional **T1 weighted images**:
+Example use for conventional **T1 weighted images**:<>
 
 ```Text
 sub-01_run-1_T1w.nii.gz
