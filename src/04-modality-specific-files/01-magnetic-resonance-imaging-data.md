@@ -223,7 +223,7 @@ A change to the specification is REQUIRED to expand or to modify the following t
 
 | Name                                       | _suffix | _suffix type | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | REQUIRED entities                                                                 | OPTIONAL entities                              |
 |--------------------------------------------|---------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|------------------------------------------------|
-| Variable flip angle                        | VFA     | Grouping     | Groups together parametrically linked anatomical images (primarily) for relaxometry mapping. The VFA method involves at least two spoiled gradient echo (SPGR) of steady-state free precession (SSFP) images acquired at different flip angles. Depending on the provided metadata fields and the sequence type, data may be eligible for DESPOT1, DESPOT2 and their variants. Please visit the <a name="prioritylevels">method-specific list of priority levels for qMRI metadata</a> for details. _Associated output suffixes_: T1map, T2map, R1map, R2map | i) `indexable_metadata` of `fa`.                                                  | i) `indexable_metadata` of `rfphase`.          |
+| Variable flip angle                        | VFA     | Grouping     | Groups together parametrically linked anatomical images (primarily) for relaxometry mapping. The VFA method involves at least two spoiled gradient echo (SPGR) of steady-state free precession (SSFP) images acquired at different flip angles. Depending on the provided metadata fields and the sequence type, data may be eligible for DESPOT1, DESPOT2 and their variants. Please visit the [method-specific list of priority levels for qMRI metadata](#prioritylevels) for details. _Associated output suffixes_: T1map, T2map, R1map, R2map | i) `indexable_metadata` of `fa`.                                                  | i) `indexable_metadata` of `rfphase`.          |
 | Inversion recovery (for T1 mapping)        | IRT1    | Grouping     | Groups together parametrically linked anatomical images for T1 mapping. The IRT1 method involves multiple inversion recovery spin-echo images acquired at different inversion times. _Associated output suffixes_: T1map, R1map                                                                                                                                                                                                                                                                                                 | i) `indexable_metadata` of `inv`.                                                 | N/A                                            |
 | Magnetization prepared two gradient echoes | MP2RAGE | Grouping     | Groups together parametrically linked anatomical images (primarily) for T1 mapping. The MP2RAGE method is a special protocol that collects several images at different flip angles and inversion times to create a parametric T1map by combining the magnitude and phase images. _Associated output suffixes_: T1map, R1map, UNIT1                                                                                                                                                                                              | i) `indexable_metadata` of `inv` and `fa`, ii) `part`.                            | i) `indexable_metadata` of `echo`.             |
 | Multi-echo spin echo                       | MESE    | Grouping     | Groups together parametrically linked anatomical images (primarily) for T2 mapping.The MESE method involves multiple spin echo images acquired at different echo times. _Associated output suffixes_: T2map, R2map, MWFmap                                                                                                                                                                                                                                                                                                      | i) `indexable_metadata` of `echo`.                                                | N/A                                            |
@@ -260,7 +260,7 @@ for images collected by a `grouping suffix`, some of the metadata entries become
 REQUIRED when considered within the context of a specific qMRI
 application.
 
-[_Table of method-specific priority levels for qMRI metadata_](#prioritylevels)
+<a name="prioritylevels">Table of method-specific priority levels for qMRI metadata</a>
 
 | Grouping suffix | REQUIRED metadata                                                                                    | OPTIONAL metadata          |
 |-----------------|------------------------------------------------------------------------------------------------------|----------------------------|
@@ -306,7 +306,7 @@ to infer possible fitting options
 * keep an inheritance track of the qMRI methods described within the
 specification.
 
-[_Table of qMRI applications that can be derived from an existing `grouping suffix`_](#varianttable)
+<a name="varianttable">Table of qMRI applications that can be derived from an existing grouping suffix</a>
 
 | Grouping suffix | If REQUIRED metadata == Value | OPTIONAL metadata [`var`/`fix`]<sup>[*](#footnotederive)</sup>      | Derived application |
 |-----------------|-------------------------------|----------------------------------|---------------------|
@@ -337,8 +337,7 @@ T2 fitting application. Finally, if the `DESPOT2` data has more than one
 `SpoilingRFPhaseIncrement` field as a metadata field, then the dataset is valid
 for `DESPOT2-FM`.
 
-Please note that OPTIONAL metadata fields listed in the <a name="varianttable"> qMRI applications that can be derived from an existing table </a> MUST be also included in the <a name="prioritylevels"> method sprecific priority levels for qMRI metadata 
-table </a> for the sake of completeness.
+Please note that OPTIONAL metadata fields listed in the qMRI applications that can be derived from an existing suffix table MUST be also included in the method sprecific priority levels for qMRI metadata table  for the sake of completeness.
 
 Please also note that the rules concerning the presence/value of certain metadata
 fields within the context of `grouping suffix` is not a part of the BIDS
@@ -410,7 +409,7 @@ file MUST inherit content from the JSON files of the constituent images of a
      `grouped scan collection` are added to the JSON file of the resultant
      qMRI map **in array form**. To find out which varying scan parameters are
      relevant to a given `grouped scan collection`, please see the
-    <a name="prioritylevels">method-specific priority levels for qMRI metadata</a> table in the [Grouping suffixes](#grouping-suffixes) subsection.
+    [method-specific priority levels for qMRI metadata](#prioritylevels) table in the [grouping suffixes](#grouping-suffixes) subsection.
      * The JSON file accompanying a qMRI map which is obtained by
      using an open-source software MUST include all the metadata fields listed
      in the following table for the sake of provenance.
@@ -500,7 +499,7 @@ varying metadata field values are enumerable and the metadata field is listed
 in the table of allowed key tags (see below), `indexable_metadata` entity SHOULD
 be included in the file name to distinguish constituent images from each other.
 
-[_Table of allowed key tags for the `indexable_metadata` entity_](#allowedkeys)
+<a name="allowedkeys">Table of allowed key tags for the indexable_metadata entity</a>
 
 | Allowed key tags | Value list | Associated metadata field |
 |---------|------------|---------------------|
@@ -534,7 +533,7 @@ values need to be stored in the corresponding metadata field of the accompanying
 JSON files.
 
 * Please note that `<indexable_metadata>-<index>` is not free form. Updates to the
-specification is REQUIRED to extend <a name="allowedkeys">the allowed key tags</a>.
+specification is REQUIRED to extend [the allowed key tags](#allowedkeys).
 
 **Important:**
 
@@ -572,7 +571,7 @@ naming convention while combining several scans of the same modality intended to
 create quantitative maps, following labels SHOULD be included in the filename
 where applicable:
 
-[_Table of allowed `<acq>` entity labels for `grouping suffixes`_](#allowedacq)
+<a name="allowedacq">Table of allowed `<acq>` entity labels for `grouping suffixes`</a>
 
 | Grouping suffix | Labels           | Respective metadata fields and values   |
 |-------------|------------------|------------------------------|
@@ -594,9 +593,9 @@ sub-01_echo-1_acq-T1w_MPM.json
 
 * Note that value of the `acq-<label>` is free form by default, as indicated
 by the main specification. However, to enable a unified naming convention for
-this specific use case, only the labels listed in <a name="allowedacq">the table of allowed `acq` entity labels</a> SHOULD be used with the corresponding `grouping suffixes`.
-* Changes to the specification is REQUIRED to extend <a name="allowedacq">the table of allowed `acq`
-entity labels</a>.
+this specific use case, only the labels listed in [the table of allowed `acq` entity labels](#allowedacq) SHOULD be used with the corresponding `grouping suffixes`.
+* Changes to the specification is REQUIRED to extend [the table of allowed `acq`
+entity labels](#allowedacq).
 
 
 #### `part-<mag/phase>` key/value pair
