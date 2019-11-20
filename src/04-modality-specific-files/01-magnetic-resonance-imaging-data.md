@@ -505,6 +505,7 @@ _Table of allowed key tags for the `indexable_metadata` entity_
 | echo    | 1,2,... N  | EchoTime            |
 | fa      | 1,2,... N  | FlipAngle           |
 | inv     | 1,2,... N  | InversionTime       |
+| rfphase | 1,2,... N  | SpoilingRFPhaseIncrement      |
 | tsl     | 1,2,... N  | SpinLockTime        |
 
 For example (for a multi-echo gradient echo dataset):
