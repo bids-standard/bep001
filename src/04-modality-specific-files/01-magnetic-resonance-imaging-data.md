@@ -2,11 +2,7 @@
 
 ## Common metadata fields
 
-MR Data described in sections 8.3.x share the following RECOMMENDED metadata
-fields (stored in sidecar JSON files). MRI acquisition parameters are divided
-into several categories based on
-["A checklist for fMRI acquisition methods reporting in the literature"](https://thewinnower.com/papers/977-a-checklist-for-fmri-acquisition-methods-reporting-in-the-literature)
-by Ben Inglis:
+MR Data described in sections 8.3.x share the following RECOMMENDED metadata fields (stored in sidecar JSON files). MRI acquisition parameters are divided into several categories based on ["A checklist for fMRI acquisition methods reporting in the literature"](https://thewinnower.com/papers/977-a-checklist-for-fmri-acquisition-methods-reporting-in-the-literature) by Ben Inglis:
 
 ### Scanner Hardware
 
@@ -595,39 +591,23 @@ JSON example:
 
 ## Fieldmap data
 
-Data acquired to correct for B0 inhomogeneities can come in different forms.
-B0 (static magnetic field strength pattern), B1+ (transmit field pattern),
-and B1- (receive field pattern; not yet supported) maps can be useful in
-post-processing both raw functional and anatomical data.
+Data acquired to correct for fieldmap inhomogeneities can come in different forms:
+- B0, static magnetic field strength pattern,
+- B1+, RF transmit field pattern (sometimes simply labeled "B1")
+- B1-, RF receive field pattern (sometimes labeled "RF sensitivity")
 
-B0 maps are primarily used to correct for spatial distortions in functional
-data acquired with EPI sequences.
+These 3 types of maps can be useful in post-processing for raw functional, diffusion and anatomical data. B0 maps are primarily used to correct for spatial distortions in (functional) data acquired with EPI sequences. B1+ and B1- maps are mostly used to correct for intensity bias in anatomical imaging, especially when applying quantitative MRI (qMRI) techniques, to account for sensitivity of the antenna(s) at emission (+) and reception (-).
+These fieldmaps are typically derived from a set of raw images acquired with specific parameters, e.g. with different echo times or excitation timing, but this is not always the case, see Case 3 here under for B0.
 
-B1+ and B1- maps are mostly used in anatomical imaging, especially when
-applying quantitative MRI (qMRI) techniques.
-
-The current version of this standard considers four different scenarios. Please
-note that in all cases fieldmap data can be linked to a specific scan(s) it was
-acquired for by filling the IntendedFor field in the corresponding JSON file.
-
-
-### B0 fieldmaps
-
-Data acquired to correct spatial distortions due to B0 inhomogeneities can come in
-different forms. The current version of this standard considers four different
-scenarios. Please note that in all cases fieldmap data can be linked to a specific
-scan(s) it was acquired for by filling the IntendedFor field in the corresponding
-JSON file.
-
+Please note that in all cases fieldmap data can be linked to a specific image (or set of images) it was
+acquired for by filling the `IntendedFor` field in the corresponding JSON file.
 For example:
-
 ```JSON
 {
    "IntendedFor": "func/sub-01_task-motor_bold.nii.gz"
 }
 ```
-
-The IntendedFor field may contain one or more filenames with paths relative to
+The `IntendedFor` field may contain one or more filenames with paths relative to
 the subject subfolder. The path needs to use forward slashes instead of backward
 slashes. Here’s an example with multiple target scans:
 
@@ -638,12 +618,27 @@ slashes. Here’s an example with multiple target scans:
 }
 ```
 
-The IntendedFor field is OPTIONAL and in case the fieldmaps do not correspond to
-any particular scans it does not have to be filled.
-
-Multiple fieldmaps can be stored. In such case the `_run-1`, `_run-2` should be
-used. The OPTIONAL `acq-<label>` key/value pair corresponds to a custom label
+Note that the `IntendedFor` field is OPTIONAL and in case the fieldmaps do not correspond to
+any particular scans it does not have to be filled. Multiple fieldmaps can be stored. In such case the `_run-1`, `_run-2` should be used. The OPTIONAL `acq-<label>` key/value pair corresponds to a custom label
 the user may use to distinguish different set of parameters.
+
+### B0 fieldmaps
+
+Data acquired to correct spatial distortions due to B0 inhomogeneities can come in different forms. The current version of this standard considers four different scenarios. Each scenario involves some possible suffix:
+
+| _suffix   | Description | Scenario |
+| --------- | ----------- | -------- |
+| _phasediff | Phase difference image | Case 1 |
+| _magnitude1  | 1st magnitude image | Case 1 & 2 |
+| _magnitude2  | 2nd magnitude image | Case 1 & 2 |
+| _phase1  | 1st phase image  | Case 2  |
+| _phase2  | 2nd phase image  | Case 2  |
+| _magnitude  | Single magnitude image | Case 3 |
+| _fieldmap  | Actual B0 fieldmap image | Case 3 |
+| _epi  | EPI image with specific phase encoding direction  | Case 4  |
+
+Currently supported scenarios include:
+
 
 #### Case 1: Phase difference image and at least one magnitude image
 
@@ -657,7 +652,7 @@ sub-<label>/[ses-<label>/]
         sub-<label>[_ses-<label>][_acq-<label>][_run-<index>]_magnitude1.nii[.gz]
 ```
 
-OPTIONAL
+OPTIONAL a second magnitude image:
 
 ```Text
 sub-<label>/[ses-<label>/]
@@ -665,12 +660,8 @@ sub-<label>/[ses-<label>/]
         sub-<label>[_ses-<label>][_acq-<label>][_run-<index>]_magnitude2.nii[.gz]
 ```
 
-This is a common output for build in fieldmap sequence on Siemens scanners. In
-this particular case the sidecar JSON file has to define the Echo Times of the
-two phase images used to create the difference image. `EchoTime1` corresponds to
-the shorter echo time and `EchoTime2` to the longer echo time. Similarly
-`_magnitude1` image corresponds to the shorter echo time and the OPTIONAL
-`_magnitude2` image to the longer echo time. For example:
+This is a common output for build in fieldmap sequence on Siemens scanners. In this particular case the sidecar JSON file has to define the Echo Times of the two phase images used to create the difference image. `EchoTime1` corresponds to the shorter echo time and `EchoTime2` to the longer echo time. Similarly
+`_magnitude1` image corresponds to the shorter echo time and the OPTIONAL `_magnitude2` image to the longer echo time. For example:
 
 ```JSON
 {
@@ -695,9 +686,7 @@ sub-<label>/[ses-<label>/]
         sub-<label>[_ses-<label>][_acq-<label>][_run-<index>]_magnitude2.nii[.gz]
 ```
 
-Similar to the case above, but instead of a precomputed phase difference map two
-separate phase images are presented. The two sidecar JSON file need to specify
-corresponding `EchoTime` values. For example:
+Similar to the case above, but instead of a precomputed phase difference map two separate phase images are presented. The two sidecar JSON file need to specify corresponding `EchoTime` values. For example:
 
 ```JSON
 {
@@ -718,10 +707,7 @@ sub-<label>/[ses-<label>/]
        sub-<label>[_ses-<label>][_acq-<label>][_run-<index>]_fieldmap.json
 ```
 
-In some cases (for example GE) the scanner software will output a precomputed
-fieldmap denoting the B0 inhomogeneities along with a magnitude image used for
-coregistration. In this case the sidecar JSON file needs to include the units of
-the fieldmap. The possible options are: `Hz`, `rad/s`, or `Tesla`. For example:
+In some cases (for example GE) the scanner software will output a precomputed fieldmap denoting the B0 inhomogeneities along with a magnitude image used for coregistration. In this case the sidecar JSON file needs to include the units of the fieldmap. The possible options are: `Hz`, `rad/s`, or `Tesla`. For example:
 
 ```JSON
 {
@@ -730,7 +716,7 @@ the fieldmap. The possible options are: `Hz`, `rad/s`, or `Tesla`. For example:
 }
 ```
 
-#### Case 4: Multiple phase encoded directions ("pepolar")
+#### Case 4: Multiple phase encoded directions ("PEpolar")
 
 Template:
 
@@ -741,17 +727,7 @@ sub-<label>/[ses-<label>/]
         sub-<label>[_ses-<label>][_acq-<label>][_ce-<label>]_dir-<label>[_run-<index>]_epi.json
 ```
 
-The phase-encoding polarity (PEpolar) technique combines two or more Spin Echo
-EPI scans with different phase encoding directions to estimate the underlying
-inhomogeneity/deformation map. Examples of tools using this kind of images are
-FSL TOPUP, AFNI 3dqwarp and SPM. In such a case, the phase encoding direction is
-specified in the corresponding JSON file as one of: `i`, `j`, `k`, `i-`, `j-`,
-`k-`. For these differentially phase encoded sequences, one also needs to
-specify the Total Readout Time defined as the time (in seconds) from the center
-of the first echo to the center of the last echo (aka "FSL definition" - see
-[here](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/topup/Faq#How_do_I_know_what_phase-encode_vectors_to_put_into_my_--datain_text_file.3F) and
-[here](https://lcni.uoregon.edu/kb-articles/kb-0003) how to calculate it). For
-example
+The phase-encoding polarity (PEpolar) technique combines two or more Spin Echo EPI scans with different phase encoding directions to estimate the underlying inhomogeneity/deformation map. Examples of tools using this kind of images are FSL TOPUP, AFNI 3dqwarp and SPM. In such a case, the phase encoding direction is specified in the corresponding JSON file as one of: `i`, `j`, `k`, `i-`, `j-`, `k-`. For these differentially phase encoded sequences, one also needs to specify the Total Readout Time defined as the time (in seconds) from the center of the first echo to the center of the last echo (aka "FSL definition" - see [here](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/topup/Faq#How_do_I_know_what_phase-encode_vectors_to_put_into_my_--datain_text_file.3F) and [here](https://lcni.uoregon.edu/kb-articles/kb-0003) how to calculate it). For example
 
 ```JSON
 {
@@ -761,16 +737,13 @@ example
 }
 ```
 
-`label` value of `_dir-` can be set to arbitrary alphanumeric label (`[a-zA-Z0-9]+` for
-example `LR` or `AP`) that can help users to distinguish between different
-files, but should not be used to infer any scanning parameters (such as phase
-encoding directions) of the corresponding sequence. Please rely only on the JSON
-file to obtain scanning parameters. \_epi files can be a 3D or 4D - in the
-latter case all timepoints share the same scanning parameters. To indicate which
-run is intended to be used with which functional or diffusion scan the
-IntendedFor field in the JSON file should be used.
+`label` value of `_dir-` can be set to arbitrary alphanumeric label (`[a-zA-Z0-9]+` for example `LR` or `AP` for left-right or anterior-posterior) that can help users to distinguish between different files, but should not be used to infer any scanning parameters (such as phase encoding directions) of the corresponding sequence. Please rely only on the JSON file to obtain scanning parameters. `\_epi` files can be a 3D or 4D - in the latter case all timepoints share the same scanning parameters. To indicate which run is intended to be used with which functional or diffusion scan the `IntendedFor` field in the JSON file should be used.
 
 ### B1+ fieldmaps
+
+Similarly to the B0 fieldmaps, data acquired to correct intensity inhomogeneities due the RF transmit field pattern can come in different forms. The current version of this standard considers two different scenarios.
+
+#### Case 1: DREAM method
 
 Template:
 
@@ -790,12 +763,52 @@ sub-<participant_label>/[ses-<session_label>/]
                    "anat/sub-01_inv-2_part-phase_MP2RAGE.nii.gz"]
 }
 ```
+In some cases, the scanner software will output a precomputed fieldmap denoting the RF transmit bias. This actual B1+ fieldmap quantifies the ratio between the _actual_ flip angle and the _intended_ flip angle that is transmited across the different locations in the image. The image is thus 3D and its values should mostly be close to 1.
 
-B1+ fieldmaps quantify the ratio between the _actual_ flip angle and the _intended_
-flip angle that is transmited across the different locations in the image.
-The image is thus 3D and its values should mostly be close to 1.  B1+
-fieldmaps are stored in the `fmap`-folder and use the suffix `_B1plusmap`.
-The `IntendedFor`-field in the JSON file can be used to indicate which
-images it is intended to be be used with.
+*NOTE: add some reference here ?*
+
+#### Case 2: SE/STE scheme
+
+Here several images are acquired following spin echo (SE) and stimulated echo (STE) excitation pulses for different flip angles. This Se/STE scheme is typical of an MPM sequence.
+Template:
+
+```Text
+sub-<participant_label>/[ses-<session_label>/]
+    fmap/
+        sub-<participant-label>[_ses-<session_label>][_acq-<acq-label>][_run-<run_index>]_fa-<index>_B1plus.nii[.gz]
+        sub-<participant-label>[_ses-<session_label>][_acq-<acq-label>][_run-<run_index>]_fa-<index>_B1plus.json
+```
+
+```JSON
+{
+   "PulseSequenceType":"SE/STE",
+   "NominalFAValues": [115,110,105,100,95,90,85,80,75,70,65],
+   "IntendedFor": ["anat/sub-anon_echo-1_acq-MTw_MPM.nii.gz",
+                   "anat/sub-anon_echo-2_acq-MTw_MPM.nii.gz",
+                   "anat/sub-anon_echo-3_acq-MTw_MPM.nii",
+                   "anat/sub-anon_echo-4_acq-MTw_MPM.nii.gz",
+                   "anat/sub-anon_echo-5_acq-MTw_MPM.nii.gz",
+                   "anat/sub-anon_echo-6_acq-MTw_MPM.nii.gz",
+                   "anat/sub-anon_echo-1_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-2_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-3_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-4_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-5_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-6_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-7_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-8_acq-PDw_MPM.nii.gz",
+                   "anat/sub-anon_echo-1_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-2_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-3_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-4_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-5_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-6_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-7_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-8_acq-T1w_MPM.nii.gz"]
+}
+```
+The `NominalFAValues` are the series of values used for *alpha* in the actual fieldmap calculation ([Jiru & Klose, MRM (2006)](https://doi.org/10.1002/mrm.21083) and [Lutti et al., MRM (2010)](https://doi.org/10.1002/mrm.22421)).
 
 ### B1- fieldmaps
+
+Like the B0 and B1+ fieldmaps, data acquired to correct intensity inhomogeneities due the antenna(s) sensitivity field pattern can come in different forms. The current version of this standard considers...
