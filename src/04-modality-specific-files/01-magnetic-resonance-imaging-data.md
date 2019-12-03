@@ -785,7 +785,7 @@ sub-<participant_label>/[ses-<session_label>/]
    "NominalFAValues": [115,110,105,100,95,90,85,80,75,70,65],
    "IntendedFor": ["anat/sub-anon_echo-1_acq-MTw_MPM.nii.gz",
                    "anat/sub-anon_echo-2_acq-MTw_MPM.nii.gz",
-                   "anat/sub-anon_echo-3_acq-MTw_MPM.nii",
+                   "anat/sub-anon_echo-3_acq-MTw_MPM.nii.gz",
                    "anat/sub-anon_echo-4_acq-MTw_MPM.nii.gz",
                    "anat/sub-anon_echo-5_acq-MTw_MPM.nii.gz",
                    "anat/sub-anon_echo-6_acq-MTw_MPM.nii.gz",
