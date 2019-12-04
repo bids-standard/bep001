@@ -660,8 +660,7 @@ sub-<label>/[ses-<label>/]
         sub-<label>[_ses-<label>][_acq-<label>][_run-<index>]_magnitude2.nii[.gz]
 ```
 
-This is a common output for build in fieldmap sequence on Siemens scanners. In this particular case the sidecar JSON file has to define the Echo Times of the two phase images used to create the difference image. `EchoTime1` corresponds to the shorter echo time and `EchoTime2` to the longer echo time. Similarly
-`_magnitude1` image corresponds to the shorter echo time and the OPTIONAL `_magnitude2` image to the longer echo time. For example:
+This is a common output for build in fieldmap sequence on Siemens scanners. In this particular case the sidecar JSON file has to define the Echo Times of the two phase images used to create the difference image. `EchoTime1` corresponds to the shorter echo time and `EchoTime2` to the longer echo time. Similarly `_magnitude1` image corresponds to the shorter echo time and the OPTIONAL `_magnitude2` image to the longer echo time. For example:
 
 ```JSON
 {
@@ -741,7 +740,14 @@ The phase-encoding polarity (PEpolar) technique combines two or more Spin Echo E
 
 ### B1+ fieldmaps
 
-Similarly to the B0 fieldmaps, data acquired to correct intensity inhomogeneities due the RF transmit field pattern can come in different forms. The current version of this standard considers two different scenarios.
+Similarly to the B0 fieldmaps, data acquired to correct intensity inhomogeneities due the RF transmit field pattern can come in different forms. The suffix used for B1+ fieldmap will be:
+
+| _suffix   | Description | Scenario |
+| --------- | ----------- | -------- |
+| _B1plusmap | Actual B1+ fieldmap image | Case 1: DREAM method |
+| _B1plus   | Images used to build the actual B1+ fieldmap | Case 2: SE/STE method  |
+
+The current version of this standard considers two different scenarios.
 
 #### Case 1: DREAM method
 
@@ -765,11 +771,11 @@ sub-<participant_label>/[ses-<session_label>/]
 ```
 In some cases, the scanner software will output a precomputed fieldmap denoting the RF transmit bias. This actual B1+ fieldmap quantifies the ratio between the _actual_ flip angle and the _intended_ flip angle that is transmited across the different locations in the image. The image is thus 3D and its values should mostly be close to 1.
 
-*NOTE: add some reference here ?*
+*CP_NOTE: add some reference here ?*
 
-#### Case 2: SE/STE scheme
+#### Case 2: 3D EPI method
 
-Here several images are acquired following spin echo (SE) and stimulated echo (STE) excitation pulses for different flip angles. This Se/STE scheme is typical of an MPM sequence.
+Here several images are acquired following successive, with a fixed "mixing time" interval, spin echo (SE) and stimulated echo (STE) excitation pulses with different flip angles for the SE/STE.
 Template:
 
 ```Text
@@ -778,11 +784,13 @@ sub-<participant_label>/[ses-<session_label>/]
         sub-<participant-label>[_ses-<session_label>][_acq-<acq-label>][_run-<run_index>]_fa-<index>_B1plus.nii[.gz]
         sub-<participant-label>[_ses-<session_label>][_acq-<acq-label>][_run-<run_index>]_fa-<index>_B1plus.json
 ```
+In this particular case the sidecar JSON file has to define the ``NominalFAValues`` of the series of flip angles, used for the SE and the ``MixingTime`` between the SE and STE. For example:
 
 ```JSON
 {
-   "PulseSequenceType":"SE/STE",
+   "PulseSequenceType":"SESTE",
    "NominalFAValues": [115,110,105,100,95,90,85,80,75,70,65],
+   "MixingTime": 0.0338,
    "IntendedFor": ["anat/sub-anon_echo-1_acq-MTw_MPM.nii.gz",
                    "anat/sub-anon_echo-2_acq-MTw_MPM.nii.gz",
                    "anat/sub-anon_echo-3_acq-MTw_MPM.nii.gz",
@@ -807,8 +815,43 @@ sub-<participant_label>/[ses-<session_label>/]
                    "anat/sub-anon_echo-8_acq-T1w_MPM.nii.gz"]
 }
 ```
-The `NominalFAValues` are the series of values used for *alpha* in the actual fieldmap calculation ([Jiru & Klose, MRM (2006)](https://doi.org/10.1002/mrm.21083) and [Lutti et al., MRM (2010)](https://doi.org/10.1002/mrm.22421)).
+The sequence uses a set of pulses with nominal flip angles α, 2α and α to create pairs of spin echo (SE) and stimulated echo (STE) images. All consecutive pairs, with `MixingTime` interval, of SE/STE images corresponding to the different nominal flip angle values α (`NominalFAValues`) of the SE/STE RF pulse are used the calculation of the actual B1+ fieldmap calculation ([Jiru & Klose, MRM (2006)](https://doi.org/10.1002/mrm.21083), [Lutti et al., MRM (2010)](https://doi.org/10.1002/mrm.22421), and [Lutti et al., PlosONE (2012)](https://doi.org/10.1371/journal.pone.0032379)). B0 field mapping images must also be provided for correcting distortions in the EPI images, ideally a pair magnitude images and the pre-subtracted phase image.
+
+*CP_NOTE: there exit many other B1+ fieldmap techniques. This one is only for the example dataset for the hMRI toolbox...*
 
 ### B1- fieldmaps
 
-Like the B0 and B1+ fieldmaps, data acquired to correct intensity inhomogeneities due the antenna(s) sensitivity field pattern can come in different forms. The current version of this standard considers...
+Like the B0 and B1+ fieldmaps, data acquired to correct intensity inhomogeneities due the antenna(s) sensitivity field pattern can come in different forms.  The suffix used for B1- fieldmap will be:
+
+| _suffix   | Description | Scenario |
+| --------- | ----------- | -------- |
+| _B1minusmap | Actual B1- fieldmap image | Typically generated by the scanner computer |
+| _B1minus   | Images used to build the actual B1+ fieldmap | FLASH Head/Body coil  |
+
+The current version of this standard considers the case of an MPM example dataset ([Callaghan et al., Data in Brief (2019)](https://doi.org/10.1016/j.dib.2019.104132)). Since the receive field sensitivity of the body coil is assumed to be flat over the spatial extent of the head ([ Pruessmann et al., MRM (1999)](https://doi.org/10.1002/(SICI)1522-2594(199911)42:5%3C952::AID-MRM16%3E3.0.CO;2-S)), if the same anatomy is imaged with the head coil and the body coil sequentially, using the same acquisition parameters and assuming no motion, then the ratio of these two scans is proportional to the net head coil receive sensitivity field
+
+Template:
+
+```Text
+sub-<participant_label>/[ses-<session_label>/]
+    fmap/
+        sub-<participant-label>[_ses-<session_label>]_acq-<label>[_run-<run_index>]_B1minus.nii[.gz]
+        sub-<participant-label>[_ses-<session_label>]_acq-<label>[_run-<run_index>]_B1minus.json
+```
+The `_acq-<label>` key/value pair corresponds to a custom label to designate the coil, e.g. 'Body' or 'Head'. In the case where a pair of 'Body' and 'Head' images are acquired for each set of anatomical image contrasts,  e.g. 'MTw', 'PDw' or 'T1w', then the contrast should be included in the acquisition label. The exact list of files should also be defined in the `IntendedFor` field in the corresponding JSON file.
+
+For example, the `sub-anon_acq-T1wBody_B1minus.nii.gz` and `sub-anon_acq-T1wHead_B1minus.nii.gz` images should be accompanied by a JSON file containing:
+```JSON
+{
+   "PulseSequenceType":"FLASH",
+   "IntendedFor": ["anat/sub-anon_echo-1_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-2_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-3_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-4_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-5_acq-T1w_MPM.nii.gz",
+                   "anat/sub-anon_echo-6_acq-T1w_MPM.nii.gz"
+  ],
+}
+```
+
+*CP_NOTE: to avoid mixing coil (head or body) and contrast, one could maybe include the key/value pair `_mod-<label>` as is done for the "_defacemask" image.*
